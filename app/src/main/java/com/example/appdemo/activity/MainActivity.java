@@ -200,26 +200,21 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(trangchu);
                         break;
                     case 1:
-                        Intent gioithieu = new Intent(getApplicationContext(),GioiThieuActivity.class);
-                        startActivity(gioithieu);
-                        break;
-
-                    case 2:
                         Intent sanpham = new Intent(getApplicationContext(),SanPhamActivity.class);
                         startActivity(sanpham);
                         break;
 
-                    case 3:
-                        Intent lienhe = new Intent(getApplicationContext(),LienHeActivity.class);
-                        startActivity(lienhe);
-                        break;
-
-                    case 4:
+                    case 2:
                         Intent giohang = new Intent(getApplicationContext(),GioHangActivity.class);
                         startActivity(giohang);
                         break;
 
-                    case 5:
+                    case 3:
+                        Intent gioithieu = new Intent(getApplicationContext(),GioiThieuActivity.class);
+                        startActivity(gioithieu);
+                        break;
+
+                    case 4:
                         Intent dangxuat = new Intent(getApplicationContext(),DangXuatActivity.class);
                         startActivity(dangxuat);
                         break;
@@ -232,10 +227,9 @@ public class MainActivity extends AppCompatActivity {
         //khoi tao list
         arrayList = new ArrayList<>();
         arrayList.add(new ItemMenu(R.drawable.baseline_home_24,"Home"));
-        arrayList.add(new ItemMenu(R.drawable.introduce,"Introduce"));
         arrayList.add(new ItemMenu(R.drawable.product,"Product"));
-        arrayList.add(new ItemMenu(R.drawable.baseline_phone_24,"Contact"));
         arrayList.add(new ItemMenu(R.drawable.baseline_shopping_cart_24,"Cart"));
+        arrayList.add(new ItemMenu(R.drawable.introduce,"About us"));
         arrayList.add(new ItemMenu(R.drawable.baseline_logout_24,"Log Out"));
 
 

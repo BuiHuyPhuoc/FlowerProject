@@ -1,6 +1,7 @@
 package com.example.appdemo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.appdemo.R;
+import com.example.appdemo.activity.ChiTietSPActivity;
 import com.example.appdemo.model.SanPhamMoi;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHolder> {
@@ -38,12 +41,20 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHo
         SanPhamMoi sanPhamMoi = array.get(position);
 
         holder.tensp.setText(sanPhamMoi.getTENSP());
-        holder.giatien.setText(Long.toString(sanPhamMoi.getDONGIA()) + "VND");
-        //DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        //holder.giatien.setText("Giá: "+decimalFormat.format(Double.parseDouble(sanPhamMoi.getGia())) + "Đ");
-
+        //holder.giatien.setText(Long.toString(sanPhamMoi.getDONGIA()) + "VND");
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        holder.giatien.setText("Giá: "+decimalFormat.format(Double.parseDouble(String.valueOf(sanPhamMoi.getDONGIA()))) + " VNĐ");
         Glide.with(context).load(sanPhamMoi.getHINHANH()).into(holder.imgHinhanh);
 //        holder.imgHinhanh.setImageResource(sanPhamMoi.getHINHANH());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, ChiTietSPActivity.class);
+                i.putExtra("chitiet",sanPhamMoi.getTENSP());
+                context.startActivity(i);
+            }
+        });
+
     }
 
     @Override
