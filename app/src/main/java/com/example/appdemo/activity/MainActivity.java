@@ -32,7 +32,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper db; //Khởi tạo database
-    //Check GitHub
+    //Check GitHub 2
     Toolbar toolbar;
     ViewFlipper viewFlipper;
     RecyclerView recyclerViewManHinhChinh;
