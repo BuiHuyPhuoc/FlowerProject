@@ -9,7 +9,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bfc21617-e8d9-40a1-85a2-79920d36e4d7" name="Changes" comment="Update:&#10;1. Activity LoginActivity&#10;2. Activity RegisterActivity&#10;3. Activity ForgotPassword&#10;4. Thêm một số ảnh liên quan" />
+    <list default="true" id="bfc21617-e8d9-40a1-85a2-79920d36e4d7" name="Changes" comment="Update:&#10;1. Activity LoginActivity&#10;2. Activity RegisterActivity&#10;3. Activity ForgotPassword&#10;4. Thêm một số ảnh liên quan">
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/appdemo/activity/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/appdemo/activity/MainActivity.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

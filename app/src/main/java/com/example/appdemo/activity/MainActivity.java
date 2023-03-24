@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case 3:
-                        Intent lienhe = new Intent(getApplicationContext(),LienHeActivity.class);
+                        Intent lienhe = new Intent(getApplicationContext(),GioiThieuActivity.class);
                         startActivity(lienhe);
                         break;
 
