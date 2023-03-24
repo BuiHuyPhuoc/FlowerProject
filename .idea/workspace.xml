@@ -9,9 +9,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c87695a5-72d9-44b2-86c4-33673b5e0ba0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-    </list>
+    <list default="true" id="bfc21617-e8d9-40a1-85a2-79920d36e4d7" name="Changes" comment="Update:&#10;1. Activity LoginActivity&#10;2. Activity RegisterActivity&#10;3. Activity ForgotPassword&#10;4. Thêm một số ảnh liên quan" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -114,5 +112,16 @@
       <updated>1679557541301</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
