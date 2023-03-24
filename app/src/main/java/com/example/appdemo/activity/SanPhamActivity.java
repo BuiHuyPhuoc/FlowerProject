@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +19,7 @@ import android.widget.ViewFlipper;
 import com.example.appdemo.R;
 import com.example.appdemo.adapter.MenuAdapter;
 import com.example.appdemo.adapter.SanPhamAdapter;
+import com.example.appdemo.model.DatabaseHelper;
 import com.example.appdemo.model.ItemMenu;
 import com.example.appdemo.model.SanPhamMoi;
 import com.google.android.material.navigation.NavigationView;
@@ -41,11 +43,23 @@ public class SanPhamActivity extends AppCompatActivity {
 
     TextView categoryFBox;
 
+    DatabaseHelper db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_san_pham);
+
+        db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
+        String x =  "CREATE TABLE IF NOT EXISTS [ROLE] (" +
+                "QUYENHAN VARCHAR PRIMARY KEY NOT NULL," +
+                "NOIDUNG Text NOT NULL);";
+        db.WriteQuery(x);
+
+        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.you_look_gorgeous);
+        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hello_sweetheart);
+        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.strawberry_sundea);
         anhxa();
         getEventClick();
         actionBar();
@@ -54,7 +68,20 @@ public class SanPhamActivity extends AppCompatActivity {
     }
 
     private void intData(){
-        arrayList = new ArrayList<>();
+        Cursor listSanPham = db.GetData(
+                "Select* from SANPHAM"
+        );
+        while (listSanPham.moveToNext()){
+            mangSpMoi.add(new SanPhamMoi(   listSanPham.getString(0),
+                    listSanPham.getString(1),
+                    listSanPham.getString(2),
+                    listSanPham.getString(3),
+                    listSanPham.getString(4),
+                    listSanPham.getInt(5),
+                    listSanPham.getLong(6),
+                    listSanPham.getInt(7)
+            ));
+        }
 
         spAdapter = new SanPhamAdapter( this,mangSpMoi);
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
@@ -75,26 +102,22 @@ public class SanPhamActivity extends AppCompatActivity {
                         break;
 
                     case 1:
-                        Intent gioithieu = new Intent(getApplicationContext(),GioiThieuActivity.class);
-                        startActivity(gioithieu);
-                        break;
-
-                    case 2:
                         Intent sanpham = new Intent(getApplicationContext(),SanPhamActivity.class);
                         startActivity(sanpham);
                         break;
 
-                    case 3:
-                        Intent lienhe = new Intent(getApplicationContext(),LienHeActivity.class);
-                        startActivity(lienhe);
-                        break;
 
-                    case 4:
+                    case 2:
                         Intent giohang = new Intent(getApplicationContext(),GioHangActivity.class);
                         startActivity(giohang);
                         break;
 
-                    case 5:
+                    case 3:
+                        Intent gioithieu = new Intent(getApplicationContext(),GioiThieuActivity.class);
+                        startActivity(gioithieu);
+                        break;
+
+                    case 4:
                         Intent dangxuat = new Intent(getApplicationContext(),DangXuatActivity.class);
                         startActivity(dangxuat);
                         break;
@@ -107,10 +130,9 @@ public class SanPhamActivity extends AppCompatActivity {
         //khoi tao list
         arrayList = new ArrayList<>();
         arrayList.add(new ItemMenu(R.drawable.baseline_home_24,"Home"));
-        arrayList.add(new ItemMenu(R.drawable.introduce,"Introduce"));
         arrayList.add(new ItemMenu(R.drawable.product,"Product"));
-        arrayList.add(new ItemMenu(R.drawable.baseline_phone_24,"Contact"));
         arrayList.add(new ItemMenu(R.drawable.baseline_shopping_cart_24,"Cart"));
+        arrayList.add(new ItemMenu(R.drawable.introduce,"About us"));
         arrayList.add(new ItemMenu(R.drawable.baseline_logout_24,"Log Out"));
 
 
