@@ -1,11 +1,13 @@
 package com.example.appdemo.model;
 
-public class SanPhamMoi {
+import java.io.Serializable;
+
+public class SanPhamMoi implements Serializable {
     String MASP, TENSP, PHANLOAI, NOINHAP, NOIDUNG;
     Integer SOLUONG, HINHANH;
     Long DONGIA;
     public SanPhamMoi(){ }
-    public SanPhamMoi(String MASP, String TENSP, String PHANLOAI, String NOINHAP, String NOIDUNG, Integer SOLUONG, Long DONGIA, int HINHANH) {
+    public SanPhamMoi(String MASP, String TENSP, String PHANLOAI, String NOINHAP, String NOIDUNG,Integer SOLUONG, Long DONGIA, int HINHANH) {
         this.MASP = MASP;
         this.TENSP = TENSP;
         this.PHANLOAI = PHANLOAI;
@@ -15,6 +17,7 @@ public class SanPhamMoi {
         this.HINHANH = HINHANH;
         this.DONGIA = DONGIA;
     }
+
 
     public String getMASP() {
         return MASP;
@@ -79,4 +82,5 @@ public class SanPhamMoi {
     public void setDONGIA(Long DONGIA) {
         this.DONGIA = DONGIA;
     }
+
 }
