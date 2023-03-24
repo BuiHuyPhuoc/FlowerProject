@@ -55,7 +55,6 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHo
             }
         });
 
-
     }
 
     @Override
