@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
         db.AddCategory("TULIP", "Hoa Tulip");
         db.AddCategory("VASE", "Bình hoa");
 //        //Tạo bảng SẢN PHẨM: Lưu trữ sản phẩm (hoa)
+//        db.WriteQuery(
+//                "Drop table if exists SANPHAM;"
+//        );
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS SANPHAM (\n" +
                         "\tMASP VARCHAR PRIMARY KEY NOT NULL,\n" +
@@ -97,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                         "FOREIGN KEY (PHANLOAI) REFERENCES [CATEGORY](NAME)" +
                         ");"
         );
-//        //Thêm 1 vài sản phẩm mẫu vào database
+        //Thêm 1 vài sản phẩm mẫu vào database
         db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.you_look_gorgeous);
         db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hello_sweetheart);
         db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.strawberry_sundea);
@@ -184,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                                             listSanPham.getInt(7)
             ));
         }
-        spAdapter = new SanPhamAdapter( this,mangSpMoi);
+        spAdapter = new SanPhamAdapter( this, mangSpMoi);
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
         recyclerViewManHinhChinh.setAdapter(spAdapter);
