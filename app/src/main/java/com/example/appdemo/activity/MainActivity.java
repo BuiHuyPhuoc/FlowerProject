@@ -154,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
                         ");"
         );
 //        //Tạo bảng CARTLIST: Lưu trữ giỏ hàng của người dùng, tự động cập nhật khi người dùng đăng nhập lại
-//
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS CARTLIST (\n" +
                         "\tIDCARTLIST   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
