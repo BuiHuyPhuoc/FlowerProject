@@ -9,9 +9,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bfc21617-e8d9-40a1-85a2-79920d36e4d7" name="Changes" comment="Update:&#10;1. Activity LoginActivity&#10;2. Activity RegisterActivity&#10;3. Activity ForgotPassword&#10;4. Thêm một số ảnh liên quan">
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/appdemo/activity/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/appdemo/activity/MainActivity.java" afterDir="false" />
-    </list>
+    <list default="true" id="bfc21617-e8d9-40a1-85a2-79920d36e4d7" name="Changes" comment="Update:" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -113,6 +111,14 @@
       <option name="presentableId" value="Default" />
       <updated>1679557541301</updated>
     </task>
+    <task id="LOCAL-00001" summary="Update:">
+      <created>1679648430677</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1679648430677</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -125,5 +131,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Update:&#10;1. Activity LoginActivity&#10;2. Activity RegisterActivity&#10;3. Activity ForgotPassword&#10;4. Thêm một số ảnh liên quan" />
+    <MESSAGE value="Update:" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update:" />
   </component>
 </project>
