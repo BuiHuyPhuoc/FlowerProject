@@ -51,9 +51,11 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHo
             public void onClick(View view) {
                 Intent i = new Intent(context, ChiTietSPActivity.class);
                 i.putExtra("chitiet",sanPhamMoi.getTENSP());
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
             }
         });
+
 
     }
 

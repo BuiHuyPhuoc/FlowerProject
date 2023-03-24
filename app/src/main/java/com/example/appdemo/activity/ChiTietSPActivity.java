@@ -30,7 +30,8 @@ public class ChiTietSPActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_spactivity);
         intView();
-        intData();
+        //intData();
+
     }
     private void intData(){
         SanPhamMoi sanPhamMoi = (SanPhamMoi) getIntent().getSerializableExtra("chitiet");
