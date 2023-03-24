@@ -7,7 +7,7 @@ public class SanPhamMoi implements Serializable {
     Integer SOLUONG, HINHANH;
     Long DONGIA;
     public SanPhamMoi(){ }
-    public SanPhamMoi(String MASP, String TENSP, String PHANLOAI, String NOINHAP, String NOIDUNG,Integer SOLUONG, Long DONGIA, int HINHANH) {
+    public SanPhamMoi(String MASP, String TENSP, String PHANLOAI, String NOINHAP, String NOIDUNG,Integer SOLUONG, Long DONGIA, Integer HINHANH) {
         this.MASP = MASP;
         this.TENSP = TENSP;
         this.PHANLOAI = PHANLOAI;

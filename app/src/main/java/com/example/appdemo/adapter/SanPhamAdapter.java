@@ -50,7 +50,10 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHo
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, ChiTietSPActivity.class);
-                i.putExtra("chitiet",sanPhamMoi.getTENSP());
+                //i.putExtra("tensp",sanPhamMoi.getTENSP());
+                //i.putExtra("gia",sanPhamMoi.getDONGIA());
+                //i.putExtra("hinhanh",sanPhamMoi.getHINHANH());
+                i.putExtra("chitiet",sanPhamMoi);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
             }

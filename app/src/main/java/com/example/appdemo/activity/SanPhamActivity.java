@@ -57,9 +57,9 @@ public class SanPhamActivity extends AppCompatActivity {
                 "NOIDUNG Text NOT NULL);";
         db.WriteQuery(x);
 
-        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.you_look_gorgeous);
-        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hello_sweetheart);
-        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.strawberry_sundea);
+        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "asd", 9500000, R.drawable.you_look_gorgeous);
+        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "asd", 9500000, R.drawable.hello_sweetheart);
+        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "asd", 9500000, R.drawable.strawberry_sundea);
         anhxa();
         getEventClick();
         actionBar();
@@ -72,7 +72,7 @@ public class SanPhamActivity extends AppCompatActivity {
                 "Select* from SANPHAM"
         );
         while (listSanPham.moveToNext()){
-            mangSpMoi.add(new SanPhamMoi(   listSanPham.getString(0),
+            mangSpMoi.add(new SanPhamMoi(listSanPham.getString(0),
                     listSanPham.getString(1),
                     listSanPham.getString(2),
                     listSanPham.getString(3),
