@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class SanPhamActivity extends AppCompatActivity {
+    //Activity hiển thị Danh mục sản phẩm (tất cả sản phẩm)
     Toolbar toolbar;
     RecyclerView recyclerViewManHinhChinh;
     NavigationView navigationView;
