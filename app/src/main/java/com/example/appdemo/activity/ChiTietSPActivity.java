@@ -39,7 +39,6 @@ public class ChiTietSPActivity extends AppCompatActivity {
         actionBar();
         intData();
         Clickbtn();
-
     }
     private void Clickbtn(){
         btnthem.setOnClickListener(new View.OnClickListener() {

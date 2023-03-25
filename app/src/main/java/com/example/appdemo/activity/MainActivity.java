@@ -86,13 +86,9 @@ public class MainActivity extends AppCompatActivity {
         db.AddCategory("VASE", "Bình hoa");
 //        //Tạo bảng SẢN PHẨM: Lưu trữ sản phẩm (hoa)
 
-        //db.WriteQuery(
-          //    "Drop table if exists SANPHAM;"
-        //);//thao tác xóa bảng và tạo lại bảng
-
-//        db.WriteQuery(
-//                "Drop table if exists SANPHAM;"
-//        );
+        db.WriteQuery(
+              "Drop table if exists SANPHAM;"
+        );
 
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS SANPHAM (\n" +
@@ -109,20 +105,6 @@ public class MainActivity extends AppCompatActivity {
         );
 
 //        //Thêm 1 vài sản phẩm mẫu vào database
-        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "das", 9500000, R.drawable.you_look_gorgeous);
-        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "asd", 9500000, R.drawable.hello_sweetheart);
-        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "ad", 9500000, R.drawable.strawberry_sundea);
-        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "asd", 9500000, R.drawable.wintry_wonder);
-        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "asd", 9500000, R.drawable.hopeful_romantic);
-        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "asd", 9500000, R.drawable.all_in_bloom);
-        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "asd", 9500000, R.drawable.blue_day);
-        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "asd", 9500000, R.drawable.red_love);
-        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "asd", 9500000, R.drawable.pure_white);
-        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "asd", 9500000, R.drawable.pastel_tulip);
-        db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "asd", 9500000, R.drawable.hope_for_love);
-        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ads", 9500000, R.drawable.big_rose);
-
-        //Thêm 1 vài sản phẩm mẫu vào database
         db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.you_look_gorgeous);
         db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hello_sweetheart);
         db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.strawberry_sundea);
@@ -135,6 +117,20 @@ public class MainActivity extends AppCompatActivity {
         db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pastel_tulip);
         db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "", 9500000, R.drawable.hope_for_love);
         db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "", 9500000, R.drawable.big_rose);
+
+        //Thêm 1 vài sản phẩm mẫu vào database
+//        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.you_look_gorgeous);
+//        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hello_sweetheart);
+//        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.strawberry_sundea);
+//        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.wintry_wonder);
+//        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hopeful_romantic);
+//        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.all_in_bloom);
+//        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.blue_day);
+//        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.red_love);
+//        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pure_white);
+//        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pastel_tulip);
+//        db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "", 9500000, R.drawable.hope_for_love);
+//        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "", 9500000, R.drawable.big_rose);
 //        //Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS BILL (\n" +
@@ -201,9 +197,9 @@ public class MainActivity extends AppCompatActivity {
             mangSpMoi.add(new SanPhamMoi(   listSanPham.getString(0),
                                             listSanPham.getString(1),
                                             listSanPham.getString(2),
-                                            listSanPham.getString(3),
+                                            listSanPham.getInt(3),
                                             listSanPham.getString(4),
-                                            listSanPham.getInt(5),
+                                            listSanPham.getString(5),
                                             listSanPham.getLong(6),
                                             listSanPham.getInt(7)
             ));
