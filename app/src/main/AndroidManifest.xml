@@ -17,7 +17,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-
+            android:name=".CategoryView"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ForgotPassword"
             android:exported="false" />
         <activity
@@ -27,7 +32,6 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-
             android:name=".activity.ChiTietSPActivity"
             android:exported="false" />
         <activity
@@ -47,6 +51,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -5,14 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.SanPhamActivity">
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -34,9 +37,9 @@
                     android:id="@+id/edtSearch"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="600dp"
                     android:layout_marginBottom="2dp"
                     android:hint="Search..."
-                    android:layout_marginLeft="600dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/toolbarManhinhChinh"
                     app:layout_constraintStart_toStartOf="parent"
@@ -46,141 +49,141 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
-                android:orientation="vertical"
                 android:background="#f5f5f5"
-                >
+                android:orientation="vertical">
+
                 <TextView
-                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="DANH MỤC SẢN PHẨM"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    android:textColor="#5D3D2E"
                     android:layout_marginLeft="12dp"
-                    />
+                    android:layout_marginTop="5dp"
+                    android:text="DANH MỤC SẢN PHẨM"
+                    android:textColor="#5D3D2E"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
-                <LinearLayout
-                    android:id="@+id/viewCategory"
+                <GridView
+                    android:id="@+id/gvCateList"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="6dp"
-                    >
-                    <TextView
-                        android:id="@+id/categoryFBox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="Flower Box"
-                        android:textSize="20dp"
-                        android:layout_marginLeft="60dp"
-                        />
+                    android:layout_height="155dp"
+                    android:numColumns="2" />
 
-                    <TextView
-                        android:id="@+id/categoryTulip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="Hoa Tulip"
-                        android:textSize="20dp"
-                        android:layout_marginLeft="60dp"
-                        />
+                <!--                <LinearLayout-->
+                <!--                    android:id="@+id/viewCategory"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginLeft="30dp"-->
+                <!--                    android:layout_marginTop="6dp"-->
+                <!--                    android:orientation="vertical">-->
 
-                    <TextView
-                        android:id="@+id/categoryHoabo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="Hoa bó"
-                        android:textSize="20dp"
-                        android:layout_marginLeft="60dp"
-                        />
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/categoryFBox"-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="30dp"-->
+                <!--                        android:layout_marginLeft="60dp"-->
+                <!--                        android:text="Flower Box"-->
+                <!--                        android:textSize="20dp" />-->
 
-                    <TextView
-                        android:id="@+id/categoryHoacuoi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="Hoa cưới"
-                        android:textSize="20dp"
-                        android:layout_marginLeft="180dp"
-                        android:layout_marginTop="-92dp"
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/categoryTulip"-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="30dp"-->
+                <!--                        android:layout_marginLeft="60dp"-->
+                <!--                        android:text="Hoa Tulip"-->
+                <!--                        android:textSize="20dp" />-->
 
-                        />
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/categoryHoabo"-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="30dp"-->
+                <!--                        android:layout_marginLeft="60dp"-->
+                <!--                        android:text="Hoa bó"-->
+                <!--                        android:textSize="20dp" />-->
 
-                    <TextView
-                        android:id="@+id/categoryHoalan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="Lan Hồ Điệp"
-                        android:textSize="20dp"
-                        android:layout_marginLeft="180dp"
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/categoryHoacuoi"-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="30dp"-->
+                <!--                        android:layout_marginLeft="180dp"-->
+                <!--                        android:layout_marginTop="-92dp"-->
+                <!--                        android:text="Hoa cưới"-->
+                <!--                        android:textSize="20dp"-->
 
-                        />
-                    <TextView
-                        android:id="@+id/categoryHoamau"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="Hoa mẫu đơn"
-                        android:textSize="20dp"
-                        android:layout_marginLeft="180dp"
-                        />
-                </LinearLayout>
+                <!--                        />-->
+
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/categoryHoalan"-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="30dp"-->
+                <!--                        android:layout_marginLeft="180dp"-->
+                <!--                        android:text="Lan Hồ Điệp"-->
+                <!--                        android:textSize="20dp"-->
+
+                <!--                        />-->
+
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/categoryHoamau"-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="30dp"-->
+                <!--                        android:layout_marginLeft="180dp"-->
+                <!--                        android:text="Hoa mẫu đơn"-->
+                <!--                        android:textSize="20dp" />-->
+                <!--                </LinearLayout>-->
             </LinearLayout>
 
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#fff"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                >
+                android:background="#fff"
+                android:orientation="vertical">
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tất cả sản phẩm"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
                     android:layout_marginLeft="12dp"
-                    />
+                    android:text="Tất cả sản phẩm"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="5dp"
-                    >
+                    android:layout_marginTop="10dp">
 
                 </androidx.recyclerview.widget.RecyclerView>
-
 
 
             </LinearLayout>
 
         </LinearLayout>
+
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigationView"
-            android:layout_gravity="start"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_gravity="start">
+
             <ListView
+                android:id="@+id/listManHinh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/listManHinh"
-                android:layout_marginTop="150dp"
-                />
+                android:layout_marginTop="150dp" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
-                    android:background="#E1CFBB"
-                    />
+                    android:background="#E1CFBB" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
