@@ -36,6 +36,7 @@ public class SanPhamActivity extends AppCompatActivity {
     //Activity hiển thị Danh mục sản phẩm (tất cả sản phẩm)
     Toolbar toolbar;
     RecyclerView recyclerViewManHinhChinh;
+    NavigationView navigationView;
     ListView lvManHinhChinh;
     DrawerLayout drawerLayout;
     MenuAdapter adapter;
