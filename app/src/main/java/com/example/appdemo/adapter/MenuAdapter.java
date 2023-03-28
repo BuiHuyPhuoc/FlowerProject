@@ -55,7 +55,6 @@ public class MenuAdapter extends BaseAdapter {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(layout,null);
             viewHolder = new ViewHolder();
-
             viewHolder.tv =(TextView) view.findViewById(R.id.tv_item);
             viewHolder.img =(ImageView) view.findViewById(R.id.imgItem);
             view.setTag(viewHolder);

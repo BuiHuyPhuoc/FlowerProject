@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                         "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
                         ");"
         );
-//        //Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
+//      //Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS VOUCHER(\n" +
                         "\tMAVOUCHER VARCHAR PRIMARY KEY not null,\n" +
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case 4:
-                        Intent dangxuat = new Intent(getApplicationContext(),DangXuatActivity.class);
+                        Intent dangxuat = new Intent(getApplicationContext(), DangXuatActivity.class);
                         startActivity(dangxuat);
                         break;
                 }
@@ -252,8 +252,6 @@ public class MainActivity extends AppCompatActivity {
         arrayList.add(new ItemMenu(R.drawable.baseline_shopping_cart_24,"Cart"));
         arrayList.add(new ItemMenu(R.drawable.introduce,"About us"));
         arrayList.add(new ItemMenu(R.drawable.baseline_logout_24,"Log Out"));
-
-
         //Khoi tao adapter
         adapter = new MenuAdapter(arrayList,R.layout.item_sanpham, this);
         lvManHinhChinh.setAdapter(adapter);

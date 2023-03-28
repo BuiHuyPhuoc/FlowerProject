@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.example.appdemo.R;
 import com.example.appdemo.model.DatabaseHelper;
 
-public class RegisterActivity extends AppCompatActivity {
+public class DangKyActivity extends AppCompatActivity {
     //Activity đăng kí tài khoản mới
     DatabaseHelper db;
     Button mRegisterBack, mRegisterSubmit;
@@ -25,8 +25,8 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        db = new DatabaseHelper(this, "FlowerShop.sqlite", null, 1);
+        setContentView(R.layout.activity_dang_ky);
+        db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
         mRegisterBack = (Button) findViewById(R.id.RegisterBack);
         mRegisterSubmit = (Button) findViewById(R.id.RegisterSubmit);
         mRegisterAcceptTerm = (CheckBox) findViewById(R.id.RegisterAcceptTerm)  ;
@@ -49,22 +49,22 @@ public class RegisterActivity extends AppCompatActivity {
             String gmail = mregisterGmail.getText().toString();
             String diachi = mregisterAddress.getText().toString();
             if (taikhoan.length() == 0 || matkhau.length() == 0 || hoten.length() == 0){
-                Toast.makeText(RegisterActivity.this, "Username, Password and Name is required", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Username, Password and Name is required", Toast.LENGTH_LONG).show();
                 return;
             }
             if (mRegisterAcceptTerm.isChecked() == false){
-                Toast.makeText(RegisterActivity.this, "You must accepted the Terms and Conditions once.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext()  , "You must accepted the Terms and Conditions once.", Toast.LENGTH_LONG).show();
                 return;
             }
             Cursor listAccount = db.GetData("Select* from ACCOUNT");
             while (listAccount.moveToNext()){
                 if (taikhoan.equals(listAccount.getString(0))){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
                     builder.setMessage("Username already exists.");
                     builder.setPositiveButton("Forgot Password?", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(RegisterActivity.this, ForgotPassword.class);
+                            Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
                             startActivity(intent);
                         }
                     });
@@ -78,12 +78,12 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
             db.AddAccount(taikhoan, matkhau, "customer", hoten, sdt, gmail, diachi);
-            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
             builder.setMessage("Create Account Success.");
             builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), DangXuatActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("user", mregisterUser.getText().toString());
                     bundle.putString("pass", mregisterPassword.getText().toString());
@@ -103,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
     public View.OnClickListener onClick_RegisterBack = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+            Intent i = new Intent(getApplicationContext(), DangXuatActivity.class);
             startActivity(i);
         }
     };

@@ -30,7 +30,6 @@ public class ChiTietSPActivity extends AppCompatActivity {
     SanPhamMoi sanPhamMoi;
     NotificationBadge badge;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
