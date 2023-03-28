@@ -68,18 +68,31 @@ public class DangXuatActivity extends AppCompatActivity {
                     "Select*" +
                             "From ACCOUNT"
             );
+
+            String role = ""; //Lưu lại role của tài khoản khi tìm thấy
             boolean existAccount = false;
             while (listAccount.moveToNext()){
                 if (taikhoan.equals(listAccount.getString(0)) && matkhau.equals(listAccount.getString(1))){
+                    role = listAccount.getString(2);
                     existAccount = true;
                     break;
                 }
             }
             if(existAccount){
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
+                //Nếu tài khoản được tìm thấy có role là admin thì vô trang admin
+                //ngược lại thì vào trang chủ của app
+                if (role.equals("admin")){
+                    Intent i = new Intent(getApplicationContext(), AdminActivity.class);
+                    startActivity(i);
+                    return;
+                } else {
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(i);
+                    return;
+                }
             } else {
                 Toast.makeText(getApplicationContext(), "Sai mật khẩu hoặc tài khoản", Toast.LENGTH_SHORT).show();
+                return;
             }
         }
     };

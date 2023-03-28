@@ -78,7 +78,7 @@ public class AdminActivity extends AppCompatActivity {
                 return true;
 
             case R.id.Logout:
-                Intent Logout = new Intent(AdminActivity.this, MainActivity.class);
+                Intent Logout = new Intent(AdminActivity.this, DangXuatActivity.class);
                 startActivity(Logout);
                 return true;
             default:
