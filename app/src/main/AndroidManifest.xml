@@ -17,6 +17,30 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".QLChiTietHoaDonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.QLHoaDonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.QLSanPhamActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.QLVoucherActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.QLAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AdminActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".DangKyActivity"
             android:exported="false" />
         <activity
@@ -29,9 +53,11 @@
             android:name=".ForgotPassword"
             android:exported="false" />
         <activity
-            android:name=".activity.DangKyActivity"
+            android:name=".RegisterActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.ChiTietSPActivity"
             android:exported="false" />

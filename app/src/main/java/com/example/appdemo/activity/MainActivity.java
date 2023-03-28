@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 "\tMATKHAU VARCHAR NOT NULL,\n" +
                 "\tQUYENHAN VARCHAR NOT NULL, \n" +
                 "\tTEN VARCHAR NOT NULL,\n" +
-                "\tSDT VARCHAR,\n" +
+                "\tSDT VARCHAR NOT NULL,\n" +
                 "\tGMAIL VARCHAR,\n" +
                 "\tDIACHI VARCHAR,\n" +
                 "\tFOREIGN KEY (QUYENHAN) REFERENCES [ROLE](QUYENHAN)\n" +
