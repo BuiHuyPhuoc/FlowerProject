@@ -142,7 +142,7 @@ android.widget.ListView ListView;
                 startActivity(HD);
                 return true;
             case R.id.Logout:
-                Intent Logout = new Intent(QLHoaDonActivity.this, LoginActivity.class);
+                Intent Logout = new Intent(QLHoaDonActivity.this, DangXuatActivity.class);
                 startActivity(Logout);
                 return true;
 

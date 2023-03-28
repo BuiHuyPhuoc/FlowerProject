@@ -31,6 +31,7 @@ public class QLAccountActivity extends AppCompatActivity {
     Button btnXoa,btnSua,btnThem,btnHienthi;
     QLAccount qlAccount;
     List<String> list = new ArrayList<>();
+    ArrayAdapter adapter;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class QLAccountActivity extends AppCompatActivity {
         //hiển thị dữ liệu khi chạy chương trình
         qlAccount = new QLAccount(QLAccountActivity.this);
         list=qlAccount.getAllAccountToString();
-        ArrayAdapter adapter =new ArrayAdapter(QLAccountActivity.this, android.R.layout.simple_list_item_1,list);
+        adapter = new ArrayAdapter(QLAccountActivity.this, android.R.layout.simple_list_item_1,list);
         ListView.setAdapter(adapter);
 
         //button hiển thị
@@ -87,7 +88,13 @@ public class QLAccountActivity extends AppCompatActivity {
                 }
                 if (kq==1){
                     Toast.makeText(QLAccountActivity.this,"Thêm thành công",Toast.LENGTH_LONG).show();
+                    //Hiển thị lại danh sách các tài khoản
+                    qlAccount = new QLAccount(QLAccountActivity.this);
+                    list=qlAccount.getAllAccountToString();
+                    ArrayAdapter adapter =new ArrayAdapter(QLAccountActivity.this, android.R.layout.simple_list_item_1,list);
+                    ListView.setAdapter(adapter);
                 }
+
             }
         });
         //Button Xóa
@@ -102,6 +109,11 @@ public class QLAccountActivity extends AppCompatActivity {
                 }
                 if (kq==1){
                     Toast.makeText(QLAccountActivity.this,"Xóa thành công",Toast.LENGTH_LONG).show();
+                    //Hiển thị lại danh sách các tài khoản
+                    qlAccount = new QLAccount(QLAccountActivity.this);
+                    list=qlAccount.getAllAccountToString();
+                    ArrayAdapter adapter =new ArrayAdapter(QLAccountActivity.this, android.R.layout.simple_list_item_1,list);
+                    ListView.setAdapter(adapter);
                 }
             }
         });
@@ -125,6 +137,11 @@ public class QLAccountActivity extends AppCompatActivity {
                 }
                 if (kq==1){
                     Toast.makeText(QLAccountActivity.this,"Sửa thành công",Toast.LENGTH_LONG).show();
+                    //Hiển thị lại danh sách các tài khoản
+                    qlAccount = new QLAccount(QLAccountActivity.this);
+                    list=qlAccount.getAllAccountToString();
+                    ArrayAdapter adapter =new ArrayAdapter(QLAccountActivity.this, android.R.layout.simple_list_item_1,list);
+                    ListView.setAdapter(adapter);
                 }
             }
         });

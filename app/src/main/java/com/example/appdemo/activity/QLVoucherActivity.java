@@ -141,7 +141,7 @@ public class QLVoucherActivity extends AppCompatActivity {
                 startActivity(HD);
                 return true;
             case R.id.Logout:
-                Intent Logout = new Intent(QLVoucherActivity.this, LoginActivity.class);
+                Intent Logout = new Intent(QLVoucherActivity.this, DangXuatActivity.class);
                 startActivity(Logout);
                 return true;
 

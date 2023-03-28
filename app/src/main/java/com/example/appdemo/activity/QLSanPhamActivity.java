@@ -167,7 +167,7 @@ public class QLSanPhamActivity extends AppCompatActivity {
                 startActivity(HD);
                 return true;
             case R.id.Logout:
-                Intent Logout = new Intent(QLSanPhamActivity.this, LoginActivity.class);
+                Intent Logout = new Intent(QLSanPhamActivity.this, DangXuatActivity.class);
                 startActivity(Logout);
                 return true;
 
