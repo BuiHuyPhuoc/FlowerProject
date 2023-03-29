@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 "\tMATKHAU VARCHAR NOT NULL,\n" +
                 "\tQUYENHAN VARCHAR NOT NULL, \n" +
                 "\tTEN VARCHAR NOT NULL,\n" +
-                "\tSDT VARCHAR,\n" +
+                "\tSDT VARCHAR NOT NULL,\n" +
                 "\tGMAIL VARCHAR,\n" +
                 "\tDIACHI VARCHAR,\n" +
                 "\tFOREIGN KEY (QUYENHAN) REFERENCES [ROLE](QUYENHAN)\n" +
@@ -85,9 +85,11 @@ public class MainActivity extends AppCompatActivity {
         db.AddCategory("TULIP", "Hoa Tulip");
         db.AddCategory("VASE", "Bình hoa");
 //        //Tạo bảng SẢN PHẨM: Lưu trữ sản phẩm (hoa)
-        //db.WriteQuery(
-          //    "Drop table if exists SANPHAM;"
-        //);//thao tác xóa bảng và tạo lại bảng
+
+        db.WriteQuery(
+              "Drop table if exists SANPHAM;"
+        );
+
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS SANPHAM (\n" +
                         "\tMASP VARCHAR PRIMARY KEY NOT NULL,\n" +
@@ -101,19 +103,34 @@ public class MainActivity extends AppCompatActivity {
                         "FOREIGN KEY (PHANLOAI) REFERENCES [CATEGORY](NAME)" +
                         ");"
         );
+
 //        //Thêm 1 vài sản phẩm mẫu vào database
-        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "das", 9500000, R.drawable.you_look_gorgeous);
-        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "asd", 9500000, R.drawable.hello_sweetheart);
-        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "ad", 9500000, R.drawable.strawberry_sundea);
-        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "asd", 9500000, R.drawable.wintry_wonder);
-        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "asd", 9500000, R.drawable.hopeful_romantic);
-        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "asd", 9500000, R.drawable.all_in_bloom);
-        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "asd", 9500000, R.drawable.blue_day);
-        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "asd", 9500000, R.drawable.red_love);
-        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "asd", 9500000, R.drawable.pure_white);
-        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "asd", 9500000, R.drawable.pastel_tulip);
-        db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "asd", 9500000, R.drawable.hope_for_love);
-        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ads", 9500000, R.drawable.big_rose);
+        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.you_look_gorgeous);
+        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hello_sweetheart);
+        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.strawberry_sundea);
+        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.wintry_wonder);
+        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hopeful_romantic);
+        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.all_in_bloom);
+        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.blue_day);
+        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.red_love);
+        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pure_white);
+        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pastel_tulip);
+        db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "", 9500000, R.drawable.hope_for_love);
+        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "", 9500000, R.drawable.big_rose);
+
+        //Thêm 1 vài sản phẩm mẫu vào database
+//        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.you_look_gorgeous);
+//        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hello_sweetheart);
+//        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.strawberry_sundea);
+//        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.wintry_wonder);
+//        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hopeful_romantic);
+//        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.all_in_bloom);
+//        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.blue_day);
+//        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.red_love);
+//        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pure_white);
+//        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pastel_tulip);
+//        db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "", 9500000, R.drawable.hope_for_love);
+//        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "", 9500000, R.drawable.big_rose);
 //        //Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS BILL (\n" +
@@ -136,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                         "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
                         ");"
         );
-//        //Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
+//      //Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS VOUCHER(\n" +
                         "\tMAVOUCHER VARCHAR PRIMARY KEY not null,\n" +
@@ -155,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                         ");"
         );
 //        //Tạo bảng CARTLIST: Lưu trữ giỏ hàng của người dùng, tự động cập nhật khi người dùng đăng nhập lại
-//
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS CARTLIST (\n" +
                         "\tIDCARTLIST   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
@@ -181,14 +197,14 @@ public class MainActivity extends AppCompatActivity {
             mangSpMoi.add(new SanPhamMoi(   listSanPham.getString(0),
                                             listSanPham.getString(1),
                                             listSanPham.getString(2),
-                                            listSanPham.getString(3),
+                                            listSanPham.getInt(3),
                                             listSanPham.getString(4),
-                                            listSanPham.getInt(5),
+                                            listSanPham.getString(5),
                                             listSanPham.getLong(6),
                                             listSanPham.getInt(7)
             ));
         }
-        spAdapter = new SanPhamAdapter( this,mangSpMoi);
+        spAdapter = new SanPhamAdapter( this, mangSpMoi);
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
         recyclerViewManHinhChinh.setAdapter(spAdapter);
@@ -220,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case 4:
-                        Intent dangxuat = new Intent(getApplicationContext(),DangXuatActivity.class);
+                        Intent dangxuat = new Intent(getApplicationContext(), DangXuatActivity.class);
                         startActivity(dangxuat);
                         break;
                 }
@@ -236,8 +252,6 @@ public class MainActivity extends AppCompatActivity {
         arrayList.add(new ItemMenu(R.drawable.baseline_shopping_cart_24,"Cart"));
         arrayList.add(new ItemMenu(R.drawable.introduce,"About us"));
         arrayList.add(new ItemMenu(R.drawable.baseline_logout_24,"Log Out"));
-
-
         //Khoi tao adapter
         adapter = new MenuAdapter(arrayList,R.layout.item_sanpham, this);
         lvManHinhChinh.setAdapter(adapter);

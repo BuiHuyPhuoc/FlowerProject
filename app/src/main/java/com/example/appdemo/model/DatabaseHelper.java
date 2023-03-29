@@ -18,23 +18,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(content);
     }
-    public void AddCategory(String NAME, String CONTENT){
-        Cursor listCategory = this.GetData(
-                "Select* from [CATEGORY]"
-        );
+    //Truy vấn trả kết quả (Select)
+    public Cursor GetData(String content){
+        SQLiteDatabase db =  getReadableDatabase();
+        return db.rawQuery(content, null);
+    }
+    //Hàm AddRole, Thêm dữ liệu vào bảng "ROLE"
+
+
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
+    }
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+    }
+    //Thêm nội dung vào db
+    public boolean AddAccount(String taikhoan, String matkhau, String quyenhan, String ten, String sdt, String gmail,String diachi){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor i = this.GetData("Select* from ACCOUNT");
         boolean check = true;
-        while (listCategory.moveToNext()){
-            if (NAME.equals(listCategory.getString(0))){
+        while (i.moveToNext()){
+            if (taikhoan.equals(i.getString(0))){
                 check = false;
                 break;
             }
         }
         if (check){
-            this.WriteQuery("Insert into [CATEGORY] Values" +
-                    "('" + NAME + "', '" + CONTENT + "');");
+            this.WriteQuery("Insert into ACCOUNT Values" +
+                    "('" + taikhoan + "', '" + matkhau + "', '" + quyenhan + "', '" + ten + "', '" + sdt + "', '" + gmail + "','" + diachi + "');");
         }
+        return check;
     }
-    public void AddProduct(String MASP, String TENSP,String PHANLOAI, Integer SOLUONG,String NOINHAP,String NOIDUNG, double DONGIA, int HINHANH){
+    public boolean AddRole(String role, String content){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor i = this.GetData("Select* from [ROLE]");
+        boolean check = true;
+        while (i.moveToNext()){
+            if (role.equals(i.getString(0))){
+                check = false;
+                break;
+            }
+        }
+        if (check){
+            this.WriteQuery("Insert into [ROLE] Values" +
+                    "('" + role + "', '" + content + "');");
+        }
+        return check;
+    }
+    public boolean AddProduct(String MASP, String TENSP,String PHANLOAI, Integer SOLUONG,String NOINHAP,String NOIDUNG, double DONGIA, int HINHANH){
         Cursor listSanPham = this.GetData(
                 "Select* from SANPHAM"
         );
@@ -49,53 +83,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             this.WriteQuery("Insert into SANPHAM Values" +
                     "('" + MASP + "', '" + TENSP + "', '" + PHANLOAI + "', '" + SOLUONG + "', '" + NOINHAP + "', '" + NOIDUNG + "', '" + DONGIA + "', '" + HINHANH + "');");
         }
-
+        return check;
     }
-
-    //Truy vấn trả kết quả (Select)
-    public Cursor GetData(String content){
-        SQLiteDatabase db =  getReadableDatabase();
-        return db.rawQuery(content, null);
-    }
-    //Hàm AddRole, Thêm dữ liệu vào bảng "ROLE"
-    public void AddRole(String role, String content){
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor i = this.GetData("Select* from [ROLE]");
+    public boolean AddCategory(String NAME, String CONTENT){
+        Cursor listCategory = this.GetData(
+                "Select* from [CATEGORY]"
+        );
         boolean check = true;
-        while (i.moveToNext()){
-            if (role.equals(i.getString(0))){
+        while (listCategory.moveToNext()){
+            if (NAME.equals(listCategory.getString(0))){
                 check = false;
                 break;
             }
         }
         if (check){
-            this.WriteQuery("Insert into [ROLE] Values" +
-                    "('" + role + "', '" + content + "');");
+            this.WriteQuery("Insert into [CATEGORY] Values" +
+                    "('" + NAME + "', '" + CONTENT + "');");
         }
+        return check;
     }
-    public void AddAccount(String taikhoan, String matkhau, String quyenhan, String ten, String sdt, String gmail,String diachi){
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor i = this.GetData("Select* from ACCOUNT");
-        boolean check = true;
-        while (i.moveToNext()){
-            if (taikhoan.equals(i.getString(0))){
-                check = false;
-                break;
-            }
-        }
-        if (check){
-            this.WriteQuery("Insert into ACCOUNT Values" +
-                    "('" + taikhoan + "', '" + matkhau + "', '" + quyenhan + "', '" + ten + "', '" + sdt + "', '" + gmail + "','" + diachi + "');");
-        }
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
-    }
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
-    }
-
 }

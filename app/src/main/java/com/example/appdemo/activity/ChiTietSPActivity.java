@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 import com.example.appdemo.R;
 import com.example.appdemo.Utils;
 import com.example.appdemo.model.GioHang;
@@ -30,7 +31,6 @@ public class ChiTietSPActivity extends AppCompatActivity {
     SanPhamMoi sanPhamMoi;
     NotificationBadge badge;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +39,6 @@ public class ChiTietSPActivity extends AppCompatActivity {
         actionBar();
         intData();
         Clickbtn();
-
     }
     private void Clickbtn(){
         btnthem.setOnClickListener(new View.OnClickListener() {
