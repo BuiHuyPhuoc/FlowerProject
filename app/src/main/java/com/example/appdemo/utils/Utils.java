@@ -1,5 +1,4 @@
-package com.example.appdemo;
-import com.example.appdemo.Utils;
+package com.example.appdemo.utils;
 import com.example.appdemo.model.GioHang;
 
 import java.util.List;

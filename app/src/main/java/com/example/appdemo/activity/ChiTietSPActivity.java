@@ -2,7 +2,6 @@ package com.example.appdemo.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
 import com.example.appdemo.R;
-import com.example.appdemo.Utils;
+import com.example.appdemo.utils.Utils;
 import com.example.appdemo.model.GioHang;
 import com.example.appdemo.model.SanPhamMoi;
 import com.nex3z.notificationbadge.NotificationBadge;
@@ -53,17 +52,19 @@ public class ChiTietSPActivity extends AppCompatActivity {
         if (Utils.manggiohang.size() > 0){
             boolean flag = false;
             int sl = Integer.parseInt(spinner.getSelectedItem().toString());
-            for (int i = 0 ; i < Utils.manggiohang.size() ; i++)
+            for (Integer i = 0 ; i < Utils.manggiohang.size() ; i++)
             {
                 //Truong72 hop trung sp
-               if (Utils.manggiohang.get(i).getIdsp() == sanPhamMoi.getMASP()){
-                    Utils.manggiohang.get(i).setSoluong(sl + Utils.manggiohang.get(i).getSoluong());
+               if (Utils.manggiohang.get(i).getIdsp() == sanPhamMoi.getMASP())
+               {
+                   Utils.manggiohang.get(i).setSoluong(sl + Utils.manggiohang.get(i).getSoluong());
                    long gia = sanPhamMoi.getDONGIA() * Utils.manggiohang.get(i).getSoluong();
                    Utils.manggiohang.get(i).setDONGIA(gia);
                    flag = true;
                }
             }
-            if (flag == false){
+            if(flag == false)
+            {
                 long gia = sanPhamMoi.getDONGIA() * sl;
                 GioHang gioHang = new GioHang();
                 gioHang.setDONGIA(gia);
@@ -90,7 +91,7 @@ public class ChiTietSPActivity extends AppCompatActivity {
     }
 
     private void intData(){
-        SanPhamMoi sanPhamMoi = (SanPhamMoi) getIntent().getSerializableExtra("chitiet");
+        sanPhamMoi = (SanPhamMoi) getIntent().getSerializableExtra("chitiet");
         tensp.setText(sanPhamMoi.getTENSP());
         motasp.setText(sanPhamMoi.getNOIDUNG());
         Glide.with(getApplicationContext()).load(sanPhamMoi.getHINHANH()).into(imgHinhAnh);
@@ -105,11 +106,11 @@ public class ChiTietSPActivity extends AppCompatActivity {
         giasp = (TextView) findViewById(R.id.tvGia);
         motasp = (TextView) findViewById(R.id.tvMotasp);
         noinhapsp = (TextView) findViewById(R.id.tvNoiNhap);
-        btnthem = (Button) findViewById(R.id.btnThemvaoGioHang);
+        btnthem = (Button) findViewById(R.id.btnthemvaoGioHang);
         spinner = (Spinner) findViewById(R.id.spinner);
         imgHinhAnh = (ImageView) findViewById(R.id.imgchitiet);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        badge = findViewById(R.id.menu_sl);
+        badge = (NotificationBadge) findViewById(R.id.menu_sl);
         if (Utils.manggiohang != null){
             badge.setText(String.valueOf(Utils.manggiohang.size()));
         }
