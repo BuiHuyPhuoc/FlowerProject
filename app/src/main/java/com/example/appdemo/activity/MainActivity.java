@@ -105,83 +105,82 @@ public class MainActivity extends AppCompatActivity {
         );
 
 //        //Thêm 1 vài sản phẩm mẫu vào database
-        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.you_look_gorgeous);
-        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hello_sweetheart);
-        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.strawberry_sundea);
-        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.wintry_wonder);
-        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hopeful_romantic);
-        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.all_in_bloom);
-        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.blue_day);
-        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.red_love);
-        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pure_white);
-        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pastel_tulip);
-        db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "", 9500000, R.drawable.hope_for_love);
-        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "", 9500000, R.drawable.big_rose);
+        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.you_look_gorgeous);
+        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.hello_sweetheart);
+        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.strawberry_sundea);
+        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.wintry_wonder);
+        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.hopeful_romantic);
+        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.all_in_bloom);
+        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.blue_day);
+        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.red_love);
+        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pure_white);
+        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pastel_tulip);
+        db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.hope_for_love);
+        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.big_rose);
 
-        //Thêm 1 vài sản phẩm mẫu vào database
-//        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.you_look_gorgeous);
-//        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hello_sweetheart);
-//        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.strawberry_sundea);
-//        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.wintry_wonder);
-//        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "", 9500000, R.drawable.hopeful_romantic);
-//        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.all_in_bloom);
-//        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.blue_day);
-//        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.red_love);
-//        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pure_white);
-//        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.pastel_tulip);
-//        db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "", 9500000, R.drawable.hope_for_love);
-//        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "", 9500000, R.drawable.big_rose);
-//        //Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
-        db.WriteQuery(
-                "CREATE TABLE IF NOT EXISTS BILL (\n" +
-                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                        "    DATEORDER        VARCHAR           NOT NULL,\n" +
-                        "    TAIKHOANCUS            VARCHAR            NOT NULL,\n" +
-                        "    ADDRESSDELIVERRY VARCHAR NOT NULL,\n" +
-                        "    FOREIGN KEY (TAIKHOANCUS) REFERENCES ACCOUNT(TAIKHOAN)\n" +
-                        ");"
-        );
+        //Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
+        db.WriteQuery("Drop table if exists CARTLIST");
+//        db.WriteQuery("Drop table if exists VOUCHER");
+//        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
+//        db.WriteQuery("Drop table if exists BILLDETAIL");
+//        db.WriteQuery("Drop table if exists bill");
+//        db.WriteQuery(
+//                "CREATE TABLE IF NOT EXISTS BILL (\n" +
+//                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+//                        "    DATEORDER        VARCHAR           NOT NULL,\n" +
+//                        "    TAIKHOANCUS            VARCHAR            NOT NULL,\n" +
+//                        "    ADDRESSDELIVERRY VARCHAR NOT NULL,\n" +
+//                        "    FOREIGN KEY (TAIKHOANCUS) REFERENCES ACCOUNT(TAIKHOAN)\n" +
+//                        ");"
+//        );
+//        //Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
+//        db.WriteQuery("Drop table IF exists VOUCHER,");
+//        db.WriteQuery(
+//                "CREATE TABLE IF NOT EXISTS VOUCHER(\n" +
+//                        "\tMAVOUCHER VARCHAR PRIMARY KEY not null,\n" +
+//                        "\tGIAM INTEGER DEFAULT(1) Check(GIAM >= 0),\n" +
+//                        ")"
+//        );
 //        //Tạo bảng Bill_Detail: Chi tiết hóa đơn
-        db.WriteQuery(
-                "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
-                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                        "    MASP VARCHAR NOT NULL,\n" +
-                        "    IDORDER   INTEGER not NULL,\n" +
-                        "    QUANTITY  INTEGER check(QUANTITY > 0) not NULL,\n" +
-                        "    UNITPRICE Real check(UNITPRICE > 0) not NULL,\n" +
-                        "    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP),\n" +
-                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
-                        ");"
-        );
-//      //Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
-        db.WriteQuery(
-                "CREATE TABLE IF NOT EXISTS VOUCHER(\n" +
-                        "\tMAVOUCHER VARCHAR PRIMARY KEY not null,\n" +
-                        "\tGIAM INTERGER DEFAULT(1) Check(GIAM >= 0),\n" +
-                        "\tHANSD VARCHAR \n" +
-                        ")"
-        );
-
-//        //Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể
-        db.WriteQuery(
-                "CREATE TABLE IF NOT EXISTS VOUCHER_DETAIL(\n" +
-                        "\tMAVOUCHER VARCHAR,\n" +
-                        "\tMASP VARCHAR NOT NULL,\n" +
-                        "\tFOREIGN KEY (MAVOUCHER) REFERENCES VOUCHER(MAVOUCHER),\n" +
-                        "  FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP)\n" +
-                        ");"
-        );
-//        //Tạo bảng CARTLIST: Lưu trữ giỏ hàng của người dùng, tự động cập nhật khi người dùng đăng nhập lại
-        db.WriteQuery(
-                "CREATE TABLE IF NOT EXISTS CARTLIST (\n" +
-                        "\tIDCARTLIST   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                        "\tIDCUS        VARCHAR NOT NULL,\n" +
-                        "\tIDSANPHAM    VARCHAR NOT NULL,\n" +
-                        "\tSOLUONG      INTEGER CHECK(SOLUONG > 0) NOT NULL,\n" +
-                        "\tFOREIGN KEY (IDCUS) REFERENCES ACCOUNT(TAIKHOAN),\n" +
-                        "\tFOREIGN KEY (IDSANPHAM) REFERENCES SANPHAM(MASP)\n" +
-                        ")"
-        );
+//        db.WriteQuery("Drop table if EXISTS BILLDETAIL,");
+//        db.WriteQuery(
+//                "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
+//                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+//                        "    MASP VARCHAR NOT NULL,\n" +
+//                        "    IDORDER   INTEGER not NULL,\n" +
+//                        "    IDVoucher VARCHAR not null, \n" +
+//                        "    QUANTITY  INTEGER check(QUANTITY > 0) not NULL,\n" +
+//                        "    UNITPRICE Real check(UNITPRICE > 0) not NULL,\n" +
+//                        "    TOTALPRICE Real check (TOTALPRICE > 0) not Null,\n" +
+//                        "    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP),\n" +
+//                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
+//                        "    FOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)" +
+//                        ");"
+//        );
+//
+//
+////        //Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể
+//        db.WriteQuery(
+//                "CREATE TABLE IF NOT EXISTS VOUCHER_DETAIL(\n" +
+//                        "\tMAVOUCHER VARCHAR,\n" +
+//                        "\tMASP VARCHAR NOT NULL,\n" +
+//                        "\tFOREIGN KEY (MAVOUCHER) REFERENCES VOUCHER(MAVOUCHER),\n" +
+//                        "  FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP)\n" +
+//                        ");"
+//        );
+////        //Tạo bảng CARTLIST: Lưu trữ giỏ hàng của người dùng, tự động cập nhật khi người dùng đăng nhập lại
+//        db.WriteQuery(
+//                "CREATE TABLE IF NOT EXISTS CARTLIST (\n" +
+//                        "\tIDCARTLIST   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+//                        "\tIDCUS        VARCHAR NOT NULL,\n" +
+//                        "\tIDSANPHAM    VARCHAR NOT NULL,\n" +
+//                        "\tIDVoucher VARCHAR not null,\n" +
+//                        "\tSOLUONG      INTEGER CHECK(SOLUONG > 0) NOT NULL,\n" +
+//                        "\tFOREIGN KEY (IDCUS) REFERENCES ACCOUNT(TAIKHOAN),\n" +
+//                        "\tFOREIGN KEY (IDSANPHAM) REFERENCES SANPHAM(MASP)\n" +
+//                        "\tFOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)\n" +
+//                        ")"
+//        );
         anhxa();
         actionBar();
         actionMenu();

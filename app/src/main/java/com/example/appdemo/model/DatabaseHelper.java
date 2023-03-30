@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.Calendar;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -36,70 +38,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
     //Thêm nội dung vào db
-    public boolean AddAccount(String taikhoan, String matkhau, String quyenhan, String ten, String sdt, String gmail,String diachi){
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor i = this.GetData("Select* from ACCOUNT");
-        boolean check = true;
+    private boolean CheckExists(String PrimaryColumn, String TableName){
+        Cursor i = this.GetData("Select* from " + TableName);
         while (i.moveToNext()){
-            if (taikhoan.equals(i.getString(0))){
-                check = false;
-                break;
+            if (PrimaryColumn.equals(i.getString(0))){
+                return false;
             }
         }
-        if (check){
+        return true;
+    }
+    public boolean AddAccount(String taikhoan, String matkhau, String quyenhan, String ten, String sdt, String gmail,String diachi){
+        if (CheckExists(taikhoan, "Account")){
             this.WriteQuery("Insert into ACCOUNT Values" +
                     "('" + taikhoan + "', '" + matkhau + "', '" + quyenhan + "', '" + ten + "', '" + sdt + "', '" + gmail + "','" + diachi + "');");
         }
-        return check;
+        return CheckExists(taikhoan, "Account");
     }
     public boolean AddRole(String role, String content){
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor i = this.GetData("Select* from [ROLE]");
-        boolean check = true;
-        while (i.moveToNext()){
-            if (role.equals(i.getString(0))){
-                check = false;
-                break;
-            }
-        }
-        if (check){
-            this.WriteQuery("Insert into [ROLE] Values" +
+        if (CheckExists(role, "[ROLE]")){
+            this.WriteQuery("Insert into ACCOUNT Values" +
                     "('" + role + "', '" + content + "');");
         }
-        return check;
+        return CheckExists(role, "[ROLE]");
     }
     public boolean AddProduct(String MASP, String TENSP,String PHANLOAI, Integer SOLUONG,String NOINHAP,String NOIDUNG, double DONGIA, int HINHANH){
-        Cursor listSanPham = this.GetData(
-                "Select* from SANPHAM"
-        );
-        boolean check = true;
-        while (listSanPham.moveToNext()){
-            if (MASP.equals(listSanPham.getString(0))){
-                check = false;
-                break;
-            }
-        }
-        if (check){
+        if (CheckExists(MASP, "SANPHAM")){
             this.WriteQuery("Insert into SANPHAM Values" +
                     "('" + MASP + "', '" + TENSP + "', '" + PHANLOAI + "', '" + SOLUONG + "', '" + NOINHAP + "', '" + NOIDUNG + "', '" + DONGIA + "', '" + HINHANH + "');");
         }
-        return check;
+        return CheckExists(MASP, "SANPHAM");
     }
     public boolean AddCategory(String NAME, String CONTENT){
-        Cursor listCategory = this.GetData(
-                "Select* from [CATEGORY]"
-        );
-        boolean check = true;
-        while (listCategory.moveToNext()){
-            if (NAME.equals(listCategory.getString(0))){
-                check = false;
-                break;
-            }
-        }
-        if (check){
+        if (CheckExists(NAME, "[CATEGORY]")){
             this.WriteQuery("Insert into [CATEGORY] Values" +
                     "('" + NAME + "', '" + CONTENT + "');");
         }
-        return check;
+        return CheckExists(NAME, "[CATEGORY]");
+    }
+    public boolean AddBill(String TAIKHOANCUS, String ADDRESSDELIVERRY){
+        try{
+            Calendar c = Calendar.getInstance();
+            String DATEORDER = Integer.toString(c.get(Calendar.DAY_OF_MONTH)) + "/" + Integer.toString(c.get(Calendar.MONTH) + 1) + "/" + Integer.toString(c.get(Calendar.YEAR)) ;
+            SQLiteDatabase db = getReadableDatabase();
+            this.WriteQuery("Insert into [CATEGORY] (DATEORDER, TAIKHOANCUS, ADDRESSDELIVERRY) Values" +
+                    "('" + DATEORDER + "', '" + TAIKHOANCUS + "', '" + ADDRESSDELIVERRY + "');");
+            return true;
+        }
+       catch (Exception e){
+            return false;
+       }
     }
 }
