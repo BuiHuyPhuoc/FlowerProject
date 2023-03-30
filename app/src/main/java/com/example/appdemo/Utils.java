@@ -1,4 +1,4 @@
-package com.example.appdemo.utils;
+package com.example.appdemo;
 import com.example.appdemo.model.GioHang;
 
 import java.util.List;

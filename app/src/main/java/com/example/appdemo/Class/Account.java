@@ -1,4 +1,7 @@
 package com.example.appdemo.Class;
+
+import com.example.appdemo.R;
+
 public class Account {
 
     private String TAIKHOAN;

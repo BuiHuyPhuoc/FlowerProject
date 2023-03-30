@@ -36,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
     //Thêm nội dung vào db
-    public boolean AddAccount(String taikhoan, String matkhau, String quyenhan, String ten, String sdt, String gmail,String diachi){
+    public boolean AddAccount(String taikhoan, String matkhau, String quyenhan, String ten, String sdt, String gmail, String diachi){
         SQLiteDatabase db = getReadableDatabase();
         Cursor i = this.GetData("Select* from ACCOUNT");
         boolean check = true;

@@ -45,10 +45,11 @@ public class DangKyActivity extends AppCompatActivity {
             String taikhoan = mregisterUser.getText().toString();
             String matkhau = mregisterPassword.getText().toString();
             String hoten = mregisterName.getText().toString();
-            String sdt = mregisterPhonenumber.getText().toString();
+            String sdt = mregisterPhonenumber.getText().toString() ;
             String gmail = mregisterGmail.getText().toString();
             String diachi = mregisterAddress.getText().toString();
-            if (taikhoan.length() == 0 || matkhau.length() == 0 || hoten.length() == 0){
+
+            if (taikhoan.length() == 0 || matkhau.length() == 0 || hoten.length() == 0 || sdt.length() == 0){
                 Toast.makeText(getApplicationContext(), "Username, Password and Name is required", Toast.LENGTH_LONG).show();
                 return;
             }
@@ -59,12 +60,12 @@ public class DangKyActivity extends AppCompatActivity {
             Cursor listAccount = db.GetData("Select* from ACCOUNT");
             while (listAccount.moveToNext()){
                 if (taikhoan.equals(listAccount.getString(0))){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(DangKyActivity.this);
                     builder.setMessage("Username already exists.");
                     builder.setPositiveButton("Forgot Password?", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
+                            Intent intent = new Intent(DangKyActivity.this, ForgotPassword.class);
                             startActivity(intent);
                         }
                     });
@@ -75,15 +76,16 @@ public class DangKyActivity extends AppCompatActivity {
                     });
                     // Create the AlertDialog object
                     builder.create().show();
+                    break;
                 }
             }
             db.AddAccount(taikhoan, matkhau, "customer", hoten, sdt, gmail, diachi);
-            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(DangKyActivity.this);
             builder.setMessage("Create Account Success.");
             builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(getApplicationContext(), DangXuatActivity.class);
+                    Intent intent = new Intent(DangKyActivity.this, DangXuatActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("user", mregisterUser.getText().toString());
                     bundle.putString("pass", mregisterPassword.getText().toString());
@@ -103,7 +105,7 @@ public class DangKyActivity extends AppCompatActivity {
     public View.OnClickListener onClick_RegisterBack = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent i = new Intent(getApplicationContext(), DangXuatActivity.class);
+            Intent i = new Intent(DangKyActivity.this, DangXuatActivity.class);
             startActivity(i);
         }
     };
