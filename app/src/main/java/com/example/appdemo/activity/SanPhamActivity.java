@@ -143,7 +143,6 @@ public class SanPhamActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
         recyclerViewManHinhChinh.setAdapter(spAdapter);
         recyclerViewManHinhChinh.setLayoutManager(layoutManager);
-
     }
 
     private void getEventClick () {
@@ -161,18 +160,12 @@ public class SanPhamActivity extends AppCompatActivity {
                         startActivity(sanpham);
                         break;
 
-
                     case 2:
-                        Intent giohang = new Intent(getApplicationContext(), GioHangActivity.class);
-                        startActivity(giohang);
-                        break;
-
-                    case 3:
                         Intent gioithieu = new Intent(getApplicationContext(), GioiThieuActivity.class);
                         startActivity(gioithieu);
                         break;
 
-                    case 4:
+                    case 3:
                         Intent dangxuat = new Intent(getApplicationContext(), DangXuatActivity.class);
                         startActivity(dangxuat);
                         break;
@@ -186,7 +179,6 @@ public class SanPhamActivity extends AppCompatActivity {
         arrayList = new ArrayList<>();
         arrayList.add(new ItemMenu(R.drawable.baseline_home_24, "Home"));
         arrayList.add(new ItemMenu(R.drawable.product, "Product"));
-        arrayList.add(new ItemMenu(R.drawable.baseline_shopping_cart_24, "Cart"));
         arrayList.add(new ItemMenu(R.drawable.introduce, "About us"));
         arrayList.add(new ItemMenu(R.drawable.baseline_logout_24, "Log Out"));
 

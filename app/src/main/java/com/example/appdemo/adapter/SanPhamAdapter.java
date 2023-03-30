@@ -58,7 +58,6 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHo
                 context.startActivity(i);
             }
         });
-
     }
 
     @Override

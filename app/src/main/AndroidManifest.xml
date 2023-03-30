@@ -36,7 +36,7 @@
             android:exported="false">
         </activity>
         <activity
-            android:name=".DangKyActivity"
+            android:name=".activity.DangKyActivity"
             android:exported="false" />
         <activity
             android:name=".CategoryView"
@@ -58,7 +58,14 @@
             android:exported="false" />
         <activity
             android:name=".activity.DangXuatActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".activity.GioHangActivity"
             android:exported="false" />
@@ -70,12 +77,8 @@
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
