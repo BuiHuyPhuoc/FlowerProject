@@ -1,11 +1,20 @@
 package com.example.appdemo.model;
 
 public class GioHang {
-    String idsp,tenSp;
+    String idsp;
+    String tenSp;
     Long DONGIA;
     Integer hinhSp,soluong;
 
     public GioHang() {
+    }
+
+    public GioHang(String idsp, String tenSp, Long DONGIA, Integer hinhSp, Integer soluong) {
+        this.idsp = idsp;
+        this.tenSp = tenSp;
+        this.DONGIA = DONGIA;
+        this.hinhSp = hinhSp;
+        this.soluong = soluong;
     }
 
     public String getIdsp() {
@@ -23,7 +32,6 @@ public class GioHang {
     public void setTenSp(String tenSp) {
         this.tenSp = tenSp;
     }
-
     public Long getDONGIA() {
         return DONGIA;
     }
@@ -40,11 +48,11 @@ public class GioHang {
         this.hinhSp = hinhSp;
     }
 
-    public int getSoluong() {
+    public Integer getSoluong() {
         return soluong;
     }
 
-    public void setSoluong(int soluong) {
+    public void setSoluong(Integer soluong) {
         this.soluong = soluong;
     }
 }

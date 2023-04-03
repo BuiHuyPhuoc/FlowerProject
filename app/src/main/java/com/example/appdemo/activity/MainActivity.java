@@ -27,6 +27,7 @@ import com.example.appdemo.model.DatabaseHelper;
 import com.example.appdemo.model.ItemMenu;
 import com.example.appdemo.model.SanPhamMoi;
 import com.google.android.material.navigation.NavigationView;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<ItemMenu> arrayList;
     List<SanPhamMoi> mangSpMoi = new ArrayList<SanPhamMoi>();
     SanPhamAdapter spAdapter;
+    NotificationBadge badge;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

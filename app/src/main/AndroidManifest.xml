@@ -49,7 +49,9 @@
             android:exported="false" />
         <activity
             android:name=".activity.DangXuatActivity"
-            android:exported="false" />
+            android:exported="false" >
+        </activity>
+
         <activity
             android:name=".activity.GioHangActivity"
             android:exported="false" />

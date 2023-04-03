@@ -82,5 +82,4 @@ public class SanPhamMoi implements Serializable {
     public void setDONGIA(Long DONGIA) {
         this.DONGIA = DONGIA;
     }
-
 }

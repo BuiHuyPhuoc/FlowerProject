@@ -64,7 +64,7 @@ public class DangKyActivity extends AppCompatActivity {
                 return;
             }
             if (mRegisterAcceptTerm.isChecked() == false){
-                Toast.makeText(DangKyActivity.this  , "You must accepted the Terms and Conditions once.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext()  , "You must accepted the Terms and Conditions once.", Toast.LENGTH_LONG).show();
                 return;
             }
             if (db.AddAccount(taikhoan, matkhau, "customer", hoten, sdt, gmail, diachi) == true){
@@ -113,7 +113,7 @@ public class DangKyActivity extends AppCompatActivity {
     public View.OnClickListener onClick_RegisterBack = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent i = new Intent(DangKyActivity.this, DangXuatActivity.class);
+            Intent i = new Intent(getApplicationContext(), DangXuatActivity.class);
             startActivity(i);
         }
     };
