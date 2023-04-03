@@ -98,7 +98,7 @@ public class DangXuatActivity extends AppCompatActivity {
         db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "asd", 9500000, R.drawable.hope_for_love);
         db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ads", 9500000, R.drawable.big_rose);
 //        //Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
-        00db.WriteQuery(
+        db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS BILL (\n" +
                         "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
                         "    DATEORDER        VARCHAR           NOT NULL,\n" +
@@ -107,7 +107,7 @@ public class DangXuatActivity extends AppCompatActivity {
                         "    FOREIGN KEY (TAIKHOANCUS) REFERENCES ACCOUNT(TAIKHOAN)\n" +
                         ");"
         );
-//        //Tạo bảng Bill_Detail: Chi tiết hóa đơn
+        //Tạo bảng Bill_Detail: Chi tiết hóa đơn
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
                         "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
@@ -119,7 +119,7 @@ public class DangXuatActivity extends AppCompatActivity {
                         "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
                         ");"
         );
-//        //Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
+        //Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS VOUCHER(\n" +
                         "\tMAVOUCHER VARCHAR PRIMARY KEY not null,\n" +
