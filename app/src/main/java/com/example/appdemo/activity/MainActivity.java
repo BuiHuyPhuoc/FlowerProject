@@ -28,12 +28,13 @@ import com.example.appdemo.model.ItemMenu;
 import com.example.appdemo.model.SanPhamMoi;
 import com.google.android.material.navigation.NavigationView;
 
+import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper db; //Khởi tạo database
-    //Check GitHub 2
+    Bundle status;
     Toolbar toolbar;
     ViewFlipper viewFlipper;
     RecyclerView recyclerViewManHinhChinh;
@@ -48,33 +49,46 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        Tạo database
+        //Tạo database
         db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
-        //Tạo bảng ROLE: Quyền hạn
-        String x =  "CREATE TABLE IF NOT EXISTS [ROLE] (" +
-                "QUYENHAN VARCHAR PRIMARY KEY NOT NULL," +
-                "NOIDUNG Text NOT NULL);";
-        db.WriteQuery(x);
-//        //Thêm dữ liệu vào bảng [ROLE]
-        db.AddRole("admin", "quan tri vien");
-        db.AddRole("customer", "khach hang");
-//        //Tạo bảng ACCOUNT: chứa các tài khoản
-        String y = "CREATE TABLE IF NOT EXISTS ACCOUNT (\n" +
+
+        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
+//        db.WriteQuery("Drop table if exists CARTLIST");
+//        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
+//        db.WriteQuery("Drop table if exists VOUCHER");
+//        db.WriteQuery("Drop table if exists BILLDETAIL");
+//        db.WriteQuery("Drop table if exists BILL");
+//        db.WriteQuery("Drop table if exists SANPHAM");
+//        db.WriteQuery("Drop table if exists [CATEGORY]");
+//        db.WriteQuery("Drop table if exists ACCOUNT");
+//        db.WriteQuery("Drop table if exists [ROLE]");
+
+        //region Tạo bảng ROLE: Quyền hạn
+        db.WriteQuery("CREATE TABLE IF NOT EXISTS [ROLE] (" +
+                            "QUYENHAN VARCHAR PRIMARY KEY NOT NULL," +
+                            "NOIDUNG Text NOT NULL)");
+        //Thêm dữ liệu vào bảng [ROLE]
+        db.AddRole("admin", "Quản trị viên");
+        db.AddRole("customer", "Khách hàng");
+        //endregion
+
+        //region Tạo bảng ACCOUNT: chứa các tài khoản
+        db.WriteQuery("CREATE TABLE IF NOT EXISTS ACCOUNT (\n" +
                 "\tTAIKHOAN VARCHAR PRIMARY KEY NOT NULL,\n" +
                 "\tMATKHAU VARCHAR NOT NULL,\n" +
                 "\tQUYENHAN VARCHAR NOT NULL, \n" +
-                "\tTEN VARCHAR NOT NULL,\n" +
-                "\tSDT VARCHAR NOT NULL,\n" +
+                "\tTEN VARCHAR,\n" +
+                "\tSDT VARCHAR,\n" +
                 "\tGMAIL VARCHAR,\n" +
                 "\tDIACHI VARCHAR,\n" +
                 "\tFOREIGN KEY (QUYENHAN) REFERENCES [ROLE](QUYENHAN)\n" +
-                ");";
-        db.WriteQuery(y);
+                ");");
         //Thêm tài khoản admin và khách hàng mẫu để test
         db.AddAccount("123", "123", "admin", "Nguyen Van A", "", "", "");
         db.AddAccount("1234", "1234", "customer", "Nguyen Thi B", "0334379439", "", "119");
-        //Tạo bảng CATEGORY: Phân loại sản phẩm
+        //endregion
+
+        //region Tạo bảng CATEGORY: Phân loại sản phẩm
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS [CATEGORY] (" +
                         "NAME VARCHAR PRIMARY KEY NOT NULL, " +
@@ -84,12 +98,9 @@ public class MainActivity extends AppCompatActivity {
         db.AddCategory("COMBO", "Bó hoa");
         db.AddCategory("TULIP", "Hoa Tulip");
         db.AddCategory("VASE", "Bình hoa");
-//        //Tạo bảng SẢN PHẨM: Lưu trữ sản phẩm (hoa)
+        //endregion
 
-        db.WriteQuery(
-              "Drop table if exists SANPHAM;"
-        );
-
+        //region Tạo bảng SẢN PHẨM: Lưu trữ sản phẩm (hoa)
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS SANPHAM (\n" +
                         "\tMASP VARCHAR PRIMARY KEY NOT NULL,\n" +
@@ -103,8 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         "FOREIGN KEY (PHANLOAI) REFERENCES [CATEGORY](NAME)" +
                         ");"
         );
-
-//        //Thêm 1 vài sản phẩm mẫu vào database
+        //Thêm 1 vài sản phẩm mẫu vào database
         db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.you_look_gorgeous);
         db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.hello_sweetheart);
         db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.strawberry_sundea);
@@ -117,76 +127,81 @@ public class MainActivity extends AppCompatActivity {
         db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pastel_tulip);
         db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.hope_for_love);
         db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.big_rose);
+        //endregion
 
-        //Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
-        db.WriteQuery("Drop table if exists CARTLIST");
-//        db.WriteQuery("Drop table if exists VOUCHER");
-//        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
-//        db.WriteQuery("Drop table if exists BILLDETAIL");
-//        db.WriteQuery("Drop table if exists bill");
-//        db.WriteQuery(
-//                "CREATE TABLE IF NOT EXISTS BILL (\n" +
-//                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-//                        "    DATEORDER        VARCHAR           NOT NULL,\n" +
-//                        "    TAIKHOANCUS            VARCHAR            NOT NULL,\n" +
-//                        "    ADDRESSDELIVERRY VARCHAR NOT NULL,\n" +
-//                        "    FOREIGN KEY (TAIKHOANCUS) REFERENCES ACCOUNT(TAIKHOAN)\n" +
-//                        ");"
-//        );
-//        //Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
-//        db.WriteQuery("Drop table IF exists VOUCHER,");
-//        db.WriteQuery(
-//                "CREATE TABLE IF NOT EXISTS VOUCHER(\n" +
-//                        "\tMAVOUCHER VARCHAR PRIMARY KEY not null,\n" +
-//                        "\tGIAM INTEGER DEFAULT(1) Check(GIAM >= 0),\n" +
-//                        ")"
-//        );
-//        //Tạo bảng Bill_Detail: Chi tiết hóa đơn
-//        db.WriteQuery("Drop table if EXISTS BILLDETAIL,");
-//        db.WriteQuery(
-//                "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
-//                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-//                        "    MASP VARCHAR NOT NULL,\n" +
-//                        "    IDORDER   INTEGER not NULL,\n" +
-//                        "    IDVoucher VARCHAR not null, \n" +
-//                        "    QUANTITY  INTEGER check(QUANTITY > 0) not NULL,\n" +
-//                        "    UNITPRICE Real check(UNITPRICE > 0) not NULL,\n" +
-//                        "    TOTALPRICE Real check (TOTALPRICE > 0) not Null,\n" +
-//                        "    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP),\n" +
-//                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
-//                        "    FOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)" +
-//                        ");"
-//        );
-//
-//
-////        //Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể
-//        db.WriteQuery(
-//                "CREATE TABLE IF NOT EXISTS VOUCHER_DETAIL(\n" +
-//                        "\tMAVOUCHER VARCHAR,\n" +
-//                        "\tMASP VARCHAR NOT NULL,\n" +
-//                        "\tFOREIGN KEY (MAVOUCHER) REFERENCES VOUCHER(MAVOUCHER),\n" +
-//                        "  FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP)\n" +
-//                        ");"
-//        );
-////        //Tạo bảng CARTLIST: Lưu trữ giỏ hàng của người dùng, tự động cập nhật khi người dùng đăng nhập lại
-//        db.WriteQuery(
-//                "CREATE TABLE IF NOT EXISTS CARTLIST (\n" +
-//                        "\tIDCARTLIST   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-//                        "\tIDCUS        VARCHAR NOT NULL,\n" +
-//                        "\tIDSANPHAM    VARCHAR NOT NULL,\n" +
-//                        "\tIDVoucher VARCHAR not null,\n" +
-//                        "\tSOLUONG      INTEGER CHECK(SOLUONG > 0) NOT NULL,\n" +
-//                        "\tFOREIGN KEY (IDCUS) REFERENCES ACCOUNT(TAIKHOAN),\n" +
-//                        "\tFOREIGN KEY (IDSANPHAM) REFERENCES SANPHAM(MASP)\n" +
-//                        "\tFOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)\n" +
-//                        ")"
-//        );
+        //region Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
+        db.WriteQuery(
+                "CREATE TABLE IF NOT EXISTS BILL (\n" +
+                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                        "    DATEORDER        VARCHAR           NOT NULL,\n" +
+                        "    TAIKHOANCUS            VARCHAR            NOT NULL,\n" +
+                        "    ADDRESSDELIVERRY VARCHAR NOT NULL,\n" +
+                        "    FOREIGN KEY (TAIKHOANCUS) REFERENCES ACCOUNT(TAIKHOAN)\n" +
+                        ");"
+        );
+        //endregion
+
+        //region Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
+        db.WriteQuery(
+                "CREATE TABLE IF NOT EXISTS VOUCHER(\n" +
+                        "\tMAVOUCHER VARCHAR PRIMARY KEY not null,\n" +
+                        "NOIDUNG TEXT ," +
+                        "\tGIAM INTEGER DEFAULT(1) Check(GIAM >= 0)\n" +
+                        ");"
+        );
+        //endregion
+
+        //region Tạo bảng Bill_Detail: Chi tiết hóa đơn
+        db.WriteQuery(
+                "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
+                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "    MASP VARCHAR NOT NULL,\n" +
+                        "    IDORDER   INTEGER not NULL,\n" +
+                        "    IDVoucher VARCHAR not null, \n" +
+                        "    QUANTITY  INTEGER check(QUANTITY > 0) not NULL,\n" +
+                        "    UNITPRICE Real check(UNITPRICE > 0) not NULL,\n" +
+                        "    TOTALPRICE Real check (TOTALPRICE > 0) not Null,\n" +
+                        "    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP),\n" +
+                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
+                        "    FOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)" +
+                        ");"
+        );
+        //endregion
+
+        //region Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể
+        db.WriteQuery(
+                "CREATE TABLE IF NOT EXISTS VOUCHER_DETAIL(\n" +
+                        "\tMAVOUCHER VARCHAR,\n" +
+                        "\tMASP VARCHAR NOT NULL,\n" +
+                        "\tFOREIGN KEY (MAVOUCHER) REFERENCES VOUCHER(MAVOUCHER),\n" +
+                        "  FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP)\n" +
+                        ");"
+        );
+        //endregion
+
+        //region Tạo bảng CARTLIST: Lưu trữ giỏ hàng của người dùng, tự động cập nhật khi người dùng đăng nhập lại
+        db.WriteQuery(
+                "CREATE TABLE IF NOT EXISTS CARTLIST (\n" +
+                        "\tIDCARTLIST   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "\tIDCUS        VARCHAR NOT NULL,\n" +
+                        "\tIDSANPHAM    VARCHAR NOT NULL,\n" +
+                        "\tIDVoucher VARCHAR not null,\n" +
+                        "\tSOLUONG      INTEGER CHECK(SOLUONG > 0) NOT NULL,\n" +
+                        "\tFOREIGN KEY (IDCUS) REFERENCES ACCOUNT(TAIKHOAN),\n" +
+                        "\tFOREIGN KEY (IDSANPHAM) REFERENCES SANPHAM(MASP)\n" +
+                        "\tFOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)\n" +
+                        ")"
+        );
+        //endregion
+
+        //region Linh tinh trong activity
         anhxa();
         actionBar();
         actionMenu();
         actionViewFilpper();
         intData();
         getEventClick();
+        //endregion
     }
     private void intData(){
         Cursor listSanPham = db.GetData(
@@ -204,12 +219,10 @@ public class MainActivity extends AppCompatActivity {
             ));
         }
         spAdapter = new SanPhamAdapter( this, mangSpMoi);
-        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
         recyclerViewManHinhChinh.setAdapter(spAdapter);
         recyclerViewManHinhChinh.setLayoutManager(layoutManager);
     }
-
     private void getEventClick(){
         lvManHinhChinh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -286,7 +299,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void anhxa(){
         //ánh xạ

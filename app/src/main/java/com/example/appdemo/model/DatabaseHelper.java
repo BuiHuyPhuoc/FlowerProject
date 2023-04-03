@@ -27,8 +27,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     //Hàm AddRole, Thêm dữ liệu vào bảng "ROLE"
 
-
-
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
@@ -48,32 +46,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
     public boolean AddAccount(String taikhoan, String matkhau, String quyenhan, String ten, String sdt, String gmail,String diachi){
-        if (CheckExists(taikhoan, "Account")){
+        boolean check = CheckExists(taikhoan, "Account");
+        if (check){
             this.WriteQuery("Insert into ACCOUNT Values" +
                     "('" + taikhoan + "', '" + matkhau + "', '" + quyenhan + "', '" + ten + "', '" + sdt + "', '" + gmail + "','" + diachi + "');");
         }
-        return CheckExists(taikhoan, "Account");
+        return check;
     }
     public boolean AddRole(String role, String content){
-        if (CheckExists(role, "[ROLE]")){
-            this.WriteQuery("Insert into ACCOUNT Values" +
+        boolean check = CheckExists(role, "[ROLE]");
+        if (check){
+            this.WriteQuery("Insert into [ROLE] Values" +
                     "('" + role + "', '" + content + "');");
         }
-        return CheckExists(role, "[ROLE]");
+        return check;
     }
     public boolean AddProduct(String MASP, String TENSP,String PHANLOAI, Integer SOLUONG,String NOINHAP,String NOIDUNG, double DONGIA, int HINHANH){
-        if (CheckExists(MASP, "SANPHAM")){
+        boolean check = CheckExists(MASP, "SANPHAM");
+        if (check){
             this.WriteQuery("Insert into SANPHAM Values" +
                     "('" + MASP + "', '" + TENSP + "', '" + PHANLOAI + "', '" + SOLUONG + "', '" + NOINHAP + "', '" + NOIDUNG + "', '" + DONGIA + "', '" + HINHANH + "');");
         }
-        return CheckExists(MASP, "SANPHAM");
+        return check;
     }
     public boolean AddCategory(String NAME, String CONTENT){
-        if (CheckExists(NAME, "[CATEGORY]")){
+        boolean check = CheckExists(NAME, "[CATEGORY]");
+        if (check){
             this.WriteQuery("Insert into [CATEGORY] Values" +
                     "('" + NAME + "', '" + CONTENT + "');");
         }
-        return CheckExists(NAME, "[CATEGORY]");
+        return check;
     }
     public boolean AddBill(String TAIKHOANCUS, String ADDRESSDELIVERRY){
         try{

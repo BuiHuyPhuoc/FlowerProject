@@ -36,22 +36,13 @@
             android:exported="false">
         </activity>
         <activity
-            android:name=".DangKyActivity"
+            android:name=".activity.DangKyActivity"
             android:exported="false" />
         <activity
-            android:name=".CategoryView"
+            android:name=".adapter.CategoryView"
             android:exported="false" />
         <activity
-            android:name=".CategoryListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ForgotPassword"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
+            android:name=".activity.ForgotPassword"
             android:exported="false" />
         <activity
             android:name=".activity.ChiTietSPActivity"
