@@ -156,7 +156,7 @@ public class DangXuatActivity extends AppCompatActivity {
     public View.OnClickListener onClick_tvRegister = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent i = new Intent(getApplicationContext(), DangKyActivity.class);
+            Intent i = new Intent(DangXuatActivity.this, DangKyActivity.class);
             startActivity(i);
         }
     };
