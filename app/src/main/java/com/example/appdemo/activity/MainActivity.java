@@ -35,6 +35,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     //Test Github
+    //Thay đổi từ main và cách nhập Main vào branch của mình
     DatabaseHelper db; //Khởi tạo database
     Bundle status;
     Toolbar toolbar;
