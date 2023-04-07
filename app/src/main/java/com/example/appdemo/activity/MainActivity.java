@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    //Test Github
     DatabaseHelper db; //Khởi tạo database
     Bundle status;
     Toolbar toolbar;
