@@ -43,7 +43,7 @@ public class MenuAdapter extends BaseAdapter {
         return 0;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView tv;
         ImageView img;
     }

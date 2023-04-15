@@ -1,6 +1,8 @@
 package com.example.appdemo.model;
 
-public class GioHang {
+import java.io.Serializable;
+
+public class GioHang{
     String idsp;
     String tenSp;
     Long DONGIA;
