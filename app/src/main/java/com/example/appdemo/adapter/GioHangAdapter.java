@@ -28,6 +28,7 @@ import java.util.List;
 
 public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHolder> {
     Context context;
+    //cmt test github
     List<GioHang> gioHangList;
 
     public GioHangAdapter(Context context, List<GioHang> gioHangList) {
@@ -119,7 +120,6 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
         ImageView item_giohang_image,item_giohang_cong,item_giohang_tru;
         TextView item_giohang_tensp,item_giohang_gia,item_giohang_sl,item_giohang_gia2;
         IImageClickListener listener;
-
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
