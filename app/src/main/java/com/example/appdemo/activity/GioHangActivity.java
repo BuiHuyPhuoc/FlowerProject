@@ -1,10 +1,12 @@
 package com.example.appdemo.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +43,45 @@ public class GioHangActivity extends AppCompatActivity {
         intView();
         intControl();
         totalMoney();
+
+        btnmuahang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Utils.manggiohang.size() > 0)
+                {
+                    AlertDialog.Builder d = new AlertDialog.Builder(GioHangActivity.this);
+                    d.setTitle("Thông báo");
+                    d.setMessage("Bạn đã thanh toán thành công");
+
+                    d.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Utils.manggiohang.clear();
+                            adapter.notifyDataSetChanged();
+                            EventBus.getDefault().postSticky(new TinhTongEvent());//bắt sk tính tổng cho all sp
+                        }
+                    });
+
+                    d.create().show();
+                }
+                else if (Utils.manggiohang.size() == 0){
+                    AlertDialog.Builder d = new AlertDialog.Builder(GioHangActivity.this);
+                    d.setTitle("Thông báo");
+                    d.setMessage("Giỏ hàng của bạn đang bị trống");
+
+                    d.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    });
+
+                    d.create().show();
+                }
+
+
+            }
+        });
     }
 
     private void totalMoney() {
