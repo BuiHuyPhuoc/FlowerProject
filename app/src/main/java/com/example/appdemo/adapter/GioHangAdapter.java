@@ -3,8 +3,6 @@ package com.example.appdemo.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.media.Image;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.appdemo.Interface.IImageClickListener;
 import com.example.appdemo.R;
 import com.example.appdemo.Utils;
-import com.example.appdemo.model.EvenBus.TinhTongEvent;
+import com.example.appdemo.adapter.EvenBus.TinhTongEvent;
 import com.example.appdemo.model.GioHang;
 
 import org.greenrobot.eventbus.EventBus;

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.appdemo.R;
 import com.example.appdemo.Utils;
 import com.example.appdemo.adapter.GioHangAdapter;
-import com.example.appdemo.model.EvenBus.TinhTongEvent;
+import com.example.appdemo.adapter.EvenBus.TinhTongEvent;
 import com.example.appdemo.model.GioHang;
 
 import org.greenrobot.eventbus.EventBus;
