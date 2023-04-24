@@ -202,10 +202,11 @@ public class MainActivity extends AppCompatActivity {
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS CARTLIST (\n" +
                         "\tIDCARTLIST   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                        "\tIDCUS        VARCHAR NOT NULL,\n" +
+                        "\tIDCUS        VARCHAR NULL,\n" +
                         "\tIDSANPHAM    VARCHAR NOT NULL,\n" +
-                        "\tIDVoucher VARCHAR not null,\n" +
-                        "\tSOLUONG      INTEGER CHECK(SOLUONG > 0) NOT NULL,\n" +
+                        "\tIDVoucher    VARCHAR null,\n" +
+                        "\tSOLUONG      INTEGER CHECK(SOLUONG > 0) NOT NULL," +
+                        "\tDONGIA       REAL NULL,\n" +
                         "\tFOREIGN KEY (IDCUS) REFERENCES ACCOUNT(TAIKHOAN),\n" +
                         "\tFOREIGN KEY (IDSANPHAM) REFERENCES SANPHAM(MASP)\n" +
                         "\tFOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)\n" +

@@ -62,7 +62,7 @@ public class SanPhamActivity extends AppCompatActivity {
                                                   Category cate = (Category) parent.getItemAtPosition(position);
                                                   if (cate.getName() == "ALL") {
                                                       Cursor listSanPham = db.GetData(
-                                                              "Select* from SANPHAM"
+                                                              "Select* from SANPHAM order by TENSP ASC"
                                                       );
                                                       //Xóa List<SanPhamMoi> cũ đi
                                                       mangSpMoi.removeAll(mangSpMoi);
@@ -91,7 +91,8 @@ public class SanPhamActivity extends AppCompatActivity {
                                                       Cursor listSanPham = db.GetData(
                                                               "Select* " +
                                                                       "from SANPHAM " +
-                                                                      "where PHANLOAI = '" + cate.getName() + "';"
+                                                                      "where PHANLOAI = '" + cate.getName() + "' " +
+                                                                      "order by TENSP ASC;"
                                                       );
                                                       //Xóa List<SanPhamMoi> cũ đi
                                                       mangSpMoi.removeAll(mangSpMoi);
@@ -118,7 +119,7 @@ public class SanPhamActivity extends AppCompatActivity {
     }
     public void intData () {
         Cursor listSanPham = db.GetData(
-                "Select* from SANPHAM"
+                "Select* from SANPHAM order by TENSP ASC"
         );
         //Lấy danh sách sản phẩm hiện có trong database
         while (listSanPham.moveToNext()) {

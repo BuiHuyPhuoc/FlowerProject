@@ -125,7 +125,7 @@ public class QLAccountActivity extends AppCompatActivity {
                                         Toast.makeText(QLAccountActivity.this,"Xóa thành công",Toast.LENGTH_LONG).show();
                                         //Hiển thị lại danh sách các tài khoản
                                         qlAccount = new QLAccount(QLAccountActivity.this);
-                                        list=qlAccount.getAllAccountToString();
+                                        list = qlAccount.getAllAccountToString();
                                         ArrayAdapter adapter =new ArrayAdapter(QLAccountActivity.this, android.R.layout.simple_list_item_1,list);
                                         ListView.setAdapter(adapter);
                                     }
