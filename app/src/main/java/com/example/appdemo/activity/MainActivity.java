@@ -1,4 +1,5 @@
 package com.example.appdemo.activity;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -15,11 +16,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.appdemo.Class.StatusLogin;
 import com.example.appdemo.R;
 import com.example.appdemo.Utils;
 import com.example.appdemo.adapter.MenuAdapter;
@@ -30,14 +29,13 @@ import com.example.appdemo.model.SanPhamMoi;
 import com.google.android.material.navigation.NavigationView;
 import com.nex3z.notificationbadge.NotificationBadge;
 
-import java.time.LocalDate;
+import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     //Test Github
-    //Thay đổi từ main và cách nhập Main vào branch của mình
     DatabaseHelper db; //Khởi tạo database
     StatusLogin status;
     Toolbar toolbar;
