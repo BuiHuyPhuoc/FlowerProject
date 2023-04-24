@@ -84,18 +84,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return check;
     }
-    public boolean AddBill(String TAIKHOANCUS, String ADDRESSDELIVERRY){
-        try{
+    public boolean AddBill(String TAIKHOANCUS, String ADDRESSDELIVERRY) {
+        try {
             Calendar c = Calendar.getInstance();
-            String DATEORDER = Integer.toString(c.get(Calendar.DAY_OF_MONTH)) + "/" + Integer.toString(c.get(Calendar.MONTH) + 1) + "/" + Integer.toString(c.get(Calendar.YEAR)) ;
+            String DATEORDER = Integer.toString(c.get(Calendar.DAY_OF_MONTH)) + "/" + Integer.toString(c.get(Calendar.MONTH) + 1) + "/" + Integer.toString(c.get(Calendar.YEAR));
             SQLiteDatabase db = getReadableDatabase();
             this.WriteQuery("Insert into [CATEGORY] (DATEORDER, TAIKHOANCUS, ADDRESSDELIVERRY) Values" +
                     "('" + DATEORDER + "', '" + TAIKHOANCUS + "', '" + ADDRESSDELIVERRY + "');");
             return true;
-        }
-       catch (Exception e){
+        } catch (Exception e) {
             return false;
-       }
+        }
     }
     public boolean AddVoucher(String MAVOUCHER, String NOIDUNG, String HSD, double GIAM){
         boolean check = CheckExists(MAVOUCHER, "VOUCHER");
