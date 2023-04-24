@@ -52,12 +52,18 @@ public class QLAccount {
             s.setMATKHAU(c.getString(1));
             s.setQUYENHAN(c.getString(2));
             s.setTEN(c.getString(3));
-            s.setSDT(c.getInt(4));
+            s.setSDT(c.getString(4));
             s.setGMAIL(c.getString(5));
             s.setDIACHI(c.getString(6));
             //chuyển đối tượng thành chuỗi
-            String chuoi = "Tài khoản: "+s.getTAIKHOAN()+" - "+"Mật khẩu: "+s.getMATKHAU()+" - "+"Quyền hạn: "+s.getQUYENHAN()+" - "+"Tên: "
-                    +s.getTEN()+" - "+"SĐT: "+s.getSDT()+" - "+"Gmail: "+s.getGMAIL()+" - "+"Địa chỉ: "+s.getDIACHI();
+            String chuoi =
+                            "Tài khoản: "+ s.getTAIKHOAN()
+                            +"\nMật khẩu: "+ s.getMATKHAU()
+                            +"\nQuyền hạn: " + s.getQUYENHAN()
+                            +"\nTên: " + s.getTEN()
+                            +"\nSĐT: "+ s.getSDT()
+                            +"\nGmail: "+ s.getGMAIL()
+                            +"\nĐịa chỉ: "+ s.getDIACHI();
             //đưa chuỗi vào list
             ls.add(chuoi);
             c.moveToNext();//di chuyển đến bảng ghi tiếp theo
@@ -68,9 +74,9 @@ public class QLAccount {
     public int XoaAccount(String TAIKHOAN){
         int kq = db.delete("ACCOUNT","TAIKHOAN=?",new String[]{TAIKHOAN});
         if(kq <= 0){
-            return -1;//Thêm thất bại
+            return -1;//Xoa thất bại
         }
-        return 1;//Thêm thành công
+        return 1;//Xoa thành công
     }
     public int SuaAccount(Account s){
         ContentValues values = new ContentValues();//Tạo đối tượng chứa dữ liệu

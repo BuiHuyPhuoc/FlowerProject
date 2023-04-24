@@ -139,8 +139,7 @@ public class DangKyActivity extends AppCompatActivity {
 
     //region Hàm xử lí chuỗi số điện thoại nhập vào
     private boolean isNumber(String x){
-        boolean isNumeric;
-        return isNumeric = x.chars().allMatch( Character::isDigit );
+        return x.chars().allMatch( Character::isDigit );
     }
     private String toPhoneNumber(String[] x){
         String originalString = "";
