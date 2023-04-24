@@ -60,15 +60,15 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
 
 //        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
-//        db.WriteQuery("Drop table if exists CARTLIST");
-//        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
-//        db.WriteQuery("Drop table if exists VOUCHER");
-//        db.WriteQuery("Drop table if exists BILLDETAIL");
-//        db.WriteQuery("Drop table if exists BILL");
-//        db.WriteQuery("Drop table if exists SANPHAM");
-//        db.WriteQuery("Drop table if exists [CATEGORY]");
-//        db.WriteQuery("Drop table if exists ACCOUNT");
-//        db.WriteQuery("Drop table if exists [ROLE]");
+        db.WriteQuery("Drop table if exists CARTLIST");
+        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
+        db.WriteQuery("Drop table if exists VOUCHER");
+        db.WriteQuery("Drop table if exists BILLDETAIL");
+        db.WriteQuery("Drop table if exists BILL");
+        db.WriteQuery("Drop table if exists SANPHAM");
+        db.WriteQuery("Drop table if exists [CATEGORY]");
+        db.WriteQuery("Drop table if exists ACCOUNT");
+        db.WriteQuery("Drop table if exists [ROLE]");
 ////
         //region Tạo bảng ROLE: Quyền hạn
         db.WriteQuery("CREATE TABLE IF NOT EXISTS [ROLE] (" +
