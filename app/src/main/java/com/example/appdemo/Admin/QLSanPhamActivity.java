@@ -1,25 +1,27 @@
-package com.example.appdemo.activity;
+package com.example.appdemo.Admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.appdemo.Class.QLSanPham;
 import com.example.appdemo.Class.SanPham;
 import com.example.appdemo.R;
+import com.example.appdemo.activity.DangXuatActivity;
 import com.example.appdemo.model.DatabaseHelper;
 
 import java.util.ArrayList;
@@ -32,13 +34,18 @@ public class QLSanPhamActivity extends AppCompatActivity {
     ListView spListView;
     Toolbar mToolBar;
     EditText edtMa, edtTen, edtGia, edtSL, edtND, edtNN, edtHA, edtPL;
+    String cate;
     Button btnXoa,btnSua,btnThem,btnHienthi;
     QLSanPham qlSanPham;
+    Spinner spnCate;
     List<String> list = new ArrayList<>();
+    ArrayAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qlsan_pham);
+        dbHelper = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
         edtMa = (EditText) findViewById(R.id.edtMSP);
         edtTen= (EditText) findViewById(R.id.edtTSP);
         edtGia= (EditText) findViewById(R.id.edtGia);
@@ -46,12 +53,36 @@ public class QLSanPhamActivity extends AppCompatActivity {
         edtND= (EditText) findViewById(R.id.edtND);
         edtNN= (EditText) findViewById(R.id.edtNN);
         edtHA= (EditText) findViewById(R.id.edtHA);
-        edtPL= (EditText) findViewById(R.id.edtPLoai);
+        spnCate = findViewById(R.id.spnCate);
         btnXoa=(Button)findViewById(R.id.btnXoa);
         btnSua=(Button)findViewById(R.id.btnSua);
         btnThem=(Button)findViewById(R.id.btnThem);
         btnHienthi=(Button)findViewById(R.id.btnShow);
+// Tạo dữ liệu cho Spinner
+        ArrayList<String> data = new ArrayList<>();
+        Cursor cursor = dbHelper.GetData("Select NOIDUNG from [CATEGORY]");
+        while (cursor.moveToNext()){
+            data.add(cursor.getString(0));
+        }
+        adapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, data);
+        // Đặt giao diện của Spinner
 
+        spnCate.setAdapter(adapter);
+        // Xử lý sự kiện khi một mục được chọn
+        spnCate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Xử lý khi một mục được chọn
+                Cursor cursor = dbHelper.GetData("Select NAME from [CATEGORY] where NOIDUNG = '"+data.get(position)+"'");
+                cursor.moveToFirst();
+                cate = cursor.getString(0);
+                Toast.makeText(getApplicationContext(), cate, Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Xử lý khi không có mục nào được chọn
+            }
+        });
 
         spListView = (ListView) findViewById(R.id.listSP);
         mToolBar =(Toolbar) findViewById(R.id.toolbarSP);

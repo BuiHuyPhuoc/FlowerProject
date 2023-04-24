@@ -32,21 +32,22 @@ import com.nex3z.notificationbadge.NotificationBadge;
 import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     //Test Github
-    //Thay đổi từ main và cách nhập Main vào branch của mình
     DatabaseHelper db; //Khởi tạo database
-    Bundle status;
+    StatusLogin status;
     Toolbar toolbar;
     ViewFlipper viewFlipper;
     RecyclerView recyclerViewManHinhChinh;
+    RecyclerView listsaleProduct;
     NavigationView navigationView;
     ListView lvManHinhChinh;
     DrawerLayout drawerLayout;
-    MenuAdapter adapter;
-    ArrayList<ItemMenu> arrayList;
+    MenuAdapter adapter = new MenuAdapter(this);
     List<SanPhamMoi> mangSpMoi = new ArrayList<SanPhamMoi>();
+    List<SanPhamMoi> saleProducts = new ArrayList<SanPhamMoi>();
     SanPhamAdapter spAdapter;
     NotificationBadge badge;
     @Override
@@ -56,21 +57,21 @@ public class MainActivity extends AppCompatActivity {
         //Tạo database
         db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
 
-        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
-//        db.WriteQuery("Drop table if exists CARTLIST");
-//        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
-//        db.WriteQuery("Drop table if exists VOUCHER");
-//        db.WriteQuery("Drop table if exists BILLDETAIL");
-//        db.WriteQuery("Drop table if exists BILL");
-//        db.WriteQuery("Drop table if exists SANPHAM");
-//        db.WriteQuery("Drop table if exists [CATEGORY]");
-//        db.WriteQuery("Drop table if exists ACCOUNT");
-//        db.WriteQuery("Drop table if exists [ROLE]");
-
+//        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
+        db.WriteQuery("Drop table if exists CARTLIST");
+        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
+        db.WriteQuery("Drop table if exists VOUCHER");
+        db.WriteQuery("Drop table if exists BILLDETAIL");
+        db.WriteQuery("Drop table if exists BILL");
+        db.WriteQuery("Drop table if exists SANPHAM");
+        db.WriteQuery("Drop table if exists [CATEGORY]");
+        db.WriteQuery("Drop table if exists ACCOUNT");
+        db.WriteQuery("Drop table if exists [ROLE]");
+////
         //region Tạo bảng ROLE: Quyền hạn
         db.WriteQuery("CREATE TABLE IF NOT EXISTS [ROLE] (" +
-                            "QUYENHAN VARCHAR PRIMARY KEY NOT NULL," +
-                            "NOIDUNG Text NOT NULL)");
+                "QUYENHAN VARCHAR PRIMARY KEY NOT NULL," +
+                "NOIDUNG Text NOT NULL)");
         //Thêm dữ liệu vào bảng [ROLE]
         db.AddRole("admin", "Quản trị viên");
         db.AddRole("customer", "Khách hàng");
@@ -115,9 +116,12 @@ public class MainActivity extends AppCompatActivity {
                         "\tNOIDUNG VARCHAR NULL,\n" +
                         "\tDONGIA REAL CHECK(DONGIA > 0) NOT NULL,\n" +
                         "\tHINHANH INTEGER NOT NULL,\n" +
+                        "\tNGAYNHAP date,\n" +
                         "FOREIGN KEY (PHANLOAI) REFERENCES [CATEGORY](NAME)" +
                         ");"
         );
+        //cách lấy dữ liệu theo mong muón datetime SELECT strftime('%d/%m/%Y', date_column) AS formatted_date FROM my_table;
+
         //Thêm 1 vài sản phẩm mẫu vào database
         db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.you_look_gorgeous);
         db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.hello_sweetheart);
@@ -149,10 +153,27 @@ public class MainActivity extends AppCompatActivity {
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS VOUCHER(\n" +
                         "\tMAVOUCHER VARCHAR PRIMARY KEY not null,\n" +
-                        "NOIDUNG TEXT ," +
+                        "\tNOIDUNG TEXT," +
+                        "\tHSD date," +
                         "\tGIAM INTEGER DEFAULT(1) Check(GIAM >= 0)\n" +
                         ");"
         );
+        int year = LocalDate.now().getYear();
+        db.AddVoucher("SALET5", "Sale tháng 5", year + "/05/31" , 10.0/100);
+        //endregion
+
+        //region Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể
+        db.WriteQuery(
+                "CREATE TABLE IF NOT EXISTS VOUCHER_DETAIL(\n" +
+                        "\tMAVOUCHER VARCHAR,\n" +
+                        "\tMASP VARCHAR NOT NULL,\n" +
+                        "\tFOREIGN KEY (MAVOUCHER) REFERENCES VOUCHER(MAVOUCHER),\n" +
+                        "  FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP)\n" +
+                        ");"
+        );
+        db.AddVoucherProduct("SALET5", "CB001");
+        db.AddVoucherProduct("SALET5", "CB002");
+        db.AddVoucherProduct("SALET5", "CB003");
         //endregion
 
         //region Tạo bảng Bill_Detail: Chi tiết hóa đơn
@@ -170,27 +191,20 @@ public class MainActivity extends AppCompatActivity {
                         "    FOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)" +
                         ");"
         );
+
         //endregion
 
-        //region Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể
-        db.WriteQuery(
-                "CREATE TABLE IF NOT EXISTS VOUCHER_DETAIL(\n" +
-                        "\tMAVOUCHER VARCHAR,\n" +
-                        "\tMASP VARCHAR NOT NULL,\n" +
-                        "\tFOREIGN KEY (MAVOUCHER) REFERENCES VOUCHER(MAVOUCHER),\n" +
-                        "  FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP)\n" +
-                        ");"
-        );
-        //endregion
+
 
         //region Tạo bảng CARTLIST: Lưu trữ giỏ hàng của người dùng, tự động cập nhật khi người dùng đăng nhập lại
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS CARTLIST (\n" +
                         "\tIDCARTLIST   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                        "\tIDCUS        VARCHAR NOT NULL,\n" +
+                        "\tIDCUS        VARCHAR NULL,\n" +
                         "\tIDSANPHAM    VARCHAR NOT NULL,\n" +
-                        "\tIDVoucher VARCHAR not null,\n" +
-                        "\tSOLUONG      INTEGER CHECK(SOLUONG > 0) NOT NULL,\n" +
+                        "\tIDVoucher    VARCHAR null,\n" +
+                        "\tSOLUONG      INTEGER CHECK(SOLUONG > 0) NOT NULL," +
+                        "\tDONGIA       REAL NULL,\n" +
                         "\tFOREIGN KEY (IDCUS) REFERENCES ACCOUNT(TAIKHOAN),\n" +
                         "\tFOREIGN KEY (IDSANPHAM) REFERENCES SANPHAM(MASP)\n" +
                         "\tFOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)\n" +
@@ -203,13 +217,13 @@ public class MainActivity extends AppCompatActivity {
         actionBar();
         actionMenu();
         actionViewFilpper();
-        intData();
-        getEventClick();
+        AllProduct();
+        SaleProduct();
         //endregion
     }
-    private void intData(){
+    private void AllProduct(){
         Cursor listSanPham = db.GetData(
-                "Select* from SANPHAM"
+                "Select* from SANPHAM ORDER BY NGAYNHAP asc"
         );
         while (listSanPham.moveToNext()){
             mangSpMoi.add(new SanPhamMoi(   listSanPham.getString(0),
@@ -219,15 +233,41 @@ public class MainActivity extends AppCompatActivity {
                                             listSanPham.getString(4),
                                             listSanPham.getString(5),
                                             listSanPham.getLong(6),
-                                            listSanPham.getInt(7)
+                                            listSanPham.getInt(7),
+                                            listSanPham.getString(8)
             ));
         }
         spAdapter = new SanPhamAdapter( this, mangSpMoi);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1,LinearLayoutManager.HORIZONTAL, false);
         recyclerViewManHinhChinh.setAdapter(spAdapter);
         recyclerViewManHinhChinh.setLayoutManager(layoutManager);
     }
-    private void getEventClick(){
+    private void SaleProduct(){
+        Cursor listSale = db.GetData(
+                "Select SANPHAM.* from SANPHAM, VOUCHER_DETAIL where SANPHAM.MASP = VOUCHER_DETAIL.MASP"
+        );
+        while (listSale.moveToNext()){
+            saleProducts.add(new SanPhamMoi(   listSale.getString(0),
+                    listSale.getString(1),
+                    listSale.getString(2),
+                    listSale.getInt(3),
+                    listSale.getString(4),
+                    listSale.getString(5),
+                    listSale.getLong(6),
+                    listSale.getInt(7),
+                    listSale.getString(8)
+            ));
+        }
+        spAdapter = new SanPhamAdapter( this, saleProducts);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1,LinearLayoutManager.HORIZONTAL, false);
+        listsaleProduct.setAdapter(spAdapter);
+        listsaleProduct.setLayoutManager(layoutManager);
+    }
+
+    private void actionMenu(){
+
+        lvManHinhChinh.setAdapter(adapter);
+        //chức năng của từng item trong actionmenu
         lvManHinhChinh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -242,35 +282,17 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case 2:
-                        Intent giohang = new Intent(getApplicationContext(),GioHangActivity.class);
-                        startActivity(giohang);
-                        break;
-
-                    case 3:
                         Intent gioithieu = new Intent(getApplicationContext(),GioiThieuActivity.class);
                         startActivity(gioithieu);
                         break;
 
-                    case 4:
+                    case 3:
                         Intent dangxuat = new Intent(getApplicationContext(), DangXuatActivity.class);
                         startActivity(dangxuat);
                         break;
                 }
             }
         });
-    }
-
-    private void actionMenu(){
-        //khoi tao list
-        arrayList = new ArrayList<>();
-        arrayList.add(new ItemMenu(R.drawable.baseline_home_24,"Home"));
-        arrayList.add(new ItemMenu(R.drawable.product,"Product"));
-        arrayList.add(new ItemMenu(R.drawable.baseline_shopping_cart_24,"Cart"));
-        arrayList.add(new ItemMenu(R.drawable.introduce,"About us"));
-        arrayList.add(new ItemMenu(R.drawable.baseline_logout_24,"Log Out"));
-        //Khoi tao adapter
-        adapter = new MenuAdapter(arrayList,R.layout.item_sanpham, this);
-        lvManHinhChinh.setAdapter(adapter);
     }
     private void actionViewFilpper()
     {
@@ -308,10 +330,12 @@ public class MainActivity extends AppCompatActivity {
         //ánh xạ
         toolbar = (Toolbar) findViewById(R.id.toolbarManhinhChinh);
         viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
-        recyclerViewManHinhChinh = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerViewManHinhChinh = (RecyclerView) findViewById(R.id.listnewProduct);
+        listsaleProduct = (RecyclerView) findViewById(R.id.listsaleProduct);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         lvManHinhChinh = (ListView) findViewById(R.id.listManHinh);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        status = (StatusLogin) getApplication();
         mangSpMoi = new ArrayList<>();
         if (Utils.manggiohang == null){
           Utils.manggiohang = new ArrayList<>();

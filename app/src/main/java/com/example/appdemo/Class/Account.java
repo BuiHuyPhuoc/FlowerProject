@@ -8,11 +8,11 @@ public class Account {
     private String MATKHAU;
     private String QUYENHAN;
     private String TEN;
-    private Integer SDT;
+    private String SDT;
     private String GMAIL;
     private String DIACHI;
 
-    public Account(String TAIKHOAN, String MATKHAU, String QUYENHAN, String TEN, Integer SDT, String GMAIL, String DIACHI) {
+    public Account(String TAIKHOAN, String MATKHAU, String QUYENHAN, String TEN, String SDT, String GMAIL, String DIACHI) {
         this.TAIKHOAN = TAIKHOAN;
         this.MATKHAU = MATKHAU;
         this.QUYENHAN = QUYENHAN;
@@ -55,11 +55,11 @@ public class Account {
         this.TEN = TEN;
     }
 
-    public Integer getSDT() {
+    public String getSDT() {
         return SDT;
     }
 
-    public void setSDT(Integer SDT) {
+    public void setSDT(String SDT) {
         this.SDT = SDT;
     }
 
