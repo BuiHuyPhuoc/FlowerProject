@@ -79,7 +79,6 @@ public class DangKyActivity extends AppCompatActivity {
                 Toast.makeText(DangKyActivity.this, "Username, Password, Name are required", Toast.LENGTH_LONG).show();
                 return;
             }
-            //Kiểm tra đã đồng ý với các điều khoản và dịch vụ
             if (mRegisterAcceptTerm.isChecked() == false){
                 Toast.makeText(getApplicationContext()  , "You must accepted the Terms and Conditions once.", Toast.LENGTH_LONG).show();
                 return;

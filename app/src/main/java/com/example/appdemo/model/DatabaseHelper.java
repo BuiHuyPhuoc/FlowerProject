@@ -1,5 +1,6 @@
 package com.example.appdemo.model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,6 +19,9 @@ import java.util.SplittableRandom;
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+    }
+    public DatabaseHelper(Context context) {
+        super(context, "DBFlowerShop.sqlite", null, 1);
     }
 
     //Truy vấn không trả kết quả
@@ -84,18 +88,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return check;
     }
-    public boolean AddBill(String TAIKHOANCUS, String ADDRESSDELIVERRY){
-        try{
+    public boolean AddBill(String TAIKHOANCUS, String ADDRESSDELIVERRY) {
+        try {
             Calendar c = Calendar.getInstance();
-            String DATEORDER = Integer.toString(c.get(Calendar.DAY_OF_MONTH)) + "/" + Integer.toString(c.get(Calendar.MONTH) + 1) + "/" + Integer.toString(c.get(Calendar.YEAR)) ;
+            String DATEORDER = Integer.toString(c.get(Calendar.DAY_OF_MONTH)) + "/" + Integer.toString(c.get(Calendar.MONTH) + 1) + "/" + Integer.toString(c.get(Calendar.YEAR));
             SQLiteDatabase db = getReadableDatabase();
             this.WriteQuery("Insert into [CATEGORY] (DATEORDER, TAIKHOANCUS, ADDRESSDELIVERRY) Values" +
                     "('" + DATEORDER + "', '" + TAIKHOANCUS + "', '" + ADDRESSDELIVERRY + "');");
             return true;
-        }
-       catch (Exception e){
+        } catch (Exception e) {
             return false;
-       }
+        }
     }
     public boolean AddVoucher(String MAVOUCHER, String NOIDUNG, String HSD, double GIAM){
         boolean check = CheckExists(MAVOUCHER, "VOUCHER");
@@ -123,5 +126,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         catch (Exception e){
             return false;
         }
+    }
+    public long addCartList(GioHang gioHang) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("IDCUS", gioHang.getIdCus());
+        values.put("IDSANPHAM", gioHang.getIdSanPham());
+        values.put("IDVoucher", gioHang.getIdVoucher());
+        values.put("SOLUONG", gioHang.getSoLuong());
+        return db.insert("CARTLIST", "IDCUS", values);
+    }
+    public long updateCartList(GioHang gioHang) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("IDCARTLIST", gioHang.getIdCartList());
+        values.put("IDCUS", gioHang.getIdCus());
+        values.put("IDSANPHAM", gioHang.getIdSanPham());
+        values.put("IDVoucher", gioHang.getIdVoucher());
+        values.put("SOLUONG", gioHang.getSoLuong());
+        values.put("DONGIA", gioHang.getDonGia());
+
+        long kq = db.update("CARTLIST", values, "IDCARTLIST=?",  new String[]{gioHang.getIdCartList().toString()});
+        db.close();
+        if(kq <= 0){
+            return -1;//Thêm thất bại
+        }
+        return 1;//Thêm thành công
     }
 }
