@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.appdemo.R;
 import com.example.appdemo.Utils;
+import com.example.appdemo.model.DatabaseHelper;
 import com.example.appdemo.model.GioHang;
 import com.example.appdemo.model.SanPhamMoi;
 import com.nex3z.notificationbadge.NotificationBadge;
@@ -30,6 +32,8 @@ public class ChiTietSPActivity extends AppCompatActivity {
     Toolbar toolbar;
     SanPhamMoi sanPhamMoi;
     NotificationBadge badge;
+    DatabaseHelper databaseHelper;
+    SQLiteDatabase sqLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +66,6 @@ public class ChiTietSPActivity extends AppCompatActivity {
                {
                    Utils.manggiohang.get(i).setSoluong(sl + Utils.manggiohang.get(i).getSoluong());
                    gia = sanPhamMoi.getDONGIA() * Utils.manggiohang.get(i).getSoluong();
-                   Utils.manggiohang.get(i).setDONGIA(gia);
                    flag = true;
                }
             }
@@ -70,7 +73,7 @@ public class ChiTietSPActivity extends AppCompatActivity {
             {
 
                 GioHang gioHang = new GioHang();
-                gioHang.setDONGIA(gia);
+                gioHang.setDONGIA(sanPhamMoi.getDONGIA());
                 gioHang.setSoluong(sl);
                 gioHang.setIdsp(sanPhamMoi.getMASP());
                 gioHang.setTenSp(sanPhamMoi.getTENSP());
@@ -82,7 +85,7 @@ public class ChiTietSPActivity extends AppCompatActivity {
             int sl = Integer.parseInt(spinner.getSelectedItem().toString());
             long gia = sanPhamMoi.getDONGIA() * sl;
             GioHang gioHang = new GioHang();
-            gioHang.setDONGIA(gia);
+            gioHang.setDONGIA(sanPhamMoi.getDONGIA());
             gioHang.setSoluong(sl);
             gioHang.setIdsp(sanPhamMoi.getMASP());
             gioHang.setTenSp(sanPhamMoi.getTENSP());
