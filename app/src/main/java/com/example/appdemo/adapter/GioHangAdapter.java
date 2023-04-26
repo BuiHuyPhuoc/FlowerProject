@@ -3,6 +3,8 @@ package com.example.appdemo.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import com.example.appdemo.Interface.IImageClickListener;
 import com.example.appdemo.R;
 import com.example.appdemo.Utils;
 import com.example.appdemo.adapter.EvenBus.TinhTongEvent;
+import com.example.appdemo.model.DatabaseHelper;
 import com.example.appdemo.model.GioHang;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,10 +31,14 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
     Context context;
     //cmt test github
     List<GioHang> gioHangList;
+    DatabaseHelper databaseHelper;
+
+
 
     public GioHangAdapter(Context context, List<GioHang> gioHangList) {
         this.context = context;
         this.gioHangList = gioHangList;
+        databaseHelper =  new DatabaseHelper(context, "DBFlowerShop.sqlite", null, 1);
     }
 
 
@@ -54,6 +61,15 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
         holder.item_giohang_gia.setText(decimalFormat.format((gioHang.getDonGia())) + " VNĐ");
         long gia = gioHang.getSoLuong() * gioHang.getDonGia();
         holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
+
+        if (!gioHang.getIdVoucher().equals("")){
+            Cursor cursor = databaseHelper.GetData("Select GIAM from VOUCHER where MAVOUCHER = '"+gioHang.getIdVoucher()+"'");
+            cursor.moveToFirst();
+            double mucgiam = cursor.getDouble(0);
+            holder.tvMaVoucher.setVisibility(View.GONE);
+            holder.tvMaVoucher.setText(gioHang.getIdVoucher());
+
+        }
         //holder.item_giohang_gia2.setText(decimalFormat.format(gioHang.getDONGIA()) + " đ");
         //holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
         holder.setListener(new IImageClickListener() {
@@ -78,8 +94,14 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                         builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Utils.manggiohang.remove(pos);
-                                notifyDataSetChanged();
+                                SQLiteDatabase db = databaseHelper.getWritableDatabase();
+                                String whereClause = "IDCARTLIST=?";
+                                String[] whereArgs = new String[] { gioHangList.get(pos).getIdCartList().toString() };
+                                int deletedRows = db.delete("CARTLIST", whereClause, whereArgs);
+
+
+//                                Utils.manggiohang.remove(pos);
+//                                notifyDataSetChanged();
                                 EventBus.getDefault().postSticky(new TinhTongEvent());//bắt sk tính tổng cho all sp
                             }
                         });
@@ -98,14 +120,12 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                         int soluongmoi = gioHangList.get(pos).getSoLuong()+1;
                         gioHangList.get(pos).setSoLuong(soluongmoi);
                     }
-
-                    holder.item_giohang_sl.setText((gioHangList.get(pos).getSoLuong() + " "));
+                    databaseHelper.updateCartList(gioHangList.get(pos));
+                    holder.item_giohang_sl.setText((gioHangList.get(pos).getSoLuong().toString()));
                     long gia = gioHangList.get(pos).getSoLuong() * gioHangList.get(pos).getDonGia();
                     holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
                     EventBus.getDefault().postSticky(new TinhTongEvent());//bắt sk tính tổng cho all sp
                 }
-
-
             }
         });
     }
@@ -117,6 +137,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView item_giohang_image,item_giohang_cong,item_giohang_tru;
         TextView item_giohang_tensp,item_giohang_gia,item_giohang_sl,item_giohang_gia2;
+        TextView tvMaVoucher, tvNewPrice;
         IImageClickListener listener;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -128,7 +149,8 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
             item_giohang_tensp = itemView.findViewById(R.id.item_giohang_tensp);
             item_giohang_tru = itemView.findViewById(R.id.item_giohang_tru);
             item_giohang_cong = itemView.findViewById(R.id.item_giohang_cong);
-
+            tvMaVoucher = itemView.findViewById(R.id.tvVoucher);
+            tvNewPrice = itemView.findViewById(R.id.tvNewPrice);
             //event click
             item_giohang_cong.setOnClickListener(this);
             item_giohang_tru.setOnClickListener(this);

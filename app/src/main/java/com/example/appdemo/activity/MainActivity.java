@@ -16,9 +16,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.appdemo.Class.StatusLogin;
 import com.example.appdemo.R;
 import com.example.appdemo.Utils;
 import com.example.appdemo.adapter.MenuAdapter;
@@ -30,6 +32,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.nio.BufferUnderflowException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -58,15 +61,15 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
 
 //        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
-        db.WriteQuery("Drop table if exists CARTLIST");
-        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
-        db.WriteQuery("Drop table if exists VOUCHER");
-        db.WriteQuery("Drop table if exists BILLDETAIL");
-        db.WriteQuery("Drop table if exists BILL");
-        db.WriteQuery("Drop table if exists SANPHAM");
-        db.WriteQuery("Drop table if exists [CATEGORY]");
-        db.WriteQuery("Drop table if exists ACCOUNT");
-        db.WriteQuery("Drop table if exists [ROLE]");
+//        db.WriteQuery("Drop table if exists CARTLIST");
+//        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
+//        db.WriteQuery("Drop table if exists VOUCHER");
+//        db.WriteQuery("Drop table if exists BILLDETAIL");
+//        db.WriteQuery("Drop table if exists BILL");
+//        db.WriteQuery("Drop table if exists SANPHAM");
+//        db.WriteQuery("Drop table if exists [CATEGORY]");
+//        db.WriteQuery("Drop table if exists ACCOUNT");
+//        db.WriteQuery("Drop table if exists [ROLE]");
 ////
         //region Tạo bảng ROLE: Quyền hạn
         db.WriteQuery("CREATE TABLE IF NOT EXISTS [ROLE] (" +
@@ -133,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.red_love);
         db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pure_white);
         db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pastel_tulip);
-        db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.hope_for_love);
+        db.AddProduct("BH001", "Hope For Love", "VASE", 0, "TPHCM", "ASD", 9500000, R.drawable.hope_for_love);
         db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.big_rose);
         //endregion
 
@@ -238,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             ));
         }
         spAdapter = new SanPhamAdapter( this, mangSpMoi);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1,LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewManHinhChinh.setAdapter(spAdapter);
         recyclerViewManHinhChinh.setLayoutManager(layoutManager);
     }

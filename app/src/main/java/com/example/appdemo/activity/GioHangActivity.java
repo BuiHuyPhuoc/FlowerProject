@@ -21,6 +21,7 @@ import com.example.appdemo.adapter.EvenBus.TinhTongEvent;
 import com.example.appdemo.model.DatabaseHelper;
 import com.example.appdemo.model.GioHang;
 
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -69,8 +70,6 @@ public class GioHangActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);//LayoutManager: xác định ra vị trí của các item trong RecyclerView.
         recyclerView.setLayoutManager(layoutManager);
         //trường hợp giỏ hàng trống
@@ -78,6 +77,9 @@ public class GioHangActivity extends AppCompatActivity {
                                                     "FROM SANPHAM, CARTLIST\n" +
                                                     "WHERE SANPHAM.MASP = CARTLIST.IDSANPHAM\n" +
                                                     "AND CARTLIST.IDCUS = '"+statusLogin.getUser()+"'");
+        gioHangList = new ArrayList<>();
+        adapter = new GioHangAdapter(getApplicationContext(), gioHangList);
+        recyclerView.setAdapter(adapter);
         Cursor cursor1 = cursor;
         if (!cursor1.moveToFirst()){
             giohangtrong.setVisibility(View.VISIBLE);
@@ -107,8 +109,7 @@ public class GioHangActivity extends AppCompatActivity {
                 gioHang.setSoLuong(cursor.getInt(7));
                 gioHangList.add(gioHang);
             }
-            adapter = new GioHangAdapter(getApplicationContext(), gioHangList);
-            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -139,6 +140,7 @@ public class GioHangActivity extends AppCompatActivity {
     @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
     public void eventTinhTien(TinhTongEvent event){
         if (event != null){
+            intControl();
             totalMoney();
         }
     }
