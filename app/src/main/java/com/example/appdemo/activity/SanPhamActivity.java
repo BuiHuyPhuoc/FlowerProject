@@ -14,9 +14,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import com.example.appdemo.R;
 import com.example.appdemo.adapter.CategoryAdapter;
@@ -30,7 +27,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class SanPhamActivity extends AppCompatActivity {
     //Activity hiển thị Danh mục sản phẩm (tất cả sản phẩm)
@@ -39,7 +35,7 @@ public class SanPhamActivity extends AppCompatActivity {
     NavigationView navigationView;
     ListView lvManHinhChinh;
     DrawerLayout drawerLayout;
-    MenuAdapter adapter;
+    MenuAdapter adapter = new MenuAdapter(this);
     ArrayList<ItemMenu> arrayList;
     List<SanPhamMoi> mangSpMoi = new ArrayList<SanPhamMoi>();
     SanPhamAdapter spAdapter;
@@ -57,7 +53,6 @@ public class SanPhamActivity extends AppCompatActivity {
         actionBar();
         actionMenu();
         intData();
-        getEventClick();
 
         //Phân loại sản phẩm
         gvCateList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -67,7 +62,7 @@ public class SanPhamActivity extends AppCompatActivity {
                                                   Category cate = (Category) parent.getItemAtPosition(position);
                                                   if (cate.getName() == "ALL") {
                                                       Cursor listSanPham = db.GetData(
-                                                              "Select* from SANPHAM"
+                                                              "Select* from SANPHAM order by TENSP ASC"
                                                       );
                                                       //Xóa List<SanPhamMoi> cũ đi
                                                       mangSpMoi.removeAll(mangSpMoi);
@@ -81,7 +76,8 @@ public class SanPhamActivity extends AppCompatActivity {
                                                                   listSanPham.getString(4),
                                                                   listSanPham.getString(5),
                                                                   listSanPham.getLong(6),
-                                                                  listSanPham.getInt(7)
+                                                                  listSanPham.getInt(7),
+                                                                  listSanPham.getString(8)
                                                           ));
                                                       }
                                                       //Cập nhật vào Adapter
@@ -95,7 +91,8 @@ public class SanPhamActivity extends AppCompatActivity {
                                                       Cursor listSanPham = db.GetData(
                                                               "Select* " +
                                                                       "from SANPHAM " +
-                                                                      "where PHANLOAI = '" + cate.getName() + "';"
+                                                                      "where PHANLOAI = '" + cate.getName() + "' " +
+                                                                      "order by TENSP ASC;"
                                                       );
                                                       //Xóa List<SanPhamMoi> cũ đi
                                                       mangSpMoi.removeAll(mangSpMoi);
@@ -109,7 +106,8 @@ public class SanPhamActivity extends AppCompatActivity {
                                                                   listSanPham.getString(4),
                                                                   listSanPham.getString(5),
                                                                   listSanPham.getLong(6),
-                                                                  listSanPham.getInt(7)
+                                                                  listSanPham.getInt(7),
+                                                                  listSanPham.getString(8)
                                                           ));
                                                       }
                                                       //Cập nhật vào Adapter
@@ -119,10 +117,9 @@ public class SanPhamActivity extends AppCompatActivity {
                                           }
         );
     }
-
     public void intData () {
         Cursor listSanPham = db.GetData(
-                "Select* from SANPHAM"
+                "Select* from SANPHAM order by TENSP ASC"
         );
         //Lấy danh sách sản phẩm hiện có trong database
         while (listSanPham.moveToNext()) {
@@ -134,10 +131,11 @@ public class SanPhamActivity extends AppCompatActivity {
                     listSanPham.getString(4),
                     listSanPham.getString(5),
                     listSanPham.getLong(6),
-                    listSanPham.getInt(7)
+                    listSanPham.getInt(7),
+                    listSanPham.getString(8)
             ));
         }
-        recyclerViewManHinhChinh = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerViewManHinhChinh = (RecyclerView) findViewById(R.id.listnewProduct);
         spAdapter = new SanPhamAdapter(this, mangSpMoi);
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
@@ -145,23 +143,25 @@ public class SanPhamActivity extends AppCompatActivity {
         recyclerViewManHinhChinh.setLayoutManager(layoutManager);
     }
 
-    private void getEventClick () {
+    private void actionMenu(){
+
+        lvManHinhChinh.setAdapter(adapter);
+        //chức năng của từng item trong actionmenu
         lvManHinhChinh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i) {
+                switch (i){
                     case 0:
-                        Intent trangchu = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent trangchu = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(trangchu);
                         break;
-
                     case 1:
-                        Intent sanpham = new Intent(getApplicationContext(), SanPhamActivity.class);
+                        Intent sanpham = new Intent(getApplicationContext(),SanPhamActivity.class);
                         startActivity(sanpham);
                         break;
 
                     case 2:
-                        Intent gioithieu = new Intent(getApplicationContext(), GioiThieuActivity.class);
+                        Intent gioithieu = new Intent(getApplicationContext(),GioiThieuActivity.class);
                         startActivity(gioithieu);
                         break;
 
@@ -172,20 +172,6 @@ public class SanPhamActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void actionMenu () {
-        //khoi tao list
-        arrayList = new ArrayList<>();
-        arrayList.add(new ItemMenu(R.drawable.baseline_home_24, "Home"));
-        arrayList.add(new ItemMenu(R.drawable.product, "Product"));
-        arrayList.add(new ItemMenu(R.drawable.introduce, "About us"));
-        arrayList.add(new ItemMenu(R.drawable.baseline_logout_24, "Log Out"));
-
-
-        //Khoi tao adapter
-        adapter = new MenuAdapter(arrayList, R.layout.item_sanpham, this);
-        lvManHinhChinh.setAdapter(adapter);
     }
 
     private void actionBar () {
@@ -203,7 +189,7 @@ public class SanPhamActivity extends AppCompatActivity {
 
     private void anhxa () {
         toolbar = (Toolbar) findViewById(R.id.toolbarManhinhChinh);
-        recyclerViewManHinhChinh = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerViewManHinhChinh = (RecyclerView) findViewById(R.id.listnewProduct);
         lvManHinhChinh = (ListView) findViewById(R.id.listManHinh);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         gvCateList = (GridView) findViewById(R.id.gvCateList);

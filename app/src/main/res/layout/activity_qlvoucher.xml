@@ -17,37 +17,51 @@
         app:title="Quản lý Voucher"
         app:titleTextColor="@color/white" />
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <EditText
+            android:id="@+id/edtMVCH"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:ems="10"
+            android:hint="Mã Voucher"
+            android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/edtMVCH"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Mã Voucher"
-                android:inputType="textPersonName" />
+        <EditText
+            android:id="@+id/edtGiam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Giảm (%)"
+            android:inputType="number|numberDecimal" />
 
-            <EditText
-                android:id="@+id/edtGiam"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Giảm"
-                android:inputType="number" />
 
-            <EditText
-                android:id="@+id/edtHSD"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Hạn sử dụng"
-                android:inputType="datetime" />
+        <Button
+            android:id="@+id/btnPickDate"
+            android:layout_width="382dp"
+            android:layout_height="wrap_content"
+            android:text="Chọn hạn sử dụng" />
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tvDatePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hạn sử dụng: "
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/edtContent"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:ems="10"
+            android:hint="Nội dung voucher"
+            android:inputType="textMultiLine|textPersonName" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

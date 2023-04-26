@@ -2,32 +2,42 @@ package com.example.appdemo.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.appdemo.Class.StatusLogin;
 import com.example.appdemo.R;
 import com.example.appdemo.model.ItemMenu;
 
+import java.util.ArrayList;
 import java.util.List;
 public class MenuAdapter extends BaseAdapter {
-    List<ItemMenu> list;
+
+    List<ItemMenu> list = new ArrayList<>();
     private int layout;
     Context context;
-
+public MenuAdapter(Context context){
+    this.context = context;
+    this.layout = R.layout.item_sanpham;
+    list.add(new ItemMenu(R.drawable.baseline_home_24,"Home"));
+    list.add(new ItemMenu(R.drawable.product,"Product"));
+    list.add(new ItemMenu(R.drawable.introduce,"About us"));
+    if (StatusLogin.login){
+        list.add(new ItemMenu(R.drawable.baseline_logout_24,"Exit, " + StatusLogin.user));
+    } else {
+        list.add(new ItemMenu(R.drawable.baseline_login_24,"Login"));
+    }
+}
     public MenuAdapter(List<ItemMenu> list, int layout, Context context) {
         this.list = list;
         this.layout = layout;
         this.context = context;
     }
-
-    public MenuAdapter(Context context, List<ItemMenu> list) {
-        this.list = list;
-        this.context = context;
-    }
-
     @Override
     public int getCount() {
         return list.size();
@@ -63,7 +73,6 @@ public class MenuAdapter extends BaseAdapter {
         }
         viewHolder.tv.setText(list.get(i).tenMenu);
         viewHolder.img.setImageResource(list.get(i).icon);
-
         return view;
     }
 }

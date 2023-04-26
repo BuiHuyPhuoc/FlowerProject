@@ -1,4 +1,4 @@
-package com.example.appdemo.activity;
+package com.example.appdemo.Admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.appdemo.R;
+import com.example.appdemo.activity.DangXuatActivity;
 
 public class AdminActivity extends AppCompatActivity {
 
