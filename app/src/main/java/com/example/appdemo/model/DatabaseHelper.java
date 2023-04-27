@@ -111,12 +111,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean AddVoucherProduct(String MAVOUCHER, String MASP){
         try{
             Cursor cursor = this.GetData(
-                    "Select*" +
-                            "From VOUCHER_DETAIL" +
-                            "Where MAVOUCHER = '" + MAVOUCHER + "'" +
-                            "and MASP = '" + MASP + "'"
+                    "Select* " +
+                            "From VOUCHER_DETAIL " +
+                            "Where MAVOUCHER = '" + MAVOUCHER + "' " +
+                            "and MASP = '" + MASP + "' "
             );
-            if (cursor == null){
+            if (!cursor.moveToFirst()){
                 this.WriteQuery("Insert into VOUCHER_DETAIL values" +
                         "('" + MAVOUCHER + "', '" + MASP + "')");
                 return true;
@@ -134,6 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("IDSANPHAM", gioHang.getIdSanPham());
         values.put("IDVoucher", gioHang.getIdVoucher());
         values.put("SOLUONG", gioHang.getSoLuong());
+        values.put("DONGIA", gioHang.getDonGia());
         return db.insert("CARTLIST", "IDCUS", values);
     }
     public long updateCartList(GioHang gioHang) {
