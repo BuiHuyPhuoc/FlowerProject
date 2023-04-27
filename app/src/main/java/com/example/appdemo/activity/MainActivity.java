@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS BILL (\n" +
                         "    ID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                        "    DATEORDER        VARCHAR           NOT NULL,\n" +
+                        "    DATEORDER        date           NOT NULL,\n" +
                         "    TAIKHOANCUS            VARCHAR            NOT NULL,\n" +
                         "    ADDRESSDELIVERRY VARCHAR NOT NULL,\n" +
                         "    FOREIGN KEY (TAIKHOANCUS) REFERENCES ACCOUNT(TAIKHOAN)\n" +
@@ -343,5 +343,6 @@ public class MainActivity extends AppCompatActivity {
         if (Utils.manggiohang == null){
           Utils.manggiohang = new ArrayList<>();
         }
+
     }
 }

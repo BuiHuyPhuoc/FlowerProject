@@ -56,9 +56,11 @@ public class ChiTietSPActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_spactivity);
         intView();
-        actionBar();
         intData();
         Clickbtn();
+        actionBar();
+
+
     }
     private void Clickbtn(){
         btnthem.setOnClickListener(new View.OnClickListener() {
@@ -149,11 +151,12 @@ public class ChiTietSPActivity extends AppCompatActivity {
             }
         }
         if (!checkExisted){
+            Toast.makeText(getApplicationContext(), sanPhamMoi.getDONGIA().toString(), Toast.LENGTH_SHORT).show();
             GioHang gioHang = new GioHang();
             gioHang.setIdCus(statusLogin_User);
             gioHang.setIdSanPham(sanPhamMoi.getMASP());
             String maVoucher = spnVoucher.getSelectedItem().toString();
-            gioHang.setIdVoucher((maVoucher == "NONE") ? null : maVoucher);
+            gioHang.setIdVoucher((maVoucher == "NONE") ? "" : maVoucher);
             gioHang.setDonGia(sanPhamMoi.getDONGIA());
             gioHang.setTenSP(sanPhamMoi.getTENSP());
             gioHang.setSoLuong(sl);
@@ -166,7 +169,6 @@ public class ChiTietSPActivity extends AppCompatActivity {
             }
         }
         updateBadge();
-
     }
 
     private void intData(){
@@ -230,13 +232,7 @@ public class ChiTietSPActivity extends AppCompatActivity {
                 startActivity(giohang);
             }
         });
-        if (Utils.manggiohang != null){
-            int toTalItem = 0;
-            for (int i = 0 ; i < Utils.manggiohang.size() ; i++){
-                toTalItem = toTalItem + Utils.manggiohang.get(i).getSoLuong();
-            }
-            badge.setText(String.valueOf(toTalItem));
-        }
+
     }
 
     private void actionBar(){

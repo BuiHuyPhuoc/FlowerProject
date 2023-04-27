@@ -134,6 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("IDSANPHAM", gioHang.getIdSanPham());
         values.put("IDVoucher", gioHang.getIdVoucher());
         values.put("SOLUONG", gioHang.getSoLuong());
+        values.put("DONGIA", gioHang.getDonGia());
         return db.insert("CARTLIST", "IDCUS", values);
     }
     public long updateCartList(GioHang gioHang) {

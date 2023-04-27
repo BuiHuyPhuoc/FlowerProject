@@ -53,7 +53,14 @@ public class GioHangActivity extends AppCompatActivity {
     private void totalMoney() {
         long tongtiensp = 0;
         for (int i = 0; i < gioHangList.size(); i++){
-            tongtiensp += gioHangList.get(i).getSoLuong()*gioHangList.get(i).getDonGia();
+            if (gioHangList.get(i).getIdVoucher().equals("")){
+                tongtiensp += gioHangList.get(i).getSoLuong()*gioHangList.get(i).getDonGia();
+            } else {
+                Cursor cursor = databaseHelper.GetData("Select GIAM from VOUCHER where MAVOUCHER = '"+gioHangList.get(i).getIdVoucher()+"'");
+                cursor.moveToFirst();
+                double mucgiam = cursor.getDouble(0);
+                tongtiensp += gioHangList.get(i).getSoLuong()*gioHangList.get(i).getDonGia()*(1-mucgiam);
+            }
         }
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         tongtien.setText(decimalFormat.format(tongtiensp) + " VNĐ ");

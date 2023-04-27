@@ -1,15 +1,18 @@
 package com.example.appdemo.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,26 +55,15 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
 
     //xử lí các dữ liệu item
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         GioHang gioHang = gioHangList.get(position);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+
         holder.item_giohang_tensp.setText(gioHang.getTenSP());
         holder.item_giohang_sl.setText((gioHang.getSoLuong() + " "));
         Glide.with(context).load(gioHang.getHinhSanPham()).into(holder.item_giohang_image);
-        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.item_giohang_gia.setText(decimalFormat.format((gioHang.getDonGia())) + " VNĐ");
-        long gia = gioHang.getSoLuong() * gioHang.getDonGia();
-        holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
+        CalculatePrice(holder, position);
 
-        if (!gioHang.getIdVoucher().equals("")){
-            Cursor cursor = databaseHelper.GetData("Select GIAM from VOUCHER where MAVOUCHER = '"+gioHang.getIdVoucher()+"'");
-            cursor.moveToFirst();
-            double mucgiam = cursor.getDouble(0);
-            holder.tvMaVoucher.setVisibility(View.GONE);
-            holder.tvMaVoucher.setText(gioHang.getIdVoucher());
-
-        }
-        //holder.item_giohang_gia2.setText(decimalFormat.format(gioHang.getDONGIA()) + " đ");
-        //holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
         holder.setListener(new IImageClickListener() {
             @Override
             public void onImageClick(View view, int pos, int giatri) {
@@ -79,15 +71,12 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                 if (giatri == 1)
                 {
                     if (gioHangList.get(pos).getSoLuong() > 1){
-                        int soluongmoi = gioHangList.get(pos).getSoLuong()-1;
-                        gioHangList.get(pos).setSoLuong(soluongmoi);
-
-                        holder.item_giohang_sl.setText((gioHangList.get(pos).getSoLuong() + " "));
-                        long gia = gioHangList.get(pos).getSoLuong() * gioHangList.get(pos).getDonGia();
-                        holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
+                        gioHangList.get(pos).setSoLuong(gioHangList.get(pos).getSoLuong()-1);
+                        databaseHelper.updateCartList(gioHangList.get(pos));
+                        CalculatePrice(holder, position);
                         EventBus.getDefault().postSticky(new TinhTongEvent());//bắt sk tính tổng cho all sp
 
-                    }else if (gioHangList.get(pos).getSoLuong() == 1){
+                    } else if (gioHangList.get(pos).getSoLuong() == 1){
                         AlertDialog.Builder builder = new AlertDialog.Builder(view.getRootView().getContext());
                         builder.setTitle("Thông báo");
                         builder.setMessage("Bạn có muốn xóa sản phẩm này khỏi giỏ hàng ?");
@@ -98,10 +87,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                                 String whereClause = "IDCARTLIST=?";
                                 String[] whereArgs = new String[] { gioHangList.get(pos).getIdCartList().toString() };
                                 int deletedRows = db.delete("CARTLIST", whereClause, whereArgs);
-
-
-//                                Utils.manggiohang.remove(pos);
-//                                notifyDataSetChanged();
+                                Toast.makeText(context, "Đã xóa " + deletedRows + " sản phẩm", Toast.LENGTH_SHORT).show();
                                 EventBus.getDefault().postSticky(new TinhTongEvent());//bắt sk tính tổng cho all sp
                             }
                         });
@@ -133,6 +119,30 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
     public int getItemCount() {
         return gioHangList.size();
     }
+    public void CalculatePrice(@NonNull MyViewHolder holder, int position){
+        GioHang gioHang = gioHangList.get(position);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        if (!gioHang.getIdVoucher().equals("")){
+            Cursor cursor = databaseHelper.GetData("Select GIAM from VOUCHER where MAVOUCHER = '"+gioHang.getIdVoucher()+"'");
+            cursor.moveToFirst();
+            double mucgiam = cursor.getDouble(0);
+            holder.tvMaVoucher.setVisibility(View.VISIBLE);
+            holder.tvNewPrice.setVisibility(View.VISIBLE);
+            holder.tvMaVoucher.setText("Mã voucher áp dụng: " + gioHang.getIdVoucher());
+            String donGiaCu = decimalFormat.format((gioHang.getDonGia()));
+            String donGiaMoi = decimalFormat.format((gioHang.getDonGia()*(1-mucgiam)));
+            holder.item_giohang_gia.setText(donGiaCu + " VNĐ");
+            holder.item_giohang_gia.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.tvNewPrice.setText(donGiaMoi + " VNĐ");
+            double gia = gioHang.getSoLuong() * gioHang.getDonGia()*(1-mucgiam);
+            holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
+        } else {
+            holder.tvMaVoucher.setVisibility(View.INVISIBLE);
+            holder.item_giohang_gia.setText(decimalFormat.format((gioHang.getDonGia())) + " VNĐ");
+            double gia = gioHang.getSoLuong() * gioHang.getDonGia();
+            holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
+        }
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView item_giohang_image,item_giohang_cong,item_giohang_tru;
@@ -149,7 +159,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
             item_giohang_tensp = itemView.findViewById(R.id.item_giohang_tensp);
             item_giohang_tru = itemView.findViewById(R.id.item_giohang_tru);
             item_giohang_cong = itemView.findViewById(R.id.item_giohang_cong);
-            tvMaVoucher = itemView.findViewById(R.id.tvVoucher);
+            tvMaVoucher = itemView.findViewById(R.id.tvMaVoucher);
             tvNewPrice = itemView.findViewById(R.id.tvNewPrice);
             //event click
             item_giohang_cong.setOnClickListener(this);
@@ -166,7 +176,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                 listener.onImageClick(view, getAbsoluteAdapterPosition(), 1);
                 //1 là trừ
             }
-            else if (view == item_giohang_cong){
+            if (view == item_giohang_cong){
                 listener.onImageClick(view, getAbsoluteAdapterPosition(), 2);
                 //2 là cộng
             }

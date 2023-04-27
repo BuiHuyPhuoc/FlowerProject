@@ -75,7 +75,7 @@
                         android:id="@+id/item_giohang_tru"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
+                        android:layout_weight="4"
                         android:src="@drawable/baseline_remove_24" />
 
                     <TextView
