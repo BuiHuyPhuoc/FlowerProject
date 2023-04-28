@@ -3,6 +3,7 @@ package com.example.appdemo.Admin;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -37,7 +38,10 @@ public class QLSanPhamActivity extends AppCompatActivity {
     String cate;
     Button btnXoa,btnSua,btnThem,btnHienthi;
     QLSanPham qlSanPham;
+
     Spinner spnCate;
+
+    Spinner spinnercate;
     List<String> list = new ArrayList<>();
     ArrayAdapter adapter;
 
@@ -50,7 +54,6 @@ public class QLSanPhamActivity extends AppCompatActivity {
         edtTen= (EditText) findViewById(R.id.edtTSP);
         edtGia= (EditText) findViewById(R.id.edtGia);
         edtSL= (EditText) findViewById(R.id.edtSL);
-        edtND= (EditText) findViewById(R.id.edtND);
         edtNN= (EditText) findViewById(R.id.edtNN);
         edtHA= (EditText) findViewById(R.id.edtHA);
         spnCate = findViewById(R.id.spnCate);
@@ -83,16 +86,72 @@ public class QLSanPhamActivity extends AppCompatActivity {
                 // Xử lý khi không có mục nào được chọn
             }
         });
+        spinnercate=(Spinner)findViewById(R.id.spnCategoty);
 
         spListView = (ListView) findViewById(R.id.listSP);
         mToolBar =(Toolbar) findViewById(R.id.toolbarSP);
         setSupportActionBar(mToolBar);
-
         //hiển thị dữ liệu khi chạy chương trình
         qlSanPham = new QLSanPham(QLSanPhamActivity.this);
         list=qlSanPham.getAllSanPhamToString();
         ArrayAdapter adapter =new ArrayAdapter(QLSanPhamActivity.this, android.R.layout.simple_list_item_1,list);
         spListView.setAdapter(adapter);
+
+        //hiển thị Category trong spinner
+        dbHelper = new DatabaseHelper(this,"DBFlowerShop.sqlite",null,1);
+        db = dbHelper.getWritableDatabase();//cho phép ghi dữ liệu vào database
+        ArrayList<String> dataList = new ArrayList<>();
+        Cursor cursor1 = db.rawQuery("SELECT * FROM CATEGORY", null);
+        if (cursor1.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String data1 = cursor1.getString(cursor.getColumnIndex("NAME"));
+                dataList.add(data1);
+            } while (cursor1.moveToNext());
+        }
+        ArrayAdapter<String> adaptercate = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dataList);
+        adaptercate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnercate.setAdapter(adaptercate);
+        //lưu dữ liệu chọn từ spinner vào database
+        spinnercate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // Lấy dữ liệu đã chọn từ Spinner
+                String selectedItem = adapterView.getItemAtPosition(i).toString();
+                    btnThem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SanPham s = new SanPham();// tạo đối tượng chứa dữ liệu người dùng nhập
+                        //đưa dữ liệu vào đối tượng
+                        if(edtSL.getText().toString().isEmpty()){
+                            Toast.makeText(QLSanPhamActivity.this,"Bạn chưa nhập số lượng",Toast.LENGTH_LONG).show();
+                        }else s.setSOLUONG(Integer.parseInt(edtSL.getText().toString()));
+                        if(edtGia.getText().toString().isEmpty()){
+                            Toast.makeText(QLSanPhamActivity.this,"Bạn chưa nhập giá",Toast.LENGTH_LONG).show();
+                        }else s.setDONGIA(Double.parseDouble(edtGia.getText().toString()));
+                        if(edtHA.getText().toString().isEmpty()){
+                            Toast.makeText(QLSanPhamActivity.this,"Bạn chưa chọn hình ảnh",Toast.LENGTH_LONG).show();
+                        }else s.setHINHANH(Integer.parseInt(edtHA.getText().toString()));
+                        s.setMASP(edtMa.getText().toString());
+                        s.setTENSP(edtTen.getText().toString());
+                        s.setNOIDUNG(edtND.getText().toString());
+                        s.setNOINHAP(edtNN.getText().toString());
+                        s.setPHANLOAI(selectedItem);
+                        int kq = qlSanPham.ThemSanPham(s);
+                        if(kq==-1){
+                            Toast.makeText(QLSanPhamActivity.this,"Thêm thất bại",Toast.LENGTH_LONG).show();
+                        }
+                        if (kq==1){
+                            Toast.makeText(QLSanPhamActivity.this,"Thêm thành công",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         //button hiển thị
         btnHienthi.setOnClickListener(new View.OnClickListener() {
@@ -107,36 +166,7 @@ public class QLSanPhamActivity extends AppCompatActivity {
 
 
         //button thêm
-        btnThem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                SanPham s = new SanPham();// tạo đối tượng chứa dữ liệu người dùng nhập
-                //đưa dữ liệu vào đối tượng
-                if(edtSL.getText().toString().isEmpty()){
-                    Toast.makeText(QLSanPhamActivity.this,"Bạn chưa nhập số lượng",Toast.LENGTH_LONG).show();
-                }else s.setSOLUONG(Integer.parseInt(edtSL.getText().toString()));
-                if(edtGia.getText().toString().isEmpty()){
-                    Toast.makeText(QLSanPhamActivity.this,"Bạn chưa nhập giá",Toast.LENGTH_LONG).show();
-                }else s.setDONGIA(Double.parseDouble(edtGia.getText().toString()));
-                if(edtHA.getText().toString().isEmpty()){
-                    Toast.makeText(QLSanPhamActivity.this,"Bạn chưa chọn hình ảnh",Toast.LENGTH_LONG).show();
-                }else s.setHINHANH(Integer.parseInt(edtHA.getText().toString()));
-                s.setMASP(edtMa.getText().toString());
-                s.setTENSP(edtTen.getText().toString());
-                s.setNOIDUNG(edtND.getText().toString());
-                s.setNOINHAP(edtNN.getText().toString());
-                s.setPHANLOAI(edtPL.getText().toString());
-                //gọi hàm thêm
-                int kq = qlSanPham.ThemSanPham(s);
-                if(kq==-1){
-                    Toast.makeText(QLSanPhamActivity.this,"Thêm thất bại",Toast.LENGTH_LONG).show();
-                }
-                if (kq==1){
-                    Toast.makeText(QLSanPhamActivity.this,"Thêm thành công",Toast.LENGTH_LONG).show();
-                }
-            }
-        });
         //Button Xóa
         btnXoa.setOnClickListener(new View.OnClickListener() {
             @Override

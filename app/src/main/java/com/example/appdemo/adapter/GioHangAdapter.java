@@ -108,7 +108,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                     }
                     databaseHelper.updateCartList(gioHangList.get(pos));
                     holder.item_giohang_sl.setText((gioHangList.get(pos).getSoLuong().toString()));
-                    long gia = gioHangList.get(pos).getSoLuong() * gioHangList.get(pos).getDonGia();
+                    double gia = gioHangList.get(pos).getSoLuong() * gioHangList.get(pos).getDonGia();
                     holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
                     EventBus.getDefault().postSticky(new TinhTongEvent());//bắt sk tính tổng cho all sp
                 }
@@ -138,6 +138,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
             holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
         } else {
             holder.tvMaVoucher.setVisibility(View.INVISIBLE);
+            holder.tvNewPrice.setVisibility(View.INVISIBLE);
             holder.item_giohang_gia.setText(decimalFormat.format((gioHang.getDonGia())) + " VNĐ");
             double gia = gioHang.getSoLuong() * gioHang.getDonGia();
             holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");

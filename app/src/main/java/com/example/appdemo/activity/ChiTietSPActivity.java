@@ -151,7 +151,6 @@ public class ChiTietSPActivity extends AppCompatActivity {
             }
         }
         if (!checkExisted){
-            Toast.makeText(getApplicationContext(), sanPhamMoi.getDONGIA().toString(), Toast.LENGTH_SHORT).show();
             GioHang gioHang = new GioHang();
             gioHang.setIdCus(statusLogin_User);
             gioHang.setIdSanPham(sanPhamMoi.getMASP());
