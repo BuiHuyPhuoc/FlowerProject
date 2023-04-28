@@ -101,12 +101,12 @@ public class QLSanPhamActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this,"DBFlowerShop.sqlite",null,1);
         db = dbHelper.getWritableDatabase();//cho phép ghi dữ liệu vào database
         ArrayList<String> dataList = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM CATEGORY", null);
-        if (cursor.moveToFirst()) {
+        Cursor cursor1 = db.rawQuery("SELECT * FROM CATEGORY", null);
+        if (cursor1.moveToFirst()) {
             do {
-                @SuppressLint("Range") String data = cursor.getString(cursor.getColumnIndex("NAME"));
-                dataList.add(data);
-            } while (cursor.moveToNext());
+                @SuppressLint("Range") String data1 = cursor1.getString(cursor.getColumnIndex("NAME"));
+                dataList.add(data1);
+            } while (cursor1.moveToNext());
         }
         ArrayAdapter<String> adaptercate = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dataList);
         adaptercate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

@@ -61,15 +61,15 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
 
 //        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
-//        db.WriteQuery("Drop table if exists CARTLIST");
-//        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
-//        db.WriteQuery("Drop table if exists VOUCHER");
-//        db.WriteQuery("Drop table if exists BILLDETAIL");
-//        db.WriteQuery("Drop table if exists BILL");
-//        db.WriteQuery("Drop table if exists SANPHAM");
-//        db.WriteQuery("Drop table if exists [CATEGORY]");
-//        db.WriteQuery("Drop table if exists ACCOUNT");
-//        db.WriteQuery("Drop table if exists [ROLE]");
+        db.WriteQuery("Drop table if exists CARTLIST");
+        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
+        db.WriteQuery("Drop table if exists VOUCHER");
+        db.WriteQuery("Drop table if exists BILLDETAIL");
+        db.WriteQuery("Drop table if exists BILL");
+        db.WriteQuery("Drop table if exists SANPHAM");
+        db.WriteQuery("Drop table if exists [CATEGORY]");
+        db.WriteQuery("Drop table if exists ACCOUNT");
+        db.WriteQuery("Drop table if exists [ROLE]");
 ////
         //region Tạo bảng ROLE: Quyền hạn
         db.WriteQuery("CREATE TABLE IF NOT EXISTS [ROLE] (" +
@@ -143,13 +143,31 @@ public class MainActivity extends AppCompatActivity {
         //region Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS BILL (\n" +
-                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                        "    DATEORDER        date           NOT NULL,\n" +
-                        "    TAIKHOANCUS            VARCHAR            NOT NULL,\n" +
-                        "    ADDRESSDELIVERRY VARCHAR NOT NULL,\n" +
-                        "    FOREIGN KEY (TAIKHOANCUS) REFERENCES ACCOUNT(TAIKHOAN)\n" +
+                        "   ID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                        "   DATEORDER date NOT NULL,\n" +
+                        "   TAIKHOANCUS VARCHAR NOT NULL,\n" +
+                        "   NAMECUS VARCHAR NOT NULL,\n" +
+                        "   ADDRESSDELIVERRY VARCHAR NOT NULL,\n" +
+                        "   SDT VARCHAR not null);"
+        );
+        //endregion
+
+        //region Tạo bảng Bill_Detail: Chi tiết hóa đơn
+        db.WriteQuery(
+                "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
+                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "    MASP VARCHAR NOT NULL,\n" +
+                        "    IDORDER   INTEGER not NULL,\n" +
+                        "    IDVoucher VARCHAR not null, \n" +
+                        "    QUANTITY  INTEGER check(QUANTITY > 0) not NULL,\n" +
+                        "    UNITPRICE Real check(UNITPRICE > 0) not NULL,\n" +
+                        "    TOTALPRICE Real check (TOTALPRICE > 0) not Null,\n" +
+                        "    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP),\n" +
+                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
+                        "    FOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)" +
                         ");"
         );
+
         //endregion
 
         //region Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
@@ -179,23 +197,7 @@ public class MainActivity extends AppCompatActivity {
         db.AddVoucherProduct("SALET5", "CB003");
         //endregion
 
-        //region Tạo bảng Bill_Detail: Chi tiết hóa đơn
-        db.WriteQuery(
-                "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
-                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                        "    MASP VARCHAR NOT NULL,\n" +
-                        "    IDORDER   INTEGER not NULL,\n" +
-                        "    IDVoucher VARCHAR not null, \n" +
-                        "    QUANTITY  INTEGER check(QUANTITY > 0) not NULL,\n" +
-                        "    UNITPRICE Real check(UNITPRICE > 0) not NULL,\n" +
-                        "    TOTALPRICE Real check (TOTALPRICE > 0) not Null,\n" +
-                        "    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP),\n" +
-                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
-                        "    FOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)" +
-                        ");"
-        );
 
-        //endregion
 
 
 

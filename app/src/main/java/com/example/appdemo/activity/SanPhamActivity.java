@@ -40,6 +40,8 @@ import com.example.appdemo.model.ItemMenu;
 import com.example.appdemo.model.SanPhamMoi;
 import com.google.android.material.navigation.NavigationView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +58,6 @@ public class SanPhamActivity extends AppCompatActivity {
 
     MenuAdapter adapter = new MenuAdapter(this);
 
-    MenuAdapter adapter;
     EditText EdtSearch;
 
     ArrayList<ItemMenu> arrayList;
@@ -78,7 +79,6 @@ public class SanPhamActivity extends AppCompatActivity {
         actionBar();
         actionMenu();
         intData();
-        getEventClick();
         SearchItem();
         sqLiteDatabase = db.getWritableDatabase();
 
@@ -170,30 +170,6 @@ public class SanPhamActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
         recyclerViewManHinhChinh.setAdapter(spAdapter);
         recyclerViewManHinhChinh.setLayoutManager(layoutManager);
-
-            Cursor listSanPham = db.GetData(
-                    "Select* from SANPHAM"
-            );
-            //Lấy danh sách sản phẩm hiện có trong database
-            while (listSanPham.moveToNext()) {
-                mangSpMoi.add(new SanPhamMoi(
-                        listSanPham.getString(0),
-                        listSanPham.getString(1),
-                        listSanPham.getString(2),
-                        listSanPham.getInt(3),
-                        listSanPham.getString(4),
-                        listSanPham.getString(5),
-                        listSanPham.getLong(6),
-                        listSanPham.getInt(7)
-                ));
-            }
-            recyclerViewManHinhChinh = (RecyclerView) findViewById(R.id.recyclerView);
-            spAdapter = new SanPhamAdapter(this, mangSpMoi);
-            //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
-            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
-            recyclerViewManHinhChinh.setAdapter(spAdapter);
-            recyclerViewManHinhChinh.setLayoutManager(layoutManager);
-
     }
 
     private void actionMenu(){
@@ -248,7 +224,17 @@ public class SanPhamActivity extends AppCompatActivity {
             @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("TENSP"));
             @SuppressLint("Range") int price = cursor.getInt(cursor.getColumnIndex("DONGIA"));
             @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("NOIDUNG"));
-            SanPhamMoi product = new SanPhamMoi(id, name, price, description);
+            SanPhamMoi product = new SanPhamMoi(
+                    cursor.getString(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                    cursor.getLong(6),
+                    cursor.getInt(7),
+                    cursor.getString(8)
+            );
             products.add(product);
         }
         cursor.close();
@@ -295,6 +281,11 @@ public class SanPhamActivity extends AppCompatActivity {
 
         // Thêm sản phẩm mới vào danh sách
         for (SanPhamMoi product : filteredProducts) {
+            String inputDate = product.getDATE();
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(inputDate, inputFormatter);
+            String outputDate = date.format(outputFormatter);
             mangSpMoi.add(new SanPhamMoi(
                     product.getMASP(),
                     product.getTENSP(),
@@ -303,7 +294,8 @@ public class SanPhamActivity extends AppCompatActivity {
                     product.getNOINHAP(),
                     product.getNOIDUNG(),
                     product.getDONGIA(),
-                    product.getHINHANH()
+                    product.getHINHANH(),
+                    outputDate
             ));
         }
         // Cập nhật adapter
