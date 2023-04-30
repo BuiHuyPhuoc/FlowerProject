@@ -16,9 +16,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.appdemo.Class.StatusLogin;
 import com.example.appdemo.R;
 import com.example.appdemo.Utils;
 import com.example.appdemo.adapter.MenuAdapter;
@@ -30,6 +32,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.nio.BufferUnderflowException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -238,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             ));
         }
         spAdapter = new SanPhamAdapter( this, mangSpMoi);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1,LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewManHinhChinh.setAdapter(spAdapter);
         recyclerViewManHinhChinh.setLayoutManager(layoutManager);
     }

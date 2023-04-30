@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
-    public DatabaseHelper(Context context) {
+    public DatabaseHelper(Context  context) {
         super(context, "DBFlowerShop.sqlite", null, 1);
     }
 
@@ -112,9 +112,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try{
             Cursor cursor = this.GetData(
                     "Select*" +
-                            "From VOUCHER_DETAIL" +
-                            "Where MAVOUCHER = '" + MAVOUCHER + "'" +
-                            "and MASP = '" + MASP + "'"
+                            " From VOUCHER_DETAIL" +
+                            " Where MAVOUCHER = '" + MAVOUCHER + "'" +
+                            " and MASP = '" + MASP + "'"
             );
             if (cursor == null){
                 this.WriteQuery("Insert into VOUCHER_DETAIL values" +
