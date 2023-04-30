@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     List<SanPhamMoi> saleProducts = new ArrayList<SanPhamMoi>();
     SanPhamAdapter spAdapter;
     NotificationBadge badge;
+    TextView tvHello;
+    ImageView imgToProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,6 +228,14 @@ public class MainActivity extends AppCompatActivity {
         AllProduct();
         SaleProduct();
         //endregion
+
+        imgToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this,ProifileActivity.class);
+                startActivity(i);
+            }
+        });
     }
     private void AllProduct(){
         Cursor listSanPham = db.GetData(
@@ -341,6 +352,18 @@ public class MainActivity extends AppCompatActivity {
         lvManHinhChinh = (ListView) findViewById(R.id.listManHinh);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         status = (StatusLogin) getApplication();
+        tvHello = findViewById(R.id.tvHello);
+        imgToProfile = findViewById(R.id.imgToProfile);
+        if (status.isLogin() == false){
+            //khi chưa đnăg nhập, ẩn thứ cần ẩn
+            tvHello.setVisibility(View.INVISIBLE);
+            imgToProfile.setVisibility(View.INVISIBLE);
+        } else {
+            //Khi ddanwg nhap roi, hien thu can hien
+            tvHello.setText("Hello, " + status.getUser());
+            imgToProfile.setVisibility(View.VISIBLE);
+            tvHello.setVisibility(View.VISIBLE);
+        }
         mangSpMoi = new ArrayList<>();
         if (Utils.manggiohang == null){
           Utils.manggiohang = new ArrayList<>();

@@ -111,10 +111,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean AddVoucherProduct(String MAVOUCHER, String MASP){
         try{
             Cursor cursor = this.GetData(
-                    "Select* " +
-                            "From VOUCHER_DETAIL " +
-                            "Where MAVOUCHER = '" + MAVOUCHER + "' " +
-                            "and MASP = '" + MASP + "' "
+                    "Select*" +
+                            " From VOUCHER_DETAIL" +
+                            " Where MAVOUCHER = '" + MAVOUCHER + "'" +
+                            " and MASP = '" + MASP + "'"
             );
             if (!cursor.moveToFirst()){
                 this.WriteQuery("Insert into VOUCHER_DETAIL values" +
