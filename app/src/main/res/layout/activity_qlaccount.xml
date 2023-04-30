@@ -43,13 +43,11 @@
                 android:hint="Mật khẩu"
                 android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/edtRole"
+            <Spinner
+                android:id="@+id/spinnerRole"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Quyền hạn"
-                android:inputType="textPersonName|text" />
+                android:contextClickable="false" />
 
             <EditText
                 android:id="@+id/edtTentk"
@@ -96,43 +94,36 @@
 
         <Button
             android:id="@+id/btnThem"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:background="#fcba03"
             android:text="Thêm"
             android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btnSua"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
 
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:background="#fcba03"
             android:text="Sửa"
             android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btnXoa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:background="#fcba03"
-            android:text="Xóa"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/btnShow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:background="#fcba03"
-            android:text="hiển thị"
+            android:text="Xóa"
             android:textColor="@color/white" />
 
     </LinearLayout>

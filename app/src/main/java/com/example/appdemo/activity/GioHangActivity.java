@@ -6,18 +6,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-
+import com.example.appdemo.Class.StatusLogin;
 import com.example.appdemo.R;
 import com.example.appdemo.Utils;
 import com.example.appdemo.adapter.GioHangAdapter;
-import com.example.appdemo.model.EvenBus.TinhTongEvent;
+import com.example.appdemo.adapter.EvenBus.TinhTongEvent;
+import com.example.appdemo.model.DatabaseHelper;
 import com.example.appdemo.model.GioHang;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,6 +27,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GioHangActivity extends AppCompatActivity {
@@ -34,7 +37,9 @@ public class GioHangActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Button btnmuahang;
     GioHangAdapter adapter;
+    DatabaseHelper databaseHelper;
     List<GioHang> gioHangList;
+    StatusLogin statusLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,56 +48,16 @@ public class GioHangActivity extends AppCompatActivity {
         intView();
         intControl();
         totalMoney();
-
-        btnmuahang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Utils.manggiohang.size() > 0)
-                {
-                    AlertDialog.Builder d = new AlertDialog.Builder(GioHangActivity.this);
-                    d.setTitle("Thông báo");
-                    d.setMessage("Bạn đã thanh toán thành công");
-
-                    d.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Utils.manggiohang.clear();
-                            adapter.notifyDataSetChanged();
-                            EventBus.getDefault().postSticky(new TinhTongEvent());//bắt sk tính tổng cho all sp
-                        }
-                    });
-
-                    d.create().show();
-                }
-                else if (Utils.manggiohang.size() == 0){
-                    AlertDialog.Builder d = new AlertDialog.Builder(GioHangActivity.this);
-                    d.setTitle("Thông báo");
-                    d.setMessage("Giỏ hàng của bạn đang bị trống");
-
-                    d.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            finish();
-                        }
-                    });
-
-                    d.create().show();
-                }
-
-
-            }
-        });
     }
 
     private void totalMoney() {
         long tongtiensp = 0;
-        for (int i = 0 ; i < Utils.manggiohang.size() ; i++){
-            tongtiensp = tongtiensp + (Utils.manggiohang.get(i).getDONGIA() * Utils.manggiohang.get(i).getSoluong());
+        for (int i = 0; i < gioHangList.size(); i++){
+            tongtiensp += gioHangList.get(i).getSoLuong()*gioHangList.get(i).getDonGia();
         }
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-      tongtien.setText(decimalFormat.format(tongtiensp) + " VNĐ ");
+        tongtien.setText(decimalFormat.format(tongtiensp) + " VNĐ ");
     }
-
 
     private void intControl() {
         setSupportActionBar(toolbar);//lay doi tuong actonbar
@@ -110,11 +75,40 @@ public class GioHangActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);//LayoutManager: xác định ra vị trí của các item trong RecyclerView.
         recyclerView.setLayoutManager(layoutManager);
         //trường hợp giỏ hàng trống
-        if (Utils.manggiohang.size() == 0){
+        Cursor cursor = databaseHelper.GetData("SELECT CARTLIST.IDCARTLIST, CARTLIST.IDVOUCHER, CARTLIST.IDSANPHAM, SANPHAM.TENSP, SANPHAM.HINHANH, CARTLIST.IDCUS, SANPHAM.DONGIA, CARTLIST.SOLUONG\n" +
+                                                    "FROM SANPHAM, CARTLIST\n" +
+                                                    "WHERE SANPHAM.MASP = CARTLIST.IDSANPHAM\n" +
+                                                    "AND CARTLIST.IDCUS = '"+statusLogin.getUser()+"'");
+        Cursor cursor1 = cursor;
+        if (!cursor1.moveToFirst()){
             giohangtrong.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(), "Empty", Toast.LENGTH_SHORT).show();
         }
-        else {
-            adapter = new GioHangAdapter(getApplicationContext(),Utils.manggiohang);
+        else{
+            cursor.moveToFirst();
+            GioHang gioHang = new GioHang();
+            gioHang.setIdCartList(cursor.getInt(0));
+            gioHang.setIdVoucher(cursor.getString(1));
+            gioHang.setIdSanPham(cursor.getString(2));
+            gioHang.setTenSP(cursor.getString(3));
+            gioHang.setHinhSanPham(cursor.getInt(4));
+            gioHang.setIdCus(cursor.getString(5));
+            gioHang.setDonGia(cursor.getLong(6));
+            gioHang.setSoLuong(cursor.getInt(7));
+            gioHangList.add(gioHang);
+            while (cursor.moveToNext()){
+                gioHang = new GioHang();
+                gioHang.setIdCartList(cursor.getInt(0));
+                gioHang.setIdVoucher(cursor.getString(1));
+                gioHang.setIdSanPham(cursor.getString(2));
+                gioHang.setTenSP(cursor.getString(3));
+                gioHang.setHinhSanPham(cursor.getInt(4));
+                gioHang.setIdCus(cursor.getString(5));
+                gioHang.setDonGia(cursor.getLong(6));
+                gioHang.setSoLuong(cursor.getInt(7));
+                gioHangList.add(gioHang);
+            }
+            adapter = new GioHangAdapter(getApplicationContext(), gioHangList);
             recyclerView.setAdapter(adapter);
         }
     }
@@ -125,6 +119,9 @@ public class GioHangActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycleViewgiohang);
         tongtien = findViewById(R.id.tongtien);
         btnmuahang = findViewById(R.id.btnMuahang);
+        databaseHelper = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
+        statusLogin = (StatusLogin) getApplication();
+        gioHangList = new ArrayList<>();
     }
 
     @Override

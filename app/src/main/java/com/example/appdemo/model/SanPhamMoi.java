@@ -1,13 +1,17 @@
 package com.example.appdemo.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class SanPhamMoi implements Serializable {
     String MASP, TENSP, PHANLOAI, NOINHAP, NOIDUNG;
     Integer SOLUONG, HINHANH;
     Long DONGIA;
+    String DATE;
     public SanPhamMoi(){ }
-    public SanPhamMoi(String MASP, String TENSP, String PHANLOAI, Integer SOLUONG, String NOINHAP, String NOIDUNG, Long DONGIA, Integer HINHANH) {
+    public SanPhamMoi(String MASP, String TENSP, String PHANLOAI, Integer SOLUONG, String NOINHAP, String NOIDUNG, Long DONGIA, Integer HINHANH, String DATE) {
         this.MASP = MASP;
         this.TENSP = TENSP;
         this.PHANLOAI = PHANLOAI;
@@ -16,6 +20,11 @@ public class SanPhamMoi implements Serializable {
         this.SOLUONG = SOLUONG;
         this.HINHANH = HINHANH;
         this.DONGIA = DONGIA;
+        //Xử lí ngày tháng
+        LocalDate date = LocalDate.parse(DATE); //Chuyển từ date kiểu chuỗi sang date kiểu LocalDate
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //Định dạng dd-mm-yyyy
+        String formattedDate = date.format(formatter); //Gán kiểu ngày tháng vào dữ liệu date
+        this.DATE = formattedDate;
     }
 
 

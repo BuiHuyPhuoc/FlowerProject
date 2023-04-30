@@ -2,13 +2,23 @@ package com.example.appdemo.Class;
 
 public class Voucher {
     private String MAVOUCHER;
-    private Integer GIAM;
+    private double GIAM;
     private String HANSD;
+    private String NOIDUNG;
 
-    public Voucher(String MAVOUCHER, Integer GIAM, String HANSD) {
+    public String getNOIDUNG() {
+        return NOIDUNG;
+    }
+
+    public void setNOIDUNG(String NOIDUNG) {
+        this.NOIDUNG = NOIDUNG;
+    }
+
+    public Voucher(String MAVOUCHER, Integer GIAM, String HANSD, String NOIDUNG) {
         this.MAVOUCHER = MAVOUCHER;
         this.GIAM = GIAM;
         this.HANSD = HANSD;
+        this.NOIDUNG  = NOIDUNG;
     }
     public Voucher(){}
 
@@ -20,11 +30,11 @@ public class Voucher {
         this.MAVOUCHER = MAVOUCHER;
     }
 
-    public Integer getGIAM() {
+    public double getGIAM() {
         return GIAM;
     }
 
-    public void setGIAM(Integer GIAM) {
+    public void setGIAM(double GIAM) {
         this.GIAM = GIAM;
     }
 

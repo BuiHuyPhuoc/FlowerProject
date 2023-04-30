@@ -1,4 +1,4 @@
-package com.example.appdemo.activity;
+package com.example.appdemo.Admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,9 +18,8 @@ import android.widget.Toast;
 import com.example.appdemo.Class.HoaDon;
 import com.example.appdemo.Class.QLHoaDon;
 import com.example.appdemo.Class.QLSanPham;
-import com.example.appdemo.Class.QLVoucher;
-import com.example.appdemo.Class.Voucher;
 import com.example.appdemo.R;
+import com.example.appdemo.activity.DangXuatActivity;
 
 import java.util.ArrayList;
 import java.util.List;

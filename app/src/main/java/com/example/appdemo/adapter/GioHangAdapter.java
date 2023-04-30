@@ -3,8 +3,6 @@ package com.example.appdemo.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.media.Image;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.appdemo.Interface.IImageClickListener;
 import com.example.appdemo.R;
 import com.example.appdemo.Utils;
-import com.example.appdemo.model.EvenBus.TinhTongEvent;
+import com.example.appdemo.adapter.EvenBus.TinhTongEvent;
 import com.example.appdemo.model.GioHang;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,12 +47,12 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         GioHang gioHang = gioHangList.get(position);
-        holder.item_giohang_tensp.setText(gioHang.getTenSp());
-        holder.item_giohang_sl.setText((gioHang.getSoluong() + " "));
-        Glide.with(context).load(gioHang.getHinhSp()).into(holder.item_giohang_image);
+        holder.item_giohang_tensp.setText(gioHang.getTenSP());
+        holder.item_giohang_sl.setText((gioHang.getSoLuong() + " "));
+        Glide.with(context).load(gioHang.getHinhSanPham()).into(holder.item_giohang_image);
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.item_giohang_gia.setText(decimalFormat.format((gioHang.getDONGIA())) + " VNĐ");
-        long gia = gioHang.getSoluong() * gioHang.getDONGIA();
+        holder.item_giohang_gia.setText(decimalFormat.format((gioHang.getDonGia())) + " VNĐ");
+        long gia = gioHang.getSoLuong() * gioHang.getDonGia();
         holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
         //holder.item_giohang_gia2.setText(decimalFormat.format(gioHang.getDONGIA()) + " đ");
         //holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
@@ -64,16 +62,16 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                 //Log.d("TAG","onImageClick: "+pos + "...."+giatri);
                 if (giatri == 1)
                 {
-                    if (gioHangList.get(pos).getSoluong() > 1){
-                        int soluongmoi = gioHangList.get(pos).getSoluong()-1;
-                        gioHangList.get(pos).setSoluong(soluongmoi);
+                    if (gioHangList.get(pos).getSoLuong() > 1){
+                        int soluongmoi = gioHangList.get(pos).getSoLuong()-1;
+                        gioHangList.get(pos).setSoLuong(soluongmoi);
 
-                        holder.item_giohang_sl.setText((gioHangList.get(pos).getSoluong() + " "));
-                        long gia = gioHangList.get(pos).getSoluong() * gioHangList.get(pos).getDONGIA();
+                        holder.item_giohang_sl.setText((gioHangList.get(pos).getSoLuong() + " "));
+                        long gia = gioHangList.get(pos).getSoLuong() * gioHangList.get(pos).getDonGia();
                         holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
                         EventBus.getDefault().postSticky(new TinhTongEvent());//bắt sk tính tổng cho all sp
 
-                    }else if (gioHangList.get(pos).getSoluong() == 1){
+                    }else if (gioHangList.get(pos).getSoLuong() == 1){
                         AlertDialog.Builder builder = new AlertDialog.Builder(view.getRootView().getContext());
                         builder.setTitle("Thông báo");
                         builder.setMessage("Bạn có muốn xóa sản phẩm này khỏi giỏ hàng ?");
@@ -96,13 +94,13 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
 
                     }
                 }else if (giatri == 2){
-                    if (gioHangList.get(pos).getSoluong() < 11) {
-                        int soluongmoi = gioHangList.get(pos).getSoluong()+1;
-                        gioHangList.get(pos).setSoluong(soluongmoi);
+                    if (gioHangList.get(pos).getSoLuong() < 11) {
+                        int soluongmoi = gioHangList.get(pos).getSoLuong()+1;
+                        gioHangList.get(pos).setSoLuong(soluongmoi);
                     }
 
-                    holder.item_giohang_sl.setText((gioHangList.get(pos).getSoluong() + " "));
-                    long gia = gioHangList.get(pos).getSoluong() * gioHangList.get(pos).getDONGIA();
+                    holder.item_giohang_sl.setText((gioHangList.get(pos).getSoLuong() + " "));
+                    long gia = gioHangList.get(pos).getSoLuong() * gioHangList.get(pos).getDonGia();
                     holder.item_giohang_gia2.setText(decimalFormat.format(gia) + " VNĐ");
                     EventBus.getDefault().postSticky(new TinhTongEvent());//bắt sk tính tổng cho all sp
                 }

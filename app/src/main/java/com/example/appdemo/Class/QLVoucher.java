@@ -45,10 +45,11 @@ public class QLVoucher {
         while(c.isAfterLast()==false){
             Voucher s = new Voucher();//tạo đối tượng chứa dữ liệu
             s.setMAVOUCHER(c.getString(0));
-            s.setGIAM(c.getInt(1));
+            s.setNOIDUNG(c.getString(1));
             s.setHANSD(c.getString(2));
+            s.setGIAM(c.getDouble(3));
             //chuyển đối tượng thành chuỗi
-            String chuoi = "Mã Voucher: "+s.getMAVOUCHER()+" - "+"Giảm giá: "+s.getGIAM()+" - "+"HạnSD: "+s.getHANSD();
+            String chuoi = "Mã Voucher: "+s.getMAVOUCHER()+"\nGiảm giá: "+s.getGIAM()*100 + "%" + "\nHạn sử dụng: "+s.getHANSD();
             //đưa chuỗi vào list
             ls.add(chuoi);
             c.moveToNext();//di chuyển đến bảng ghi tiếp theo
