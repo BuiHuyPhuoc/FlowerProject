@@ -10,6 +10,15 @@ public class SanPhamMoi implements Serializable {
     Integer SOLUONG, HINHANH;
     Long DONGIA;
     String DATE;
+
+    public String getDATE() {
+        return DATE;
+    }
+
+    public void setDATE(String DATE) {
+        this.DATE = DATE;
+    }
+
     public SanPhamMoi(){ }
     public SanPhamMoi(String MASP, String TENSP, String PHANLOAI, Integer SOLUONG, String NOINHAP, String NOIDUNG, Long DONGIA, Integer HINHANH, String DATE) {
         this.MASP = MASP;

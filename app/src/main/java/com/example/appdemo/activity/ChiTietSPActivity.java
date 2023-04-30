@@ -3,12 +3,17 @@ package com.example.appdemo.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.ContentValues;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -28,12 +33,16 @@ import com.example.appdemo.model.SanPhamMoi;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChiTietSPActivity extends AppCompatActivity {
-    TextView tensp,giasp,motasp,noinhapsp;
+    TextView tensp, giasp, motasp, noinhapsp, tvVoucher;
     Button btnthem;
     ImageView imgHinhAnh;
-    Spinner spinner;
+    Spinner spnSL, spnVoucher;
     Toolbar toolbar;
     SanPhamMoi sanPhamMoi;
     NotificationBadge badge;
@@ -41,15 +50,17 @@ public class ChiTietSPActivity extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabase;
     StatusLogin statusLogin;
     QLGioHang qlGioHang;
-
+    ArrayList<String> listVoucher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_spactivity);
         intView();
-        actionBar();
         intData();
         Clickbtn();
+        actionBar();
+
+
     }
     private void Clickbtn(){
         btnthem.setOnClickListener(new View.OnClickListener() {
@@ -58,31 +69,82 @@ public class ChiTietSPActivity extends AppCompatActivity {
                 themGioHang();
             }
         });
+        spnVoucher.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Xử lý sự kiện khi người dùng chọn một phần tử trong Spinner
+                if (spnVoucher.getSelectedItem() != "NONE"){
+                    Cursor cursor = databaseHelper.GetData("Select VOUCHER_DETAIL.MAVOUCHER, VOUCHER.NOIDUNG, VOUCHER.HSD, VOUCHER.GIAM " +
+                            "\nFrom VOUCHER_DETAIL, VOUCHER " +
+                            "\nWhere VOUCHER_DETAIL.MAVOUCHER = VOUCHER.MAVOUCHER" +
+                            "\nAnd VOUCHER_DETAIL.MAVOUCHER == '"+spnVoucher.getSelectedItem()+"'");
+                    cursor.moveToFirst();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ChiTietSPActivity.this);
+                    String hsd = cursor.getString(2);
+                    // Định dạng của chuỗi đầu vào
+                    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+                    // Định dạng của chuỗi đầu ra
+                    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+                    // Chuyển đổi chuỗi đầu vào sang LocalDate
+                    LocalDate date = LocalDate.parse(hsd, inputFormatter);
+
+                    // Chuyển đổi LocalDate sang chuỗi đầu ra
+                    String outputDate = date.format(outputFormatter);
+
+                    String infoVoucher = "Mã voucher: " + cursor.getString(0)
+                            + "\nNội dung: " + cursor.getString(1)
+                            + "\nHạn sử dụng: " + outputDate
+                            +"\nMức giảm: " + cursor.getDouble(3)*100 + "%";
+                    builder.setMessage(infoVoucher);
+                    builder.setTitle("THÔNG TIN VOUCHER");
+                    builder.setPositiveButton("Áp dụng", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            spnVoucher.setSelection(position);
+                        }
+                    });
+                    builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            spnVoucher.setSelection(0);
+                        }
+                    });
+                    builder.create().show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void themGioHang() {
         String masp = sanPhamMoi.getMASP();
         String statusLogin_User = statusLogin.getUser();
-        int sl = Integer.parseInt(spinner.getSelectedItem().toString());
+        int sl = Integer.parseInt(spnSL.getSelectedItem().toString());
         Cursor cursor = databaseHelper.GetData("Select* from CARTLIST where IDSANPHAM = '" + masp + "' and IDCUS = '" + statusLogin_User + "'");
         boolean checkExisted = false;
         while (cursor.moveToNext()){
-            //Tìm thấy dữ liệu trong database đã tồn tại
+            //Nếu Tìm thấy giỏ hàng đã tồn tại trong database
             if (cursor.getString(2).equals(masp) && cursor.getString(1).equals(statusLogin_User)){
                 GioHang gioHang = new GioHang();
                 gioHang.setIdCartList(cursor.getInt(0));
                 gioHang.setIdCus(cursor.getString(1));
                 gioHang.setIdSanPham(cursor.getString(2));
-                gioHang.setIdVoucher(null);
+                gioHang.setIdVoucher((spnVoucher.getSelectedItem() == "NONE") ? "" : spnVoucher.getSelectedItem().toString());
                 gioHang.setDonGia(sanPhamMoi.getDONGIA());
                 gioHang.setTenSP(sanPhamMoi.getTENSP());
                 gioHang.setSoLuong(sl + cursor.getInt(4));
                 gioHang.setHinhSanPham(sanPhamMoi.getHINHANH());
                 long kq = databaseHelper.updateCartList(gioHang);
                 if (kq == 1){
-                    Toast.makeText(getApplicationContext(), "Sản phẩm đã được thêm vào giỏ hàng, chỉnh số lượng", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Sản phẩm đã có trong giỏ hàng, chỉnh số lượng", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Sản phẩm đã được thêm vào giỏ hàng, lỗi update dữ liệu", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Sản phẩm đã có trong vào giỏ hàng, lỗi update dữ liệu", Toast.LENGTH_SHORT).show();
                 }
                 checkExisted = true;
                 return;
@@ -92,72 +154,20 @@ public class ChiTietSPActivity extends AppCompatActivity {
             GioHang gioHang = new GioHang();
             gioHang.setIdCus(statusLogin_User);
             gioHang.setIdSanPham(sanPhamMoi.getMASP());
-            gioHang.setIdVoucher(null);
+            String maVoucher = spnVoucher.getSelectedItem().toString();
+            gioHang.setIdVoucher((maVoucher == "NONE") ? "" : maVoucher);
             gioHang.setDonGia(sanPhamMoi.getDONGIA());
             gioHang.setTenSP(sanPhamMoi.getTENSP());
             gioHang.setSoLuong(sl);
             gioHang.setHinhSanPham(sanPhamMoi.getHINHANH());
             long kq = databaseHelper.addCartList(gioHang);
-            if (kq == 1){
-                Toast.makeText(getApplicationContext(), "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+            if (kq != -1){
+                Toast.makeText(getApplicationContext(), "Sản phẩm đã được thêm vào giỏ hàng.", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(), "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Sản phẩm thêm thất bại.", Toast.LENGTH_SHORT).show();
             }
         }
         updateBadge();
-
-//        if (cursor == null){
-//            GioHang gioHang = new GioHang(sanPhamMoi.getMASP(), statusLogin_Name, "", sanPhamMoi.getTENSP(), sanPhamMoi.getDONGIA(), sanPhamMoi.getHINHANH(), sl);
-//            long i = qlGioHang.themGioHang(gioHang);
-//            if (i == -1){
-//                Toast.makeText(this, "That bai", Toast.LENGTH_SHORT).show();
-//            } else {
-//                Toast.makeText(this, "Thanh cong", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//        if (Utils.manggiohang.size() > 0){
-//            boolean flag = false;
-//            int sl = Integer.parseInt(spinner.getSelectedItem().toString());
-//            long gia = sanPhamMoi.getDONGIA() * sl;
-//            for (Integer i = 0 ; i < Utils.manggiohang.size() ; i++)
-//            {
-//                //Truong72 hop trung sp
-//               if (Utils.manggiohang.get(i).getIdsp() == sanPhamMoi.getMASP())
-//               {
-//                   Utils.manggiohang.get(i).setSoluong(sl + Utils.manggiohang.get(i).getSoluong());
-//                   gia = sanPhamMoi.getDONGIA() * Utils.manggiohang.get(i).getSoluong();
-//                   flag = true;
-//               }
-//            }
-//            if(flag == false)
-//            {
-//
-//                GioHang gioHang = new GioHang();
-//                gioHang.setDONGIA(sanPhamMoi.getDONGIA());
-//                gioHang.setSoluong(sl);
-//                gioHang.setIdsp(sanPhamMoi.getMASP());
-//                gioHang.setTenSp(sanPhamMoi.getTENSP());
-//                gioHang.setHinhSp(sanPhamMoi.getHINHANH());
-//                Utils.manggiohang.add(gioHang);
-//            }
-//        }
-//        else {
-//            int sl = Integer.parseInt(spinner.getSelectedItem().toString());
-//            long gia = sanPhamMoi.getDONGIA() * sl;
-//            GioHang gioHang = new GioHang();
-//            gioHang.setDONGIA(sanPhamMoi.getDONGIA());
-//            gioHang.setSoluong(sl);
-//            gioHang.setIdsp(sanPhamMoi.getMASP());
-//            gioHang.setTenSp(sanPhamMoi.getTENSP());
-//            gioHang.setHinhSp(sanPhamMoi.getHINHANH());
-//            Utils.manggiohang.add(gioHang);
-//
-//        }
-//        int toTalItem = 0;
-//        for (int i = 0 ; i < Utils.manggiohang.size() ; i++){
-//            toTalItem = toTalItem + Utils.manggiohang.get(i).getSoluong();
-//        }
-//        badge.setText(String.valueOf((toTalItem)));
     }
 
     private void intData(){
@@ -166,10 +176,34 @@ public class ChiTietSPActivity extends AppCompatActivity {
         motasp.setText(sanPhamMoi.getNOIDUNG());
         Glide.with(getApplicationContext()).load(sanPhamMoi.getHINHANH()).into(imgHinhAnh);
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        giasp.setText("Giá: "+decimalFormat.format(Double.parseDouble(String.valueOf(sanPhamMoi.getDONGIA()))) + " Đ");
+        giasp.setText("Giá: "+ decimalFormat.format(Double.parseDouble(String.valueOf(sanPhamMoi.getDONGIA()))) + " VNĐ");
         Integer[] sl = new Integer[]{1,2,3,4,5,6,7,8,9,10};
         ArrayAdapter<Integer> adapterspin = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,sl);
-        spinner.setAdapter(adapterspin);
+        spnSL.setAdapter(adapterspin);
+
+        //Setup spinner spnVoucher
+        listVoucher.add("NONE");
+        Cursor cursor = databaseHelper.GetData("Select* from VOUCHER_DETAIL where MASP = '"+ sanPhamMoi.getMASP() + "'");
+        while (cursor.moveToNext()){
+            listVoucher.add(cursor.getString(0));
+        }
+        ArrayAdapter<String> adapterVoucher = new ArrayAdapter<>(this,androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, listVoucher );
+        spnVoucher.setAdapter(adapterVoucher);
+
+        //nếu hệ thống chưa được đăng nhập, voucher sẽ không khả dụng
+        if (!statusLogin.isLogin()){
+            spnVoucher.setVisibility(View.GONE);
+            tvVoucher.setText("ĐĂNG NHẬP TẠI ĐÂY ĐỂ SỬ DỤNG VOUCHER.");
+            tvVoucher.setTypeface(null, Typeface.BOLD);
+            tvVoucher.setTextColor(Color.parseColor("#FF0000"));
+            tvVoucher.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getApplicationContext(), DangXuatActivity.class);
+                    startActivity(i);
+                }
+            });
+        }
     }
     private void intView(){
         tensp = (TextView) findViewById(R.id.tvTenSp);
@@ -177,12 +211,15 @@ public class ChiTietSPActivity extends AppCompatActivity {
         motasp = (TextView) findViewById(R.id.tvMotasp);
         noinhapsp = (TextView) findViewById(R.id.tvNoiNhap);
         btnthem = (Button) findViewById(R.id.btnthemvaoGioHang);
-        spinner = (Spinner) findViewById(R.id.spinner);
+        spnSL = (Spinner) findViewById(R.id.spnSL);
+        spnVoucher = (Spinner) findViewById(R.id.spnVoucher);
         imgHinhAnh = (ImageView) findViewById(R.id.imgchitiet);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         badge = (NotificationBadge) findViewById(R.id.menu_sl);
         qlGioHang = new QLGioHang(this);
         FrameLayout frameLayoutgiohang = findViewById(R.id.framegiohang);
+        tvVoucher = (TextView) findViewById(R.id.tvVoucher);
+        listVoucher = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
         statusLogin = (StatusLogin) getApplication();
         updateBadge();
@@ -194,13 +231,7 @@ public class ChiTietSPActivity extends AppCompatActivity {
                 startActivity(giohang);
             }
         });
-        if (Utils.manggiohang != null){
-            int toTalItem = 0;
-            for (int i = 0 ; i < Utils.manggiohang.size() ; i++){
-                toTalItem = toTalItem + Utils.manggiohang.get(i).getSoLuong();
-            }
-            badge.setText(String.valueOf(toTalItem));
-        }
+
     }
 
     private void actionBar(){
@@ -222,7 +253,7 @@ public class ChiTietSPActivity extends AppCompatActivity {
         updateBadge();
     }
     private void updateBadge(){
-        Cursor cursor = databaseHelper.GetData("Select* from CARTLIST");
+        Cursor cursor = databaseHelper.GetData("Select* from CARTLIST where IDCUS = '" + statusLogin.getUser() + "'");
         Integer count = 0;
         while (cursor.moveToNext()){
             count++;

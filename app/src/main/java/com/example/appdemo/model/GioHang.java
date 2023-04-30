@@ -6,7 +6,7 @@ public class GioHang{
 
     Integer soLuong, idCartList, hinhSanPham;
     String idVoucher, idSanPham, idCus;
-    long totalMoney, donGia;
+    double totalMoney, donGia;
     String tenSP;
     public GioHang(Integer soLuong, Integer idCartList, String idVoucher, String idSanPham, String idCus, long donGia, String tenSP, Integer hinhSanPham) {
         this.soLuong = soLuong;
@@ -15,7 +15,6 @@ public class GioHang{
         this.idSanPham = idSanPham;
         this.idCus = idCus;
         this.donGia = donGia;
-        this.totalMoney = soLuong*donGia;
         this.tenSP = tenSP;
         this.hinhSanPham = hinhSanPham;
     }
@@ -69,15 +68,19 @@ public class GioHang{
         this.idCus = idCus;
     }
 
-    public long getTotalMoney() {
+    public double getTotalMoney() {
         return totalMoney;
     }
 
-    public void setTotalMoney(long totalMoney) {
+    public void setTotalMoney(double totalMoney) {
         this.totalMoney = totalMoney;
     }
 
-    public long getDonGia() {
+    public void setDonGia(double donGia) {
+        this.donGia = donGia;
+    }
+
+    public double getDonGia() {
         return donGia;
     }
 

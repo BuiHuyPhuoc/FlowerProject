@@ -136,20 +136,38 @@ public class MainActivity extends AppCompatActivity {
         db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.red_love);
         db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pure_white);
         db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pastel_tulip);
-        db.AddProduct("BH001", "Hope For Love", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.hope_for_love);
+        db.AddProduct("BH001", "Hope For Love", "VASE", 0, "TPHCM", "ASD", 9500000, R.drawable.hope_for_love);
         db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.big_rose);
         //endregion
 
         //region Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
         db.WriteQuery(
                 "CREATE TABLE IF NOT EXISTS BILL (\n" +
-                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                        "    DATEORDER        VARCHAR           NOT NULL,\n" +
-                        "    TAIKHOANCUS            VARCHAR            NOT NULL,\n" +
-                        "    ADDRESSDELIVERRY VARCHAR NOT NULL,\n" +
-                        "    FOREIGN KEY (TAIKHOANCUS) REFERENCES ACCOUNT(TAIKHOAN)\n" +
+                        "   ID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                        "   DATEORDER date NOT NULL,\n" +
+                        "   TAIKHOANCUS VARCHAR NOT NULL,\n" +
+                        "   NAMECUS VARCHAR NOT NULL,\n" +
+                        "   ADDRESSDELIVERRY VARCHAR NOT NULL,\n" +
+                        "   SDT VARCHAR not null);"
+        );
+        //endregion
+
+        //region Tạo bảng Bill_Detail: Chi tiết hóa đơn
+        db.WriteQuery(
+                "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
+                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "    MASP VARCHAR NOT NULL,\n" +
+                        "    IDORDER   INTEGER not NULL,\n" +
+                        "    IDVoucher VARCHAR not null, \n" +
+                        "    QUANTITY  INTEGER check(QUANTITY > 0) not NULL,\n" +
+                        "    UNITPRICE Real check(UNITPRICE > 0) not NULL,\n" +
+                        "    TOTALPRICE Real check (TOTALPRICE > 0) not Null,\n" +
+                        "    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP),\n" +
+                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
+                        "    FOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)" +
                         ");"
         );
+
         //endregion
 
         //region Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
@@ -179,23 +197,7 @@ public class MainActivity extends AppCompatActivity {
         db.AddVoucherProduct("SALET5", "CB003");
         //endregion
 
-        //region Tạo bảng Bill_Detail: Chi tiết hóa đơn
-        db.WriteQuery(
-                "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
-                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                        "    MASP VARCHAR NOT NULL,\n" +
-                        "    IDORDER   INTEGER not NULL,\n" +
-                        "    IDVoucher VARCHAR not null, \n" +
-                        "    QUANTITY  INTEGER check(QUANTITY > 0) not NULL,\n" +
-                        "    UNITPRICE Real check(UNITPRICE > 0) not NULL,\n" +
-                        "    TOTALPRICE Real check (TOTALPRICE > 0) not Null,\n" +
-                        "    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP),\n" +
-                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
-                        "    FOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)" +
-                        ");"
-        );
 
-        //endregion
 
 
 
@@ -343,5 +345,6 @@ public class MainActivity extends AppCompatActivity {
         if (Utils.manggiohang == null){
           Utils.manggiohang = new ArrayList<>();
         }
+
     }
 }

@@ -2,6 +2,7 @@ package com.example.appdemo.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.appdemo.R;
 import com.example.appdemo.activity.ChiTietSPActivity;
+import com.example.appdemo.activity.GioiThieuActivity;
 import com.example.appdemo.model.SanPhamMoi;
 
 import java.text.DecimalFormat;
@@ -41,18 +43,18 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHo
         SanPhamMoi sanPhamMoi = array.get(position);
 
         holder.tensp.setText(sanPhamMoi.getTENSP());
-        //holder.giatien.setText(Long.toString(sanPhamMoi.getDONGIA()) + "VND");
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.giatien.setText("Giá: "+decimalFormat.format(Double.parseDouble(String.valueOf(sanPhamMoi.getDONGIA()))) + " VNĐ");
+        if (sanPhamMoi.getSOLUONG() <= 0){
+            holder.giatien.setText("TẠM HẾT HÀNG");
+            holder.giatien.setTextColor(Color.parseColor("#FF0000"));
+        } else {
+            holder.giatien.setText("Giá: "+decimalFormat.format(Double.parseDouble(String.valueOf(sanPhamMoi.getDONGIA()))) + " VNĐ");
+        }
         Glide.with(context).load(sanPhamMoi.getHINHANH()).into(holder.imgHinhanh);
-//        holder.imgHinhanh.setImageResource(sanPhamMoi.getHINHANH());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, ChiTietSPActivity.class);
-                //i.putExtra("tensp",sanPhamMoi.getTENSP());
-                //i.putExtra("gia",sanPhamMoi.getDONGIA());
-                //i.putExtra("hinhanh",sanPhamMoi.getHINHANH());
                 i.putExtra("chitiet",sanPhamMoi);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
