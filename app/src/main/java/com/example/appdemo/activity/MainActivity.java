@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     List<SanPhamMoi> saleProducts = new ArrayList<SanPhamMoi>();
     SanPhamAdapter spAdapter;
     NotificationBadge badge;
+    TextView tvHello;
+    ImageView imgToProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,15 +64,15 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
 
 //        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
-        db.WriteQuery("Drop table if exists CARTLIST");
-        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
-        db.WriteQuery("Drop table if exists VOUCHER");
-        db.WriteQuery("Drop table if exists BILLDETAIL");
-        db.WriteQuery("Drop table if exists BILL");
-        db.WriteQuery("Drop table if exists SANPHAM");
-        db.WriteQuery("Drop table if exists [CATEGORY]");
-        db.WriteQuery("Drop table if exists ACCOUNT");
-        db.WriteQuery("Drop table if exists [ROLE]");
+//        db.WriteQuery("Drop table if exists CARTLIST");
+//        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
+//        db.WriteQuery("Drop table if exists VOUCHER");
+//        db.WriteQuery("Drop table if exists BILLDETAIL");
+//        db.WriteQuery("Drop table if exists BILL");
+//        db.WriteQuery("Drop table if exists SANPHAM");
+//        db.WriteQuery("Drop table if exists [CATEGORY]");
+//        db.WriteQuery("Drop table if exists ACCOUNT");
+//        db.WriteQuery("Drop table if exists [ROLE]");
 ////
         //region Tạo bảng ROLE: Quyền hạn
         db.WriteQuery("CREATE TABLE IF NOT EXISTS [ROLE] (" +
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 "\tFOREIGN KEY (QUYENHAN) REFERENCES [ROLE](QUYENHAN)\n" +
                 ");");
         //Thêm tài khoản admin và khách hàng mẫu để test
-        db.AddAccount("123", "123", "admin", "Nguyen Van A", "", "", "");
+        db.AddAccount("123", "123", "admin", "Nguyen Van A", "0924939352", "voquinamit1@gmail.com", "thailan");
         db.AddAccount("1234", "1234", "customer", "Nguyen Thi B", "0334379439", "", "119");
         //endregion
 
@@ -225,6 +228,15 @@ public class MainActivity extends AppCompatActivity {
         AllProduct();
         SaleProduct();
         //endregion
+
+        imgToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this,ProifileActivity.class);
+                startActivity(i);
+            }
+        });
+
     }
     private void AllProduct(){
         Cursor listSanPham = db.GetData(
@@ -341,6 +353,18 @@ public class MainActivity extends AppCompatActivity {
         lvManHinhChinh = (ListView) findViewById(R.id.listManHinh);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         status = (StatusLogin) getApplication();
+        tvHello = findViewById(R.id.tvHello);
+        imgToProfile = findViewById(R.id.imgToProfile);
+        if (status.isLogin() == false){
+            //khi chưa đnăg nhập, ẩn thứ cần ẩn
+            tvHello.setVisibility(View.INVISIBLE);
+            imgToProfile.setVisibility(View.INVISIBLE);
+        } else {
+            //Khi ddanwg nhap roi, hien thu can hien
+            tvHello.setText("Hello, " + status.getUser());
+            imgToProfile.setVisibility(View.VISIBLE);
+            tvHello.setVisibility(View.VISIBLE);
+        }
         mangSpMoi = new ArrayList<>();
         if (Utils.manggiohang == null){
           Utils.manggiohang = new ArrayList<>();

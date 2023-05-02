@@ -8,15 +8,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.example.appdemo.R;
+import com.example.appdemo.Class.Account;
 
-import java.lang.annotation.Target;
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.SplittableRandom;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+    private static String tablename = "TAIKHOAN";
+    Context context;
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
@@ -111,10 +110,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean AddVoucherProduct(String MAVOUCHER, String MASP){
         try{
             Cursor cursor = this.GetData(
-                    "Select* " +
-                            "From VOUCHER_DETAIL " +
-                            "Where MAVOUCHER = '" + MAVOUCHER + "' " +
-                            "and MASP = '" + MASP + "' "
+                    "Select*" +
+                            " From VOUCHER_DETAIL" +
+                            " Where MAVOUCHER = '" + MAVOUCHER + "'" +
+                            " and MASP = '" + MASP + "'"
             );
             if (!cursor.moveToFirst()){
                 this.WriteQuery("Insert into VOUCHER_DETAIL values" +
@@ -154,4 +153,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return 1;//Thêm thành công
     }
+
+    public void updateUser(Account account) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+//            values.put("TAIKHOAN",account.getTAIKHOAN());
+//            values.put("MATKHAU",account.getMATKHAU());
+//            values.put("QUYENHAN",account.getQUYENHAN());
+            values.put("TEN", account.getTEN());
+            values.put("SDT", account.getSDT());
+            values.put("GMAIL", account.getGMAIL());
+            values.put("DIACHI",account.getDIACHI());
+
+           long check = db.update("ACCOUNT",values,"TAIKHOAN=?",new String[]{account.getTAIKHOAN().toString()});
+        //long check = db.insert("ACCOUNT",null,values);
+//            if (check != -1){
+//                Toast.makeText(context,"Saved", Toast.LENGTH_SHORT).show();
+//                db.close();
+//
+//            }else {
+//                Toast.makeText(context, "Chỉnh sửa thất bại", Toast.LENGTH_SHORT).show();
+//            }
+    }
+
+    public Cursor getUser(){
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery("Select * from ACCOUNT",null);
+        return cursor;
+    }
+
+    public long changePassword(String user, String oldPass, String newPass) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("MATKHAU", newPass);
+        return db.update("ACCOUNT", values, "TAIKHOAN=?", new String[]{user});
+    }
+
 }

@@ -70,10 +70,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_marginTop="-10dp"
+                    android:layout_marginRight="16dp"
                     android:text="Tiệm hoa La Vie Est Belle nằm giữa lòng Sài Gòn nhộn nhịp với những mảng tường xanh mát, nắng đan xen qua giàn dây leo lá rũ, tạo một cảm giác bình yên, nhẹ nhàng và gần gũi .Đội ngũ Florist chúng tôi - các bạn trẻ đầy sáng tạo, đam mê và nhiệt huyết với mong muốn tạo được sự gắn kết cảm xúc và lan toả yêu thương qua những bông hoa tươi thắm. Mỗi một sản phẩm hoa hoàn thiện được trao đến tay khách hàng là tất cả sự tận tâm và trân trọng của chúng tôi .\n"
                     android:textSize="20dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
