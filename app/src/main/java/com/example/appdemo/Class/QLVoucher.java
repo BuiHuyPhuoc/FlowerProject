@@ -58,6 +58,8 @@ public class QLVoucher {
         return ls;
     }
     public int XoaVoucher(String MAVOUCHER){
+        //Xóa trong VOUCHER_DETAIL trước
+        int check = db.delete("VOUCHER_DETAIL", "MAVOUCHER=?", new String[]{MAVOUCHER});
         int kq = db.delete("VOUCHER","MAVOUCHER=?",new String[]{MAVOUCHER});
         if(kq <= 0){
             return -1;//Thêm thất bại
@@ -68,14 +70,25 @@ public class QLVoucher {
         ContentValues values = new ContentValues();//Tạo đối tượng chứa dữ liệu
         //Đưa dữ liệu vào đối tượng chứa
         values.put("MAVOUCHER", s.getMAVOUCHER());
-        values.put("GIAM", s.getGIAM());
-        values.put("HANSD", s.getHANSD());
+        values.put("GIAM", s.getGIAM()/100 );
+        values.put("HSD", s.getHANSD());
+        values.put("NOIDUNG", s.getNOIDUNG());
         //thực thi Thêm
         long kq = db.update("VOUCHER", values, "MAVOUCHER=?",new String[]{s.getMAVOUCHER()});
         //Kiểm tra kết quả Insert
         if (kq <= 0) {
-            return -1;//Thêm thất bại
+            return -1;//sửa thất bại
         }
-        return 1;//Thêm thành công
+        return 1;//sửa thành công
+    }
+    public boolean useVoucher(String maVoucher, String maSanPham){
+        ContentValues values = new ContentValues();
+        values.put("MASP", maSanPham);
+        values.put("MAVOUCHER", maVoucher);
+        Cursor cursor = dbHelper.GetData("Select* from VOUCHER_DETAIL where MASP = '" + maSanPham + "' and MAVOUCHER ='"+maVoucher+"'");
+        if (!cursor.moveToFirst())
+            db.insert("VOUCHER_DETAIL", null, values);
+        return cursor.moveToFirst();
+        //Trả về true khi thêm thành công
     }
 }

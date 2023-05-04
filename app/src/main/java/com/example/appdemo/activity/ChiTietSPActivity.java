@@ -82,7 +82,7 @@ public class ChiTietSPActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ChiTietSPActivity.this);
                     String hsd = cursor.getString(2);
                     // Định dạng của chuỗi đầu vào
-                    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+                    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
                     // Định dạng của chuỗi đầu ra
                     DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
