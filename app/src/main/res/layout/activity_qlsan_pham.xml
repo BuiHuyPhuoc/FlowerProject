@@ -161,7 +161,7 @@
             <ListView
                 android:id="@+id/listSP"
                 android:layout_width="match_parent"
-                android:layout_height="198dp"
+                android:layout_height="257dp"
                 android:nestedScrollingEnabled="false"
                 android:scrollingCache="true" />
         </LinearLayout>
