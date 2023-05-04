@@ -99,14 +99,15 @@
             android:background="#fcba03"
             android:text="Xóa"
             android:textColor="@color/white" />
+
         <Button
-            android:id="@+id/btnShowVC"
-            android:layout_margin="5dp"
+            android:id="@+id/btnUse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="5dp"
             android:background="#fcba03"
-            android:text="hiển thị"
+            android:text="ÁP DỤNG"
             android:textColor="@color/white" />
 
     </LinearLayout>

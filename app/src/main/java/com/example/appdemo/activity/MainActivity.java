@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         ");"
         );
         int year = LocalDate.now().getYear();
-        db.AddVoucher("SALET5", "Sale tháng 5", year + "/05/31" , 10.0/100);
+        db.AddVoucher("SALET5", "Sale tháng 5", "2022-05-31" , 10.0/100);
         //endregion
 
         //region Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể

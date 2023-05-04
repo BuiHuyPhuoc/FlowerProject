@@ -99,9 +99,14 @@ public class QLAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String TAIKHOAN = edtTK.getText().toString();
+                if (TAIKHOAN.equals("")){
+                    Toast.makeText(QLAccountActivity.this, "Nhập tài khoản", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Cursor cursor = db.GetData("Select* from ACCOUNT where ACCOUNT.TAIKHOAN = '"+ TAIKHOAN +"'");
                 if (cursor == null){
                     Toast.makeText(getApplicationContext(), "Not Exist Account", Toast.LENGTH_SHORT).show();
+                    return;
                 } else {
                     cursor.moveToFirst();
                     AlertDialog.Builder builder = new AlertDialog.Builder(QLAccountActivity.this);

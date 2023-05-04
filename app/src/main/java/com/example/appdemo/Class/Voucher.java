@@ -1,6 +1,8 @@
 package com.example.appdemo.Class;
 
-public class Voucher {
+import java.io.Serializable;
+
+public class Voucher implements Serializable {
     private String MAVOUCHER;
     private double GIAM;
     private String HANSD;
@@ -14,7 +16,7 @@ public class Voucher {
         this.NOIDUNG = NOIDUNG;
     }
 
-    public Voucher(String MAVOUCHER, Integer GIAM, String HANSD, String NOIDUNG) {
+    public Voucher(String MAVOUCHER, String NOIDUNG, String HANSD, double GIAM) {
         this.MAVOUCHER = MAVOUCHER;
         this.GIAM = GIAM;
         this.HANSD = HANSD;
@@ -44,5 +46,8 @@ public class Voucher {
 
     public void setHANSD(String HANSD) {
         this.HANSD = HANSD;
+    }
+    public String toString(){
+        return "Mã Voucher: "+ this.getMAVOUCHER()+"\nGiảm giá: "+ this.getGIAM()*100 + "%" + "\nHạn sử dụng: "+ this.getHANSD();
     }
 }

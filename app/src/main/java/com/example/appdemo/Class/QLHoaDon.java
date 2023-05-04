@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.appdemo.adapter.HoaDonAdapter;
 import com.example.appdemo.model.DatabaseHelper;
 
 import java.util.ArrayList;
@@ -41,23 +42,28 @@ public class QLHoaDon {
     public List<String> getAllHoaDonToString(){
         List<String> ls = new ArrayList<>();//tạo danh sách rỗng
         //tạo con trỏ đọc bảng dữ liệu sản phẩm
-        Cursor c = db.query("BILL",null,null,null,null,null,null);
-        c.moveToFirst();//di chuyển con trỏ về bảng ghi đầu tiên
-        //đọc
-        while(c.isAfterLast()==false){
-            HoaDon s = new HoaDon();//tạo đối tượng chứa dữ liệu
-            s.setID(c.getInt(0));
-            s.setDATEORDER(c.getString(1));
-            s.setTAIKHOANCUS(c.getString(2));
-            s.setADDRESSDELIVERRY(c.getString(3));
-            //chuyển đối tượng thành chuỗi
-            String chuoi = "Mã ID: "+s.getID()+" - "+"Ngày tạo đơn: "+s.getDATEORDER()+" - "+"Tài khoản mua: "+s.getTAIKHOANCUS();
-            //đưa chuỗi vào list
+        Cursor c = dbHelper.GetData("Select BILL.ID, BILL.DATEORDER, BILL.TAIKHOANCUS, ACCOUNT.DIACHI from BILL, ACCOUNT where BILL.TAIKHOANCUS = ACCOUNT.TAIKHOAN");
+        while (c.moveToNext()){
+            String chuoi = "Mã ID: "+ c.getString(0)
+                    +"\nNgày tạo đơn: "+c.getString(1)
+                    +"\nTài khoản mua: "+c.getString(2)
+                    +"\nĐịa chỉ giao: " + c.getString(3);
             ls.add(chuoi);
-            c.moveToNext();//di chuyển đến bảng ghi tiếp theo
         }
-        c.close();
         return ls;
+    }
+    public ArrayList<HoaDon> getAllHoaDon(){
+        ArrayList<HoaDon> hoaDons = new ArrayList<>();
+        Cursor cursor = dbHelper.GetData("Select* from BILL");
+        while (cursor.moveToNext()){
+            HoaDon hoaDon = new HoaDon();
+            hoaDon.setID(Integer.parseInt(cursor.getString(0)));
+            hoaDon.setDATEORDER(cursor.getString(1));
+            hoaDon.setTAIKHOANCUS(cursor.getString(2));
+            hoaDon.setADDRESSDELIVERRY(cursor.getString(4));
+            hoaDons.add(hoaDon);
+        }
+        return hoaDons;
     }
     public int XoaHoaDon(Integer ID){
         int kq = db.delete("BILL","ID=?",new String[]{String.valueOf(ID)});
