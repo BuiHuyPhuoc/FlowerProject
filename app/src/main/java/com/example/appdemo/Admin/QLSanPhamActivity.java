@@ -36,11 +36,8 @@ public class QLSanPhamActivity extends AppCompatActivity {
     Toolbar mToolBar;
     EditText edtMa, edtTen, edtGia, edtSL, edtND, edtNN, edtHA, edtPL;
     String cate;
-    Button btnXoa,btnSua,btnThem,btnHienthi;
+    Button btnXoa,btnSua,btnThem;
     QLSanPham qlSanPham;
-
-    Spinner spnCate;
-
     Spinner spinnercate;
     List<String> list = new ArrayList<>();
     ArrayAdapter adapter;
@@ -49,64 +46,57 @@ public class QLSanPhamActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qlsan_pham);
-        dbHelper = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
+        //ánh xạ
         edtMa = (EditText) findViewById(R.id.edtMSP);
         edtTen= (EditText) findViewById(R.id.edtTSP);
         edtGia= (EditText) findViewById(R.id.edtGia);
         edtSL= (EditText) findViewById(R.id.edtSL);
         edtNN= (EditText) findViewById(R.id.edtNN);
+        edtND = (EditText) findViewById(R.id.edtND);
         edtHA= (EditText) findViewById(R.id.edtHA);
-        spnCate = findViewById(R.id.spnCate);
         btnXoa=(Button)findViewById(R.id.btnXoa);
         btnSua=(Button)findViewById(R.id.btnSua);
         btnThem=(Button)findViewById(R.id.btnThem);
-        btnHienthi=(Button)findViewById(R.id.btnShow);
-// Tạo dữ liệu cho Spinner
-        ArrayList<String> data = new ArrayList<>();
-        Cursor cursor = dbHelper.GetData("Select NOIDUNG from [CATEGORY]");
-        while (cursor.moveToNext()){
-            data.add(cursor.getString(0));
-        }
-        adapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, data);
-        // Đặt giao diện của Spinner
-
-        spnCate.setAdapter(adapter);
-        // Xử lý sự kiện khi một mục được chọn
-        spnCate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Xử lý khi một mục được chọn
-                Cursor cursor = dbHelper.GetData("Select NAME from [CATEGORY] where NOIDUNG = '"+data.get(position)+"'");
-                cursor.moveToFirst();
-                cate = cursor.getString(0);
-                Toast.makeText(getApplicationContext(), cate, Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Xử lý khi không có mục nào được chọn
-            }
-        });
         spinnercate=(Spinner)findViewById(R.id.spnCategoty);
-
         spListView = (ListView) findViewById(R.id.listSP);
         mToolBar =(Toolbar) findViewById(R.id.toolbarSP);
         setSupportActionBar(mToolBar);
+
+
+        //SET ONCLICKITEMLISTENER CỦA LISTVIEW ACCOUNT
+        spListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Lấy ra tài khoản từ một chuỗi dài trong ListView
+                String getSanPham = list.get(position).split("\n")[0].split(" ")[2].trim();
+                Cursor cursor = dbHelper.GetData("Select* from SANPHAM where SANPHAM.MASP = '"+ getSanPham +"'");
+                cursor.moveToFirst();
+                edtMa.setText(cursor.getString(0));
+                edtTen.setText(cursor.getString(1));
+                spinnercate.setSelection(cursor.getString(2).equals("COMBO") ? 0: 1);
+                edtSL.setText(cursor.getInt(3));
+                edtNN.setText(cursor.getString(4));
+                edtND.setText(cursor.getString(5));
+                edtGia.setText((int) cursor.getDouble(6));
+                edtHA.setText(cursor.getInt(7));
+                return;
+            }
+        });
         //hiển thị dữ liệu khi chạy chương trình
         qlSanPham = new QLSanPham(QLSanPhamActivity.this);
         list=qlSanPham.getAllSanPhamToString();
         ArrayAdapter adapter =new ArrayAdapter(QLSanPhamActivity.this, android.R.layout.simple_list_item_1,list);
         spListView.setAdapter(adapter);
-
         //hiển thị Category trong spinner
         dbHelper = new DatabaseHelper(this,"DBFlowerShop.sqlite",null,1);
         db = dbHelper.getWritableDatabase();//cho phép ghi dữ liệu vào database
         ArrayList<String> dataList = new ArrayList<>();
-        Cursor cursor1 = db.rawQuery("SELECT * FROM CATEGORY", null);
-        if (cursor1.moveToFirst()) {
+        Cursor cursor = db.rawQuery("SELECT * FROM CATEGORY", null);
+        if (cursor.moveToFirst()) {
             do {
-                @SuppressLint("Range") String data1 = cursor1.getString(cursor.getColumnIndex("NAME"));
-                dataList.add(data1);
-            } while (cursor1.moveToNext());
+                @SuppressLint("Range") String data = cursor.getString(cursor.getColumnIndex("NAME"));
+                dataList.add(data);
+            } while (cursor.moveToNext());
         }
         ArrayAdapter<String> adaptercate = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dataList);
         adaptercate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -142,6 +132,40 @@ public class QLSanPhamActivity extends AppCompatActivity {
                         }
                         if (kq==1){
                             Toast.makeText(QLSanPhamActivity.this,"Thêm thành công",Toast.LENGTH_LONG).show();
+                            //update listview
+                            qlSanPham = new QLSanPham(QLSanPhamActivity.this);
+                            list=qlSanPham.getAllSanPhamToString();
+                            ArrayAdapter adapter =new ArrayAdapter(QLSanPhamActivity.this, android.R.layout.simple_list_item_1,list);
+                            spListView.setAdapter(adapter);
+                        }
+                    }
+                });
+                //Button Sửa
+                btnSua.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SanPham s = new SanPham();// tạo đối tượng chứa dữ liệu người dùng nhập
+                        //đưa dữ liệu vào đối tượng
+                        s.setMASP(edtMa.getText().toString());
+                        s.setTENSP(edtTen.getText().toString());
+                        s.setDONGIA(Double.parseDouble(edtGia.getText().toString()));
+                        s.setSOLUONG(Integer.parseInt(edtSL.getText().toString()));
+                        s.setNOIDUNG(edtND.getText().toString());
+                        s.setNOINHAP(edtNN.getText().toString());
+                        s.setPHANLOAI(edtPL.getText().toString());
+                        s.setHINHANH(Integer.parseInt(edtHA.getText().toString()));
+                        //gọi hàm Sửa
+                        int kq = qlSanPham.SuaSanPham(s);
+                        if(kq==-1){
+                            Toast.makeText(QLSanPhamActivity.this,"Sửa thất bại",Toast.LENGTH_LONG).show();
+                        }
+                        if (kq==1){
+                            Toast.makeText(QLSanPhamActivity.this,"Sửa thành công",Toast.LENGTH_LONG).show();
+                            //update listview
+                            qlSanPham = new QLSanPham(QLSanPhamActivity.this);
+                            list=qlSanPham.getAllSanPhamToString();
+                            ArrayAdapter adapter =new ArrayAdapter(QLSanPhamActivity.this, android.R.layout.simple_list_item_1,list);
+                            spListView.setAdapter(adapter);
                         }
                     }
                 });
@@ -152,22 +176,6 @@ public class QLSanPhamActivity extends AppCompatActivity {
 
             }
         });
-
-        //button hiển thị
-        btnHienthi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                qlSanPham = new QLSanPham(QLSanPhamActivity.this);
-                list=qlSanPham.getAllSanPhamToString();
-                ArrayAdapter adapter =new ArrayAdapter(QLSanPhamActivity.this, android.R.layout.simple_list_item_1,list);
-                spListView.setAdapter(adapter);
-            }
-        });
-
-
-        //button thêm
-
-        //Button Xóa
         btnXoa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,30 +187,6 @@ public class QLSanPhamActivity extends AppCompatActivity {
                 }
                 if (kq==1){
                     Toast.makeText(QLSanPhamActivity.this,"Xóa thành công",Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        //Button Sửa
-        btnSua.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SanPham s = new SanPham();// tạo đối tượng chứa dữ liệu người dùng nhập
-                //đưa dữ liệu vào đối tượng
-                s.setMASP(edtMa.getText().toString());
-                s.setTENSP(edtTen.getText().toString());
-                s.setDONGIA(Double.parseDouble(edtGia.getText().toString()));
-                s.setSOLUONG(Integer.parseInt(edtSL.getText().toString()));
-                s.setNOIDUNG(edtND.getText().toString());
-                s.setNOINHAP(edtNN.getText().toString());
-                s.setPHANLOAI(edtPL.getText().toString());
-                s.setHINHANH(Integer.parseInt(edtHA.getText().toString()));
-                //gọi hàm Sửa
-                int kq = qlSanPham.SuaSanPham(s);
-                if(kq==-1){
-                    Toast.makeText(QLSanPhamActivity.this,"Sửa thất bại",Toast.LENGTH_LONG).show();
-                }
-                if (kq==1){
-                    Toast.makeText(QLSanPhamActivity.this,"Sửa thành công",Toast.LENGTH_LONG).show();
                 }
             }
         });

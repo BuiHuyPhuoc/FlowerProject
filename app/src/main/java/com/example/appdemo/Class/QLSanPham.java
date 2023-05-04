@@ -22,25 +22,6 @@ public class QLSanPham {
     }
     //Thêm dữ liệu
     public int ThemSanPham(SanPham s){
-        /*//gán giá trị khi không nhập số lượng
-        Integer quantity = (s.getSOLUONG());
-        Double Price = (s.getDONGIA());
-        Integer Image = (s.getHINHANH());
-        if (quantity == null) {
-            // Thêm quantity vào cột "SOLUONG" trong bảng "SANPHAM" trong database
-            String insertQuery = "INSERT INTO SANPHAM (SOLUONG) VALUES (" + 0 + ")";
-            db.execSQL(insertQuery);
-        }
-        if (Price == null) {
-            // Thêm quantity vào cột "SOLUONG" trong bảng "SANPHAM" trong database
-            String insertQuery = "INSERT INTO SANPHAM (DONGIA) VALUES (" + 0 + ")";
-            db.execSQL(insertQuery);
-        }
-        if (Image == null) {
-            // Thêm quantity vào cột "SOLUONG" trong bảng "SANPHAM" trong database
-            String insertQuery = "INSERT INTO SANPHAM (HINHANH) VALUES (" + 0 + ")";
-            db.execSQL(insertQuery);
-        }*/
         ContentValues values = new ContentValues();//Tạo đối tượng chứa dữ liệu
         //Đưa dữ liệu vào đối tượng chứa
         values.put("MASP",s.getMASP());
@@ -76,10 +57,16 @@ public class QLSanPham {
             s.setNOIDUNG(c.getString(5));//đọc dữ liệu trường NOIDUNG và đưa vào đối tượng
             s.setDONGIA(c.getDouble(6));//đọc dữ liệu trường DONGIA và đưa vào đối tượng
             s.setHINHANH(c.getInt(7));//đọc dữ liệu trường HINHANH và đưa vào đối tượng
-
             //chuyển đối tượng thành chuỗi
-            String chuoi = "MASP: "+s.getMASP()+" - "+"TENSP: "+s.getTENSP()+" - "+"DONGIA: "+s.getDONGIA()+" - "+"SOLUONG: "
-                    +s.getSOLUONG()+" - "+"NOIDUNG: "+s.getNOIDUNG()+" - "+"HINHANH: "+s.getHINHANH()+" - "+"PHANLOAI: "+s.getPHANLOAI()+" - "+"NOINHAP: "+s.getNOINHAP();
+            String chuoi =
+                    "Mã sản phẩm: "+ s.getMASP()
+                    +"\nTên sản phẩm: "+ s.getTENSP()
+                    +"\nPhân loại: "+ s.getPHANLOAI()
+                    +"\nSố lượng: "+ s.getSOLUONG()
+                    +"\nNơi nhập: "+ s.getNOINHAP()
+                    +"\nNội dung: "+ s.getNOIDUNG()
+                    +"\nĐơn giá: "+ s.getDONGIA()
+                    +"\nHình ảnh: "+ s.getHINHANH();
             //đưa chuỗi vào list
             ls.add(chuoi);
             c.moveToNext();//di chuyển đến bảng ghi tiếp theo
