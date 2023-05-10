@@ -75,4 +75,5 @@ public MenuAdapter(Context context){
         viewHolder.img.setImageResource(list.get(i).icon);
         return view;
     }
+
 }

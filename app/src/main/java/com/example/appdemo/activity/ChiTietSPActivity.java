@@ -59,13 +59,15 @@ public class ChiTietSPActivity extends AppCompatActivity {
         intData();
         Clickbtn();
         actionBar();
-
-
     }
     private void Clickbtn(){
         btnthem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (sanPhamMoi.getSOLUONG() < Integer.parseInt(spnSL.getSelectedItem().toString())){
+                    Toast.makeText(getApplicationContext(), "Lượng hàng còn lại không đủ.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 themGioHang();
             }
         });
@@ -74,10 +76,10 @@ public class ChiTietSPActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Xử lý sự kiện khi người dùng chọn một phần tử trong Spinner
                 if (spnVoucher.getSelectedItem() != "NONE"){
-                    Cursor cursor = databaseHelper.GetData("Select VOUCHER_DETAIL.MAVOUCHER, VOUCHER.NOIDUNG, VOUCHER.HSD, VOUCHER.GIAM " +
-                            "\nFrom VOUCHER_DETAIL, VOUCHER " +
-                            "\nWhere VOUCHER_DETAIL.MAVOUCHER = VOUCHER.MAVOUCHER" +
-                            "\nAnd VOUCHER_DETAIL.MAVOUCHER == '"+spnVoucher.getSelectedItem()+"'");
+                    Cursor cursor = databaseHelper.GetData("Select VOUCHER.MAVOUCHER, VOUCHER.NOIDUNG, VOUCHER.HSD, VOUCHER.GIAM " +
+                            "From VOUCHER_DETAIL, VOUCHER " +
+                            "Where VOUCHER_DETAIL.MAVOUCHER = VOUCHER.MAVOUCHER " +
+                            "And VOUCHER_DETAIL.MAVOUCHER = '"+ spnVoucher.getSelectedItem() + "' ");
                     cursor.moveToFirst();
                     AlertDialog.Builder builder = new AlertDialog.Builder(ChiTietSPActivity.this);
                     String hsd = cursor.getString(2);
@@ -96,7 +98,7 @@ public class ChiTietSPActivity extends AppCompatActivity {
                     String infoVoucher = "Mã voucher: " + cursor.getString(0)
                             + "\nNội dung: " + cursor.getString(1)
                             + "\nHạn sử dụng: " + outputDate
-                            +"\nMức giảm: " + cursor.getDouble(3)*100 + "%";
+                            + "\nMức giảm: " + cursor.getDouble(3)*100 + "%";
                     builder.setMessage(infoVoucher);
                     builder.setTitle("THÔNG TIN VOUCHER");
                     builder.setPositiveButton("Áp dụng", new DialogInterface.OnClickListener() {
@@ -127,8 +129,9 @@ public class ChiTietSPActivity extends AppCompatActivity {
         String statusLogin_User = statusLogin.getUser();
         int sl = Integer.parseInt(spnSL.getSelectedItem().toString());
         Cursor cursor = databaseHelper.GetData("Select* from CARTLIST where IDSANPHAM = '" + masp + "' and IDCUS = '" + statusLogin_User + "'");
+        Cursor cursor1 = databaseHelper.GetData("Select SOLUONG from SANPHAM Where MASP = '" + masp + "'");
         boolean checkExisted = false;
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext() && cursor1.moveToFirst()){
             //Nếu Tìm thấy giỏ hàng đã tồn tại trong database
             if (cursor.getString(2).equals(masp) && cursor.getString(1).equals(statusLogin_User)){
                 GioHang gioHang = new GioHang();
@@ -138,7 +141,7 @@ public class ChiTietSPActivity extends AppCompatActivity {
                 gioHang.setIdVoucher((spnVoucher.getSelectedItem() == "NONE") ? "" : spnVoucher.getSelectedItem().toString());
                 gioHang.setDonGia(sanPhamMoi.getDONGIA());
                 gioHang.setTenSP(sanPhamMoi.getTENSP());
-                gioHang.setSoLuong(sl + cursor.getInt(4));
+                gioHang.setSoLuong(((sl + cursor.getInt(4)) > cursor1.getInt(0)) ? cursor1.getInt(0) : sl + cursor.getInt(4));
                 gioHang.setHinhSanPham(sanPhamMoi.getHINHANH());
                 long kq = databaseHelper.updateCartList(gioHang);
                 if (kq == 1){
@@ -173,21 +176,28 @@ public class ChiTietSPActivity extends AppCompatActivity {
     private void intData(){
         sanPhamMoi = (SanPhamMoi) getIntent().getSerializableExtra("chitiet");
         tensp.setText(sanPhamMoi.getTENSP());
-        motasp.setText(sanPhamMoi.getNOIDUNG());
+        motasp.setText("Lượng hàng còn lại: " + sanPhamMoi.getSOLUONG() + "\n" +sanPhamMoi.getNOIDUNG());
+        noinhapsp.setText("Nơi nhập: " + sanPhamMoi.getNOINHAP());
         Glide.with(getApplicationContext()).load(sanPhamMoi.getHINHANH()).into(imgHinhAnh);
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        giasp.setText("Giá: "+ decimalFormat.format(Double.parseDouble(String.valueOf(sanPhamMoi.getDONGIA()))) + " VNĐ");
+        giasp.setText("Giá: " + decimalFormat.format(Double.parseDouble(String.valueOf(sanPhamMoi.getDONGIA()))) + " VNĐ");
         Integer[] sl = new Integer[]{1,2,3,4,5,6,7,8,9,10};
         ArrayAdapter<Integer> adapterspin = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,sl);
         spnSL.setAdapter(adapterspin);
-
         //Setup spinner spnVoucher
+        if(listVoucher != null){
+            listVoucher.removeAll(listVoucher);
+        }
         listVoucher.add("NONE");
-        Cursor cursor = databaseHelper.GetData("Select* from VOUCHER_DETAIL where MASP = '"+ sanPhamMoi.getMASP() + "'");
+        Cursor cursor = databaseHelper.GetData("Select VOUCHER.MAVOUCHER " +
+                "From VOUCHER_DETAIL, VOUCHER " +
+                "Where VOUCHER_DETAIL.MAVOUCHER = VOUCHER.MAVOUCHER " +
+                "And VOUCHER.HSD > '"+ LocalDate.now().toString() +"' " +
+                "And VOUCHER_DETAIL.MASP = '"+ sanPhamMoi.getMASP() + "' ");
         while (cursor.moveToNext()){
             listVoucher.add(cursor.getString(0));
         }
-        ArrayAdapter<String> adapterVoucher = new ArrayAdapter<>(this,androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, listVoucher );
+        ArrayAdapter<String> adapterVoucher = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, listVoucher );
         spnVoucher.setAdapter(adapterVoucher);
 
         //nếu hệ thống chưa được đăng nhập, voucher sẽ không khả dụng
@@ -251,6 +261,42 @@ public class ChiTietSPActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateBadge();
+        Cursor cursor = databaseHelper.GetData("Select* from SANPHAM Where MASP = '" +sanPhamMoi.getMASP()+"'");
+        cursor.moveToFirst();
+        tensp.setText(cursor.getString(1));
+        motasp.setText("Lượng hàng còn lại: " + cursor.getInt(3) + "\n" +cursor.getString(5));
+        noinhapsp.setText("Nơi nhập: " + cursor.getString(4));
+        Glide.with(getApplicationContext()).load(cursor.getInt(7)).into(imgHinhAnh);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        giasp.setText("Giá: " + decimalFormat.format(Double.parseDouble(String.valueOf(cursor.getDouble(6)))) + " VNĐ");
+        //Setup spinner spnVoucher
+        if (listVoucher != null)
+            listVoucher.removeAll(listVoucher);
+        listVoucher.add("NONE");
+        Cursor cursor1 = databaseHelper.GetData("Select VOUCHER_DETAIL.MAVOUCHER " +
+                "From VOUCHER_DETAIL, VOUCHER " +
+                "Where VOUCHER_DETAIL.MAVOUCHER = VOUCHER.MAVOUCHER " +
+                "And VOUCHER.HSD > '"+ LocalDate.now().toString() +"' " +
+                "And VOUCHER_DETAIL.MASP = '"+ cursor.getString(0) + "' ");
+        while (cursor1.moveToNext()){
+            listVoucher.add(cursor1.getString(0));
+        }
+        ArrayAdapter<String> adapterVoucher = new ArrayAdapter<>(this,androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, listVoucher );
+        spnVoucher.setAdapter(adapterVoucher);
+        //nếu hệ thống chưa được đăng nhập, voucher sẽ không khả dụng
+        if (!statusLogin.isLogin()){
+            spnVoucher.setVisibility(View.GONE);
+            tvVoucher.setText("ĐĂNG NHẬP TẠI ĐÂY ĐỂ SỬ DỤNG VOUCHER.");
+            tvVoucher.setTypeface(null, Typeface.BOLD);
+            tvVoucher.setTextColor(Color.parseColor("#FF0000"));
+            tvVoucher.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getApplicationContext(), DangXuatActivity.class);
+                    startActivity(i);
+                }
+            });
+        }
     }
     private void updateBadge(){
         Cursor cursor = databaseHelper.GetData("Select* from CARTLIST where IDCUS = '" + statusLogin.getUser() + "'");
