@@ -57,13 +57,18 @@ public class MainActivity extends AppCompatActivity {
     TextView tvHello;
     ImageView imgToProfile;
     @Override
+    protected void onResume() {
+        super.onResume();
+        AllProduct();
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Tạo database
         db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
 
-//        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
+        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
 //        db.WriteQuery("Drop table if exists CARTLIST");
 //        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
 //        db.WriteQuery("Drop table if exists VOUCHER");
@@ -73,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 //        db.WriteQuery("Drop table if exists [CATEGORY]");
 //        db.WriteQuery("Drop table if exists ACCOUNT");
 //        db.WriteQuery("Drop table if exists [ROLE]");
-////
+//
         //region Tạo bảng ROLE: Quyền hạn
         db.WriteQuery("CREATE TABLE IF NOT EXISTS [ROLE] (" +
                 "QUYENHAN VARCHAR PRIMARY KEY NOT NULL," +
@@ -129,18 +134,18 @@ public class MainActivity extends AppCompatActivity {
         //cách lấy dữ liệu theo mong muón datetime SELECT strftime('%d/%m/%Y', date_column) AS formatted_date FROM my_table;
 
         //Thêm 1 vài sản phẩm mẫu vào database
-        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.you_look_gorgeous);
-        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.hello_sweetheart);
-        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.strawberry_sundea);
-        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.wintry_wonder);
-        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.hopeful_romantic);
-        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.all_in_bloom);
-        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.blue_day);
-        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.red_love);
-        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pure_white);
-        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pastel_tulip);
-        db.AddProduct("BH001", "Hope For Love", "VASE", 0, "TPHCM", "ASD", 9500000, R.drawable.hope_for_love);
-        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.big_rose);
+        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 1150000, R.drawable.you_look_gorgeous);
+        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 4500000, R.drawable.hello_sweetheart);
+        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 2500000, R.drawable.strawberry_sundea);
+        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "", 1500000, R.drawable.wintry_wonder);
+        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "", 2000000, R.drawable.hopeful_romantic);
+        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.all_in_bloom);
+        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.blue_day);
+        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.red_love);
+        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.pure_white);
+        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.pastel_tulip);
+        db.AddProduct("BH001", "Hope For Love", "VASE", 0, "TPHCM", "", 5000000, R.drawable.hope_for_love);
+        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "", 5000000, R.drawable.big_rose);
         //endregion
 
         //region Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
@@ -183,7 +188,8 @@ public class MainActivity extends AppCompatActivity {
                         ");"
         );
         int year = LocalDate.now().getYear();
-        db.AddVoucher("SALET5", "Sale tháng 5", "2022-05-31" , 10.0/100);
+        db.AddVoucher("SALET5", "Sale tháng 5", "2023-05-31" , 10.0/100);
+        db.AddVoucher("SALET2", "Sale tháng 2", "2023-02-28", 30.0/100);
         //endregion
 
         //region Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể
@@ -198,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         db.AddVoucherProduct("SALET5", "CB001");
         db.AddVoucherProduct("SALET5", "CB002");
         db.AddVoucherProduct("SALET5", "CB003");
+        db.AddVoucherProduct("SALET2", "CB001");
         //endregion
 
 
@@ -232,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
         imgToProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this,ProifileActivity.class);
+                Intent i = new Intent(MainActivity.this, AboutCustomer.class);
                 startActivity(i);
             }
         });
@@ -242,7 +249,11 @@ public class MainActivity extends AppCompatActivity {
         Cursor listSanPham = db.GetData(
                 "Select* from SANPHAM ORDER BY NGAYNHAP asc"
         );
-        while (listSanPham.moveToNext()){
+        if (mangSpMoi != null){
+            mangSpMoi.removeAll(mangSpMoi);
+        }
+        int quantitySP = 5;
+        while (listSanPham.moveToNext() && quantitySP > 0){
             mangSpMoi.add(new SanPhamMoi(   listSanPham.getString(0),
                                             listSanPham.getString(1),
                                             listSanPham.getString(2),
@@ -253,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
                                             listSanPham.getInt(7),
                                             listSanPham.getString(8)
             ));
+            quantitySP--;
         }
         spAdapter = new SanPhamAdapter( this, mangSpMoi);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false);
@@ -261,8 +273,11 @@ public class MainActivity extends AppCompatActivity {
     }
     private void SaleProduct(){
         Cursor listSale = db.GetData(
-                "Select SANPHAM.* from SANPHAM, VOUCHER_DETAIL where SANPHAM.MASP = VOUCHER_DETAIL.MASP"
+                "SELECT DISTINCT SANPHAM.* from SANPHAM, VOUCHER_DETAIL where SANPHAM.MASP = VOUCHER_DETAIL.MASP"
         );
+        if (saleProducts != null){
+            saleProducts.removeAll(saleProducts);
+        }
         while (listSale.moveToNext()){
             saleProducts.add(new SanPhamMoi(   listSale.getString(0),
                     listSale.getString(1),
@@ -290,8 +305,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
                     case 0:
-                        Intent trangchu = new Intent(getApplicationContext(),MainActivity.class);
-                        startActivity(trangchu);
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case 1:
                         Intent sanpham = new Intent(getApplicationContext(),SanPhamActivity.class);
