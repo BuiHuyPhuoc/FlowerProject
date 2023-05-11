@@ -1,6 +1,5 @@
 package com.example.appdemo.Admin;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.appdemo.Class.QLSanPham;
@@ -40,7 +40,8 @@ public class QLSanPhamActivity extends AppCompatActivity {
     DatabaseHelper dbHelper;
     ListView spListView;
     Toolbar mToolBar;
-    EditText edtMa, edtTen, edtGia, edtSL, edtND, edtNN, edtHA;
+    EditText edtMa, edtTen, edtGia, edtSL, edtND, edtNN;
+    TextView edtHA;
     String cate;
     Button btnXoa,btnSua,btnThem,btnchonanh;
     ImageView imageViewSP;
@@ -63,7 +64,7 @@ public class QLSanPhamActivity extends AppCompatActivity {
         edtSL = (EditText) findViewById(R.id.edtSL);
         edtNN = (EditText) findViewById(R.id.edtNN);
         edtND = (EditText) findViewById(R.id.edtND);
-        edtHA = (EditText) findViewById(R.id.edtHA);
+        edtHA = (TextView) findViewById(R.id.tvHA);
         btnXoa = (Button) findViewById(R.id.btnXoa);
         btnSua = (Button) findViewById(R.id.btnSua);
         btnThem = (Button) findViewById(R.id.btnThem);

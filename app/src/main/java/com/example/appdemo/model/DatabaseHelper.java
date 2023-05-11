@@ -5,16 +5,21 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.example.appdemo.Class.Account;
+import com.example.appdemo.R;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static String tablename = "TAIKHOAN";
     Context context;
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -38,7 +43,155 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        //region Tạo bảng ROLE: Quyền hạn
+         db.execSQL("CREATE TABLE IF NOT EXISTS [ROLE] (" +
+                        "QUYENHAN VARCHAR PRIMARY KEY NOT NULL," +
+                        "NOIDUNG Text NOT NULL)");
+        //Thêm dữ liệu vào bảng [ROLE]
+        String s = "Insert into [ROLE] values " +
+                "('admin', 'Quản trị viên');";
+         db.execSQL("Insert into [ROLE] values" +
+                 "('admin', 'Quản trị viên')," +
+                 "('customer', 'Khách hàng')");
+        //endregion
 
+        //region Tạo bảng ACCOUNT: chứa các tài khoản
+        db.execSQL("CREATE TABLE IF NOT EXISTS ACCOUNT (\n" +
+                "\tTAIKHOAN VARCHAR PRIMARY KEY NOT NULL,\n" +
+                "\tMATKHAU VARCHAR NOT NULL,\n" +
+                "\tQUYENHAN VARCHAR NOT NULL, \n" +
+                "\tTEN VARCHAR,\n" +
+                "\tSDT VARCHAR,\n" +
+                "\tGMAIL VARCHAR,\n" +
+                "\tDIACHI VARCHAR,\n" +
+                "\tFOREIGN KEY (QUYENHAN) REFERENCES [ROLE](QUYENHAN)\n" +
+                ");");
+        //Thêm tài khoản admin và khách hàng mẫu để test
+        db.execSQL("Insert into ACCOUNT values " +
+                "('123', '123', 'admin', 'Nguyen Van A', '0924939352', 'voquinamit1@gmail.com', 'thailan'), " +
+                "('1234', '1234', 'customer', 'Nguyen Thi B', '0334379439', '', '119');");
+        //endregion
+
+        //region Tạo bảng CATEGORY: Phân loại sản phẩm
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS [CATEGORY] (" +
+                        "NAME VARCHAR PRIMARY KEY NOT NULL, " +
+                        "NOIDUNG VARCHAR);"
+        );
+        //Thêm một số CATEGORY
+        db.execSQL("Insert into [CATEGORY] values " +
+                "('COMBO', 'Bó hoa'), " +
+                "('TULIP', 'Hoa Tulip'), " +
+                "('VASE', 'Bình hoa')");
+        //endregion
+
+        //region Tạo bảng SẢN PHẨM: Lưu trữ sản phẩm (hoa)
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS SANPHAM (\n" +
+                        "MASP VARCHAR PRIMARY KEY NOT NULL,\n" +
+                        "TENSP VARCHAR NOT NULL, \n" +
+                        "PHANLOAI VARCHAR NOT NULL, \n" +
+                        "SOLUONG INTEGER NOT NULL,\n" +
+                        "NOINHAP VARCHAR NOT NULL,\n" +
+                        "NOIDUNG VARCHAR, \n" +
+                        "DONGIA REAL CHECK(DONGIA > 0) NOT NULL,\n" +
+                        "HINHANH INTEGER NOT NULL,\n" +
+                        "NGAYNHAP date,\n" +
+                        "FOREIGN KEY (PHANLOAI) REFERENCES [CATEGORY](NAME)" +
+                        ");"
+        );
+        String date = "2023-04-02";
+        db.execSQL("Insert into SANPHAM values \n" +
+                "('CB001', 'You Look Gorgeous', 'COMBO', 10, 'Đà Lạt', 'ASD', 9500000, "+R.drawable.imgpro_you_look_gorgeous+", '"+date+"'), \n " +
+                "('CB002', 'Hello Sweetheart', 'COMBO', 10, 'Đà Lạt', 'ASD', 5000000, "+R.drawable.imgpro_hello_sweetheart+", '"+date+"'), \n" +
+                "('CB003', 'Strawberry Sundea', 'COMBO', 10, 'Đà Lạt', 'ASD', 9500000, "+R.drawable.imgpro_strawberry_sundea+", '"+date+"'), \n" +
+                "('CB004', 'Wintry Wonder', 'COMBO', 10, 'Đà Lạt', 'ASD', 5000000, "+R.drawable.imgpro_wintry_wonder+", '"+date+"'),  \n" +
+                "('CB005', 'Hopeful Romantic', 'COMBO', 10, 'Đà Lạt', 'ASD', 9500000, "+R.drawable.imgpro_hopeful_romantic+", '"+date+"'),  \n" +
+                "('TL001', 'All In Bloom', 'TULIP', 10, 'TPHCM', 'ASD', 1500000, "+R.drawable.imgpro_all_in_bloom+", '"+date+"'),  \n" +
+                "('TL002', 'Blue Day', 'TULIP', 10, 'TPHCM', 'ASD', 1500000, "+R.drawable.imgpro_blue_day+", '"+date+"'),  \n" +
+                "('TL003', 'Red Love', 'TULIP', 10, 'TPHCM', 'ASD', 1500000, "+R.drawable.imgpro_red_love+", '"+date+"'),  \n" +
+                "('TL004', 'Pure White', 'TULIP', 10, 'TPHCM', 'ASD', 1500000, "+R.drawable.imgpro_pure_white+", '"+date+"'),  \n" +
+                "('TL005', 'Pastel Tulip', 'TULIP', 10, 'TPHCM', 'ASD', 1000000, "+R.drawable.imgpro_pastel_tulip+", '"+date+"'),  \n" +
+                "('BH001', 'Hope For Love', 'VASE', 0, 'TPHCM', 'ASD', 3000000, "+R.drawable.imgpro_hope_for_love+", '"+date+"'),  \n" +
+                "('BH002', 'Big Rose', 'VASE', 10, 'TPHCM', 'ASD', 3000000, "+R.drawable.imgpro_big_rose+", '"+date+"');");
+
+        //region Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS BILL (\n" +
+                        "   ID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                        "   DATEORDER date NOT NULL,\n" +
+                        "   TAIKHOANCUS VARCHAR NOT NULL,\n" +
+                        "   NAMECUS VARCHAR NOT NULL,\n" +
+                        "   ADDRESSDELIVERRY VARCHAR NOT NULL,\n" +
+                        "   SDT VARCHAR not null);"
+        );
+        //endregion
+
+        //region Tạo bảng Bill_Detail: Chi tiết hóa đơn
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
+                        "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "    MASP VARCHAR NOT NULL,\n" +
+                        "    IDORDER   INTEGER not NULL,\n" +
+                        "    IDVoucher VARCHAR not null, \n" +
+                        "    QUANTITY  INTEGER check(QUANTITY > 0) not NULL,\n" +
+                        "    UNITPRICE Real check(UNITPRICE > 0) not NULL,\n" +
+                        "    TOTALPRICE Real check (TOTALPRICE > 0) not Null,\n" +
+                        "    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP),\n" +
+                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID), \n" +
+                        "    FOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)" +
+                        ");"
+        );
+
+        //endregion
+
+        //region Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS VOUCHER(\n" +
+                        "\tMAVOUCHER VARCHAR PRIMARY KEY not null,\n" +
+                        "\tNOIDUNG TEXT," +
+                        "\tHSD date," +
+                        "\tGIAM INTEGER DEFAULT(1) Check(GIAM >= 0)\n" +
+                        ");"
+        );
+        int year = LocalDate.now().getYear();
+        db.execSQL("Insert into VOUCHER values \n" +
+                "('SALET5', 'Sale tháng 5', '2023-05-31' , 10.0/100), \n" +
+                "('SALENEW', 'Sale mới', '2023-05-31' , 30.0/100), \n" +
+                "('TVBTRAN', 'Sale báo', '2023-02-31' , 15.0/100), \n" +
+                "('TVBTRAN19T2', 'Vẫn là báo sale', '2023-04-31' , 20.0/100)");
+
+        //endregion
+
+        //region Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS VOUCHER_DETAIL(\n" +
+                        "MAVOUCHER VARCHAR," +
+                        "MASP VARCHAR NOT NULL," +
+                        "FOREIGN KEY (MAVOUCHER) REFERENCES VOUCHER(MAVOUCHER)," +
+                        "  FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP)" +
+                        ");"
+        );
+        db.execSQL("Insert into VOUCHER_DETAIL values " +
+                "('SALET5', 'CB001'), " +
+                "('SALET5', 'CB002'), " +
+                "('SALET5', 'CB003') ");
+        //endregion
+        //region Tạo bảng CARTLIST: Lưu trữ giỏ hàng của người dùng, tự động cập nhật khi người dùng đăng nhập lại
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS CARTLIST (\n" +
+                        "\tIDCARTLIST   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "\tIDCUS        VARCHAR,\n" +
+                        "\tIDSANPHAM    VARCHAR NOT NULL,\n" +
+                        "\tIDVoucher    VARCHAR,\n" +
+                        "\tSOLUONG      INTEGER CHECK(SOLUONG > 0) NOT NULL," +
+                        "\tDONGIA       REAL,\n" +
+                        "\tFOREIGN KEY (IDCUS) REFERENCES ACCOUNT(TAIKHOAN),\n" +
+                        "\tFOREIGN KEY (IDSANPHAM) REFERENCES SANPHAM(MASP), \n" +
+                        "\tFOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)\n" +
+                        ")"
+        );
+        //endregion
     }
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {

@@ -77,6 +77,19 @@ public class QLAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (checkNull() == false) return;
+                String gmail = edtGM.getText().toString();
+                if (!gmail.equals("")){
+                    boolean check = false;
+                    for (int i = 0; i < gmail.length(); i++){
+                        if (gmail.charAt(i) == '@'){
+                            check = true;
+                        }
+                    }
+                    if (!check){
+                        Toast.makeText(getApplicationContext(), "Gmail phải có '@', sai định dạng!!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 boolean check =  db.AddAccount(edtTK.getText().toString()
                         , edtMK.getText().toString()
                         , edtRole
@@ -99,9 +112,14 @@ public class QLAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String TAIKHOAN = edtTK.getText().toString();
+                if (TAIKHOAN.equals("")){
+                    Toast.makeText(QLAccountActivity.this, "Nhập tài khoản", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Cursor cursor = db.GetData("Select* from ACCOUNT where ACCOUNT.TAIKHOAN = '"+ TAIKHOAN +"'");
                 if (cursor == null){
                     Toast.makeText(getApplicationContext(), "Not Exist Account", Toast.LENGTH_SHORT).show();
+                    return;
                 } else {
                     cursor.moveToFirst();
                     AlertDialog.Builder builder = new AlertDialog.Builder(QLAccountActivity.this);
@@ -128,6 +146,13 @@ public class QLAccountActivity extends AppCompatActivity {
                                         list = qlAccount.getAllAccountToString();
                                         ArrayAdapter adapter =new ArrayAdapter(QLAccountActivity.this, android.R.layout.simple_list_item_1,list);
                                         ListView.setAdapter(adapter);
+                                        edtADR.setText("");
+                                        edtTK.setText("");
+                                        edtMK.setText("");
+                                        edtTenAC.setText("");
+                                        edtSDT.setText("");
+                                        edtGM.setText("");
+                                        edtTK.requestFocus();
                                     }
                                 }
                             })
@@ -147,6 +172,19 @@ public class QLAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (checkNull() == false) return;
+                String gmail = edtGM.getText().toString();
+                if (!gmail.equals("")){
+                    boolean check = false;
+                    for (int i = 0; i < gmail.length(); i++){
+                        if (gmail.charAt(i) == '@'){
+                            check = true;
+                        }
+                    }
+                    if (!check){
+                        Toast.makeText(getApplicationContext(), "Gmail phải có '@', sai định dạng!!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 Account s = new Account();// tạo đối tượng chứa dữ liệu người dùng nhập
                 //đưa dữ liệu vào đối tượng
                 s.setTAIKHOAN(edtTK.getText().toString());

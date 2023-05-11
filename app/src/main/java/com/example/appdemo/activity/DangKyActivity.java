@@ -73,7 +73,19 @@ public class DangKyActivity extends AppCompatActivity {
                 mregisterPhonenumber.setText(toPhoneNumber(token));
             }
             //endregion
-
+            //Kiểm tra gmail
+            if (!gmail.equals("")){
+                boolean check = false;
+                for (int i = 0; i < gmail.length(); i++){
+                    if (gmail.charAt(i) == '@'){
+                        check = true;
+                    }
+                }
+                if (!check){
+                    Toast.makeText(getApplicationContext(), "Gmail phải có '@', sai định dạng!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
             //Kiểm tra đã nhập đủ thông tin cần thiết chưa
             if (taikhoan.length() == 0 || matkhau.length() == 0 || hoten.length() == 0){
                 Toast.makeText(DangKyActivity.this, "Username, Password, Name are required", Toast.LENGTH_LONG).show();

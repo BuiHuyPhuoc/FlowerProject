@@ -49,6 +49,7 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHo
             holder.giatien.setTextColor(Color.parseColor("#FF0000"));
         } else {
             holder.giatien.setText("Giá: "+decimalFormat.format(Double.parseDouble(String.valueOf(sanPhamMoi.getDONGIA()))) + " VNĐ");
+            holder.giatien.setTextColor(Color.parseColor("#000000"));
         }
         Glide.with(context).load(sanPhamMoi.getHINHANH()).into(holder.imgHinhanh);
         holder.itemView.setOnClickListener(new View.OnClickListener() {

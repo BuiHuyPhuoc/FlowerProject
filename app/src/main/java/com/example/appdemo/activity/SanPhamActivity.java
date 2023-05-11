@@ -59,8 +59,6 @@ public class SanPhamActivity extends AppCompatActivity {
     MenuAdapter adapter = new MenuAdapter(this);
 
     EditText EdtSearch;
-
-    ArrayList<ItemMenu> arrayList;
     List<SanPhamMoi> mangSpMoi = new ArrayList<SanPhamMoi>();
     SanPhamAdapter spAdapter;
     GridView gvCateList;
@@ -69,6 +67,18 @@ public class SanPhamActivity extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabase;
     ArrayList<Category> cateListContent;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (cateListContent != null){
+            cateListContent.removeAll(cateListContent);
+        }
+        if (mangSpMoi != null){
+            mangSpMoi.removeAll(mangSpMoi);
+        }
+        anhxa();
+        intData();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,8 +195,7 @@ public class SanPhamActivity extends AppCompatActivity {
                         startActivity(trangchu);
                         break;
                     case 1:
-                        Intent sanpham = new Intent(getApplicationContext(),SanPhamActivity.class);
-                        startActivity(sanpham);
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
                     case 2:
@@ -240,14 +249,14 @@ public class SanPhamActivity extends AppCompatActivity {
         cursor.close();
         return products;
     }
-     private void SearchItem(){
+    private void SearchItem(){
         // Khởi tạo SearchManager
-         SearchManager searchManager = (SearchManager) getSystemService(this.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) getSystemService(this.SEARCH_SERVICE);
         // Khởi tạo SearchableInfo từ ComponentName của Activity và searchable configuration trong manifest
-         SearchableInfo searchableInfo = searchManager.getSearchableInfo(new ComponentName(this, SanPhamActivity.class));
+        SearchableInfo searchableInfo = searchManager.getSearchableInfo(new ComponentName(this, SanPhamActivity.class));
         // Thiết lập SearchableInfo cho SearchView
-         searchView.setSearchableInfo(searchableInfo);
-         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setSearchableInfo(searchableInfo);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Xử lý yêu cầu tìm kiếm khi người dùng nhấn nút tìm kiếm
@@ -266,14 +275,14 @@ public class SanPhamActivity extends AppCompatActivity {
                 return true;
             }
         });
-         // Thiết lập cursor adapter để hiển thị danh sách gợi ý
+        // Thiết lập cursor adapter để hiển thị danh sách gợi ý
 
-     }
+    }
     public void HienLaiSanPham() {
-            // Nếu đang hiển thị danh sách sản phẩm tìm kiếm, xóa danh sách đó và hiển thị lại tất cả sản phẩm
-            mangSpMoi.clear();
-            spAdapter.notifyDataSetChanged();
-            intData();
+        // Nếu đang hiển thị danh sách sản phẩm tìm kiếm, xóa danh sách đó và hiển thị lại tất cả sản phẩm
+        mangSpMoi.clear();
+        spAdapter.notifyDataSetChanged();
+        intData();
     }
     private void showFilteredProducts(List<SanPhamMoi> filteredProducts) {
         // Xóa dữ liệu cũ trong danh sách sản phẩm

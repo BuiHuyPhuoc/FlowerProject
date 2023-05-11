@@ -6,8 +6,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -136,6 +138,21 @@ public class GioHangActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (gioHangList.size() > 0)
                 {
+
+                    for (int i = 0; i < gioHangList.size(); i++){
+                        if (!gioHangList.get(i).getIdVoucher().equals("")){
+                            Cursor cursor2 =
+                                    databaseHelper.GetData("SELECT* " +
+                                            "FROM VOUCHER " +
+                                            "WHERE MAVOUCHER = '"+ gioHangList.get(i).getIdVoucher() +"' " +
+                                            "AND HSD > '"+ LocalDate.now().toString() + "' ");
+                            if (!cursor2.moveToFirst())
+                            {
+                                Toast.makeText(getApplicationContext(), "Voucher của sản phẩm " + gioHangList.get(i).getTenSP() + " đã hết hạn sử dụng.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    }
                     if (!statusLogin.isLogin()) {
                         AlertDialog.Builder d = new AlertDialog.Builder(GioHangActivity.this);
                         d.setTitle("THÔNG BÁO THANH TOÁN");
@@ -170,8 +187,9 @@ public class GioHangActivity extends AppCompatActivity {
                                     return;
                                 }
 
-                                //Sau khi kiểm tra dữ liệu đầu vào, bắt đầu thêm dữ liệu vào talbe tương ứng
+                                //Sau khi kiểm tra dữ liệu đầu vào, bắt đầu thêm dữ liệu vào talbe BILL và BILLDETAIL
                                 //Và xóa dữ liệu từ Cartlist
+                                //Và giảm số lượng trong SANPHAM
 
                                 //Thêm dữ liệu vào table BILL
                                 ContentValues values = new ContentValues();
@@ -197,15 +215,21 @@ public class GioHangActivity extends AppCompatActivity {
                                         values1.put("UNITPRICE", gioHangList.get(j).getDonGia());
                                         values1.put("TOTALPRICE", gioHangList.get(j).getTotalMoney());
                                         i2 = sqLiteDatabase.insert("BILLDETAIL", null, values1);
+                                        //Giảm số lượng trong bảng SANPHAM
+                                        Cursor cursor3 = databaseHelper.GetData("Select SOLUONG from SANPHAM WHERE MASP = '" + gioHangList.get(j).getIdSanPham() + "'");
+                                        cursor3.moveToFirst();
+                                        ContentValues values2 = new ContentValues();
+                                        values2.put("SOLUONG", cursor3.getInt(0) - gioHangList.get(j).getSoLuong());
+                                        sqLiteDatabase.update("SANPHAM", values2, "MASP=?", new String[]{gioHangList.get(j).getIdSanPham()});
                                     }
                                 }
                                 //Xóa dữ liệu trong Cartlist
                                 sqLiteDatabase.delete("CARTLIST", "IDCUS=?", new String[]{statusLogin.getUser()});
                                 if (i2 != -1){
                                     gioHangList.removeAll(gioHangList);
-                                    Toast.makeText(getApplicationContext(), "Thanh toán thành công.", Toast.LENGTH_SHORT).show();
                                     adapter.notifyDataSetChanged();
                                     intControl();
+                                    Toast.makeText(getApplicationContext(), "Thanh toán thành công", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Thanh toán thất bại, đã xảy ra lỗi.", Toast.LENGTH_SHORT).show();
                                 }
@@ -262,6 +286,12 @@ public class GioHangActivity extends AppCompatActivity {
                                         values1.put("UNITPRICE", gioHangList.get(j).getDonGia());
                                         values1.put("TOTALPRICE", gioHangList.get(j).getTotalMoney());
                                         i2 = sqLiteDatabase.insert("BILLDETAIL", null, values1);
+                                        //Giảm số lượng trong SANPHAM
+                                        Cursor cursor3 = databaseHelper.GetData("Select SOLUONG from SANPHAM WHERE MASP = '" + gioHangList.get(j).getIdSanPham() + "'");
+                                        cursor3.moveToFirst();
+                                        ContentValues values2 = new ContentValues();
+                                        values2.put("SOLUONG", cursor3.getInt(0) - gioHangList.get(j).getSoLuong());
+                                        sqLiteDatabase.update("SANPHAM", values2, "MASP=?", new String[]{gioHangList.get(j).getIdSanPham()});
                                     }
                                 }
                                 //Xóa dữ liệu trong Cartlist

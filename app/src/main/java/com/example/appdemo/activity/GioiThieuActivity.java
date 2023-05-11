@@ -52,8 +52,7 @@ public class GioiThieuActivity extends AppCompatActivity {
                         break;
 
                     case 2:
-                        Intent gioithieu = new Intent(getApplicationContext(),GioiThieuActivity.class);
-                        startActivity(gioithieu);
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
                     case 3:

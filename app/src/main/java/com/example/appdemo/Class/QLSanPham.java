@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.appdemo.model.DatabaseHelper;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class QLSanPham {
         values.put("NOIDUNG",s.getNOIDUNG());
         values.put("DONGIA",s.getDONGIA());
         values.put("HINHANH",s.getHINHANH());
+        values.put("NGAYNHAP", LocalDate.now().toString());
         //thực thi Thêm
         long kq = db.insert("SANPHAM",null, values);
         //Kiểm tra kết quả Insert

@@ -18,6 +18,20 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.HistoryShopping"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@drawable/circle_shape" />
+
+        <activity
+            android:name=".activity.AboutCustomer"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.UseVoucherActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ChangePasswordActivity"
             android:exported="false" />
         <activity
@@ -27,19 +41,11 @@
             android:name=".activity.ProifileActivity"
             android:exported="false" />
         <activity
-            android:name=".QLChiTietHoaDonActivity"
-            android:exported="false" />
-        <activity
             android:name=".Admin.QLHoaDonActivity"
             android:exported="false" />
         <activity
             android:name=".Admin.QLSanPhamActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
         <activity
             android:name=".Admin.QLVoucherActivity"
@@ -77,14 +83,11 @@
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">
-
-            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
     </application>
 

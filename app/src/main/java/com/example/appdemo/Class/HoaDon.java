@@ -1,4 +1,7 @@
 package com.example.appdemo.Class;
+
+import androidx.annotation.NonNull;
+
 public class HoaDon {
     private Integer ID;
     private String DATEORDER;
@@ -44,5 +47,10 @@ public class HoaDon {
 
     public void setTAIKHOANCUS(String TAIKHOANCUS) {
         this.TAIKHOANCUS = TAIKHOANCUS;
+    }
+    @NonNull
+    @Override
+    public String toString() {
+        return getID() + " - " + getADDRESSDELIVERRY() + " - \n" + getTAIKHOANCUS() + " - " + getDATEORDER();
     }
 }

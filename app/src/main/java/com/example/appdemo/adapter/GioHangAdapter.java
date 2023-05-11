@@ -101,11 +101,15 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
 
 
                     }
-                }else if (giatri == 2){
-                    if (gioHangList.get(pos).getSoLuong() < 11) {
-                        int soluongmoi = gioHangList.get(pos).getSoLuong()+1;
-                        gioHangList.get(pos).setSoLuong(soluongmoi);
+                } else if (giatri == 2) {
+                    int soluongmoi = gioHangList.get(pos).getSoLuong()+1;
+                    Cursor cursor = databaseHelper.GetData("Select SOLUONG from SANPHAM WHERE MASP = '" + gioHangList.get(pos).getIdSanPham() + "'");
+                    cursor.moveToFirst();
+                    if (cursor.getInt(0) < soluongmoi) {
+                        Toast.makeText(context,"Số lượng vượt số lượng trong kho.", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    gioHangList.get(pos).setSoLuong(soluongmoi);
                     databaseHelper.updateCartList(gioHangList.get(pos));
                     holder.item_giohang_sl.setText((gioHangList.get(pos).getSoLuong().toString()));
                     double gia = gioHangList.get(pos).getSoLuong() * gioHangList.get(pos).getDonGia();
