@@ -64,15 +64,15 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
 
 //        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
-        db.WriteQuery("Drop table if exists CARTLIST");
-        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
-        db.WriteQuery("Drop table if exists VOUCHER");
-        db.WriteQuery("Drop table if exists BILLDETAIL");
-        db.WriteQuery("Drop table if exists BILL");
-        db.WriteQuery("Drop table if exists SANPHAM");
-        db.WriteQuery("Drop table if exists [CATEGORY]");
-        db.WriteQuery("Drop table if exists ACCOUNT");
-        db.WriteQuery("Drop table if exists [ROLE]");
+//        db.WriteQuery("Drop table if exists CARTLIST");
+//        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
+//        db.WriteQuery("Drop table if exists VOUCHER");
+//        db.WriteQuery("Drop table if exists BILLDETAIL");
+//        db.WriteQuery("Drop table if exists BILL");
+//        db.WriteQuery("Drop table if exists SANPHAM");
+//        db.WriteQuery("Drop table if exists [CATEGORY]");
+//        db.WriteQuery("Drop table if exists ACCOUNT");
+//        db.WriteQuery("Drop table if exists [ROLE]");
 ////
         //region Tạo bảng ROLE: Quyền hạn
         db.WriteQuery("CREATE TABLE IF NOT EXISTS [ROLE] (" +
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 "\tFOREIGN KEY (QUYENHAN) REFERENCES [ROLE](QUYENHAN)\n" +
                 ");");
         //Thêm tài khoản admin và khách hàng mẫu để test
-        db.AddAccount("123", "123", "admin", "Nguyen Van A", "", "", "");
+        db.AddAccount("123", "123", "admin", "Nguyen Van A", "0924939352", "voquinamit1@gmail.com", "thailan");
         db.AddAccount("1234", "1234", "customer", "Nguyen Thi B", "0334379439", "", "119");
         //endregion
 
@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
     }
     private void AllProduct(){
         Cursor listSanPham = db.GetData(

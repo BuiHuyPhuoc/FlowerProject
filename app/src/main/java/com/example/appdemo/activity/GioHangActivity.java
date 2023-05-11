@@ -106,8 +106,8 @@ public class GioHangActivity extends AppCompatActivity {
         }
         else{
             cursor.moveToFirst();
-            GioHang gioHang = new GioHang();
-            gioHang.setIdCartList(cursor.getInt(0));
+            GioHang gioHang = new GioHang();//Taọ class
+            gioHang.setIdCartList(cursor.getInt(0));//Thêm thông tin
             gioHang.setIdVoucher(cursor.getString(1));
             gioHang.setIdSanPham(cursor.getString(2));
             gioHang.setTenSP(cursor.getString(3));
