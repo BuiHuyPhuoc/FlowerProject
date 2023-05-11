@@ -78,16 +78,6 @@ public class QLVoucherActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-        //button hiển thị
-        btnHienthi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                qlVoucher = new QLVoucher(QLVoucherActivity.this);
-                list=qlVoucher.getAllVoucherToString();
-                ArrayAdapter adapter =new ArrayAdapter(QLVoucherActivity.this, android.R.layout.simple_list_item_1,list);
-                ListView.setAdapter(adapter);
-            }
-        });
         //button thêm
         btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +126,12 @@ public class QLVoucherActivity extends AppCompatActivity {
                 }
                 if (kq==1){
                     Toast.makeText(QLVoucherActivity.this,"Xóa thành công",Toast.LENGTH_LONG).show();
+                    //Hiển thị lại danh sách listview
+                    qlVoucher = new QLVoucher(QLVoucherActivity.this);
+                    list = qlVoucher.getAllVoucherToString();
+                    ArrayAdapter adapter =new ArrayAdapter(QLVoucherActivity.this, android.R.layout.simple_list_item_1,list);
+                    ListView.setAdapter(adapter);
+                    return;
                 }
             }
         });
@@ -155,6 +151,12 @@ public class QLVoucherActivity extends AppCompatActivity {
                 }
                 if (kq==1){
                     Toast.makeText(QLVoucherActivity.this,"Sửa thành công",Toast.LENGTH_LONG).show();
+                    //Hiển thị lại danh sách listview
+                    qlVoucher = new QLVoucher(QLVoucherActivity.this);
+                    list = qlVoucher.getAllVoucherToString();
+                    ArrayAdapter adapter =new ArrayAdapter(QLVoucherActivity.this, android.R.layout.simple_list_item_1,list);
+                    ListView.setAdapter(adapter);
+                    return;
                 }
             }
         });
@@ -197,13 +199,10 @@ public class QLVoucherActivity extends AppCompatActivity {
         btnXoa=(Button)findViewById(R.id.btnXoaVC);
         btnSua=(Button)findViewById(R.id.btnSuaVC);
         btnThem=(Button)findViewById(R.id.btnThemVC);
-        btnHienthi=(Button)findViewById(R.id.btnShowVC);
         ListView = (ListView) findViewById(R.id.listVch);
         mToolBar =(Toolbar) findViewById(R.id.toolbarVch);
         tvDatePicker = findViewById(R.id.tvDatePicker);
         db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
-
         setSupportActionBar(mToolBar);
-
     }
 }

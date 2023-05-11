@@ -27,16 +27,13 @@ import com.example.appdemo.Utils;
 import com.example.appdemo.adapter.MenuAdapter;
 import com.example.appdemo.adapter.SanPhamAdapter;
 import com.example.appdemo.model.DatabaseHelper;
-import com.example.appdemo.model.ItemMenu;
 import com.example.appdemo.model.SanPhamMoi;
 import com.google.android.material.navigation.NavigationView;
 import com.nex3z.notificationbadge.NotificationBadge;
 
-import java.nio.BufferUnderflowException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     //Test Github
@@ -64,15 +61,15 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
 
 //        //Reset Nội dung trong database, chỉ kích hoạt khi muốn reset các bảng
-//        db.WriteQuery("Drop table if exists CARTLIST");
-//        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
-//        db.WriteQuery("Drop table if exists VOUCHER");
-//        db.WriteQuery("Drop table if exists BILLDETAIL");
-//        db.WriteQuery("Drop table if exists BILL");
-//        db.WriteQuery("Drop table if exists SANPHAM");
-//        db.WriteQuery("Drop table if exists [CATEGORY]");
-//        db.WriteQuery("Drop table if exists ACCOUNT");
-//        db.WriteQuery("Drop table if exists [ROLE]");
+        db.WriteQuery("Drop table if exists CARTLIST");
+        db.WriteQuery("Drop table if exists VOUCHER_DETAIL");
+        db.WriteQuery("Drop table if exists VOUCHER");
+        db.WriteQuery("Drop table if exists BILLDETAIL");
+        db.WriteQuery("Drop table if exists BILL");
+        db.WriteQuery("Drop table if exists SANPHAM");
+        db.WriteQuery("Drop table if exists [CATEGORY]");
+        db.WriteQuery("Drop table if exists ACCOUNT");
+        db.WriteQuery("Drop table if exists [ROLE]");
 ////
         //region Tạo bảng ROLE: Quyền hạn
         db.WriteQuery("CREATE TABLE IF NOT EXISTS [ROLE] (" +
@@ -129,18 +126,18 @@ public class MainActivity extends AppCompatActivity {
         //cách lấy dữ liệu theo mong muón datetime SELECT strftime('%d/%m/%Y', date_column) AS formatted_date FROM my_table;
 
         //Thêm 1 vài sản phẩm mẫu vào database
-        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.you_look_gorgeous);
-        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.hello_sweetheart);
-        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.strawberry_sundea);
-        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.wintry_wonder);
-        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.hopeful_romantic);
-        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.all_in_bloom);
-        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.blue_day);
-        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.red_love);
-        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pure_white);
-        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.pastel_tulip);
-        db.AddProduct("BH001", "Hope For Love", "VASE", 0, "TPHCM", "ASD", 9500000, R.drawable.hope_for_love);
-        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.big_rose);
+        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.imgpro_you_look_gorgeous);
+        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.imgpro_hello_sweetheart);
+        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.imgpro_strawberry_sundea);
+        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.imgpro_wintry_wonder);
+        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.imgpro_hopeful_romantic);
+        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_all_in_bloom);
+        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_blue_day);
+        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_red_love);
+        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_pure_white);
+        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_pastel_tulip);
+        db.AddProduct("BH001", "Hope For Love", "VASE", 0, "TPHCM", "ASD", 9500000, R.drawable.imgpro_hope_for_love);
+        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_big_rose);
         //endregion
 
         //region Tạo bảng BILL: Lưu trữ các hóa đơn của người mua

@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <array name="drawable_images">
+        <item>@drawable/imgpro_big_rose</item>
+        <item>@drawable/imgpro_blue_day</item>
+        <item>@drawable/imgpro_pure_white</item>
+        <item>@drawable/imgpro_red_love</item>
+        <item>@drawable/imgpro_strawberry_sundea</item>
+        <item>@drawable/imgpro_wintry_wonder</item>
+        <item>@drawable/imgpro_all_in_bloom</item>
+    </array>
 </resources>
