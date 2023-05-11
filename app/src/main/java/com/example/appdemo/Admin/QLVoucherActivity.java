@@ -5,8 +5,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,10 +34,12 @@ import com.example.appdemo.activity.ChiTietSPActivity;
 import com.example.appdemo.activity.DangXuatActivity;
 import com.example.appdemo.model.DatabaseHelper;
 
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Formatter;
 import java.util.List;
 
 
@@ -51,6 +55,12 @@ public class QLVoucherActivity extends AppCompatActivity {
     LocalDate HSD;
     DatabaseHelper db;
     SQLiteDatabase sqLiteDatabase;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,11 +105,11 @@ public class QLVoucherActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-        //button hiển thị
+
+        //button Dùng voucher
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String maVoucher = edtMaVCh.getText().toString();
                 Cursor cursor = db.GetData("Select* from VOUCHER where MAVOUCHER = '"+maVoucher+"'");
                 if (cursor.moveToFirst()){
@@ -109,9 +119,32 @@ public class QLVoucherActivity extends AppCompatActivity {
                     voucher.setNOIDUNG(cursor.getString(1));
                     voucher.setGIAM(cursor.getDouble(3));
                     voucher.setHANSD(cursor.getString(2));
-                    Intent i = new Intent(QLVoucherActivity.this, UseVoucherActivity.class);
-                    i.putExtra("VOUCHER", voucher);
-                    startActivity(i);
+                    LocalDate date = LocalDate.parse(cursor.getString(2), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    LocalDate currentDate = LocalDate.now();
+                    if (currentDate.isAfter(date)){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(QLVoucherActivity.this);
+                        builder.setTitle("THÔNG BÁO!");
+                        builder.setMessage("Voucher này đã hết hạn sử dụng, vẫn muốn áp dụng?");
+                        builder.setNegativeButton("Tiếp tục", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(QLVoucherActivity.this, UseVoucherActivity.class);
+                                i.putExtra("VOUCHER", voucher);
+                                startActivity(i);
+                            }
+                        });
+                        builder.setPositiveButton("Hủy", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        builder.create().show();
+                    } else {
+                        Intent i = new Intent(QLVoucherActivity.this, UseVoucherActivity.class);
+                        i.putExtra("VOUCHER", voucher);
+                        startActivity(i);
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), "Voucher không tồn tại.", Toast.LENGTH_SHORT).show();
                     return;
@@ -132,9 +165,20 @@ public class QLVoucherActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Mã voucher, mức giảm và hạn dùng là bắt buộc!!", Toast.LENGTH_LONG).show();
                         return;
                     } else {
+                        if (!checkHSD(HSD)){
+                            Toast.makeText(getApplicationContext(), "Hạn sử dụng bé hơn ngày hiện tại, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         boolean check = db.AddVoucher(maVoucher, NOIDUNG, HSD.toString(), giam);
                         if (check)
+                        {
                             Toast.makeText(getApplicationContext(), "Thêm thành công!", Toast.LENGTH_SHORT).show();
+                            edtGiam.setText("");
+                            edtMaVCh.setText("");
+                            tvDatePicker.setText("");
+                            edtContent.setText("");
+                            edtMaVCh.requestFocus();
+                        }
                         else
                         {
                             Toast.makeText(getApplicationContext(), "Mã voucher đã tồn tại!", Toast.LENGTH_SHORT).show();
@@ -149,7 +193,7 @@ public class QLVoucherActivity extends AppCompatActivity {
                     }
                 }
                 catch (Exception e){
-                    Toast.makeText(getApplicationContext(), "Đã có lỗi xảy ra trong quá trình thêm voucher, vui lòng kiểm tra và thử lại!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Đã có lỗi xảy ra, vui lòng kiểm tra và thử lại!", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -168,6 +212,11 @@ public class QLVoucherActivity extends AppCompatActivity {
                 }
                 if (kq==1){
                     Toast.makeText(QLVoucherActivity.this,"Xóa thành công",Toast.LENGTH_LONG).show();
+                    edtGiam.setText("");
+                    edtMaVCh.setText("");
+                    tvDatePicker.setText("");
+                    edtContent.setText("");
+                    edtMaVCh.requestFocus();
                     HienThiDuLieu();
                 }
 
@@ -178,14 +227,13 @@ public class QLVoucherActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //đưa dữ liệu vào đối tượng
-                String maVoucher = edtMaVCh.getText().toString();
-                String noidungVoucher = edtContent.getText().toString();
-                double giamVoucher = Double.parseDouble(edtGiam.getText().toString());
-                if (tvDatePicker.equals("") || maVoucher.equals("") || noidungVoucher.equals("") || edtGiam.equals("")){
+                if (tvDatePicker.equals("") || edtMaVCh.getText().toString().equals("") || edtContent.getText().toString().equals("") || edtGiam.getText().toString().equals("")){
                     Toast.makeText(getApplicationContext(), "Nhập đầy đủ thông tin cần sửa", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                String maVoucher = edtMaVCh.getText().toString();
+                String noidungVoucher = edtContent.getText().toString();
+                double giamVoucher = Double.parseDouble(edtGiam.getText().toString());
                 if (!checkHSD(HSD)){
                     Toast.makeText(getApplicationContext(), "Hạn sử dụng phải xảy ra sau ngày hiện tại.", Toast.LENGTH_SHORT).show();
                     return;
@@ -243,7 +291,7 @@ public class QLVoucherActivity extends AppCompatActivity {
                 startActivity(QL);
                 return true;
             case R.id.SanPham:
-                Intent HD = new Intent(QLVoucherActivity.this, QLSanPham.class);
+                Intent HD = new Intent(QLVoucherActivity.this, QLSanPhamActivity.class);
                 startActivity(HD);
                 return true;
             case R.id.Logout:
@@ -254,7 +302,6 @@ public class QLVoucherActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
     private void AnhXa(){
         edtMaVCh = (EditText) findViewById(R.id.edtMVCH);

@@ -44,13 +44,15 @@
                 android:text="chọn ảnh"
                 android:textColor="@color/white" />
 
-            <EditText
-                android:id="@+id/edtHA"
+            <TextView
+                android:id="@+id/tvHA"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Mã ảnh"
-                android:inputType="number|textPersonName" />
+                android:inputType="number|textPersonName"
+                android:paddingStart="3dp"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/edtMSP"

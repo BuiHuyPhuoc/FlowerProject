@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -12,10 +13,13 @@ import com.example.appdemo.Class.Account;
 import com.example.appdemo.R;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static String tablename = "TAIKHOAN";
     Context context;
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -40,16 +44,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //region Tạo bảng ROLE: Quyền hạn
-        this.WriteQuery("CREATE TABLE IF NOT EXISTS [ROLE] (" +
-                "QUYENHAN VARCHAR PRIMARY KEY NOT NULL," +
-                "NOIDUNG Text NOT NULL)");
+         db.execSQL("CREATE TABLE IF NOT EXISTS [ROLE] (" +
+                        "QUYENHAN VARCHAR PRIMARY KEY NOT NULL," +
+                        "NOIDUNG Text NOT NULL)");
         //Thêm dữ liệu vào bảng [ROLE]
-        this.AddRole("admin", "Quản trị viên");
-        this.AddRole("customer", "Khách hàng");
+        String s = "Insert into [ROLE] values " +
+                "('admin', 'Quản trị viên');";
+         db.execSQL("Insert into [ROLE] values" +
+                 "('admin', 'Quản trị viên')," +
+                 "('customer', 'Khách hàng')");
         //endregion
 
         //region Tạo bảng ACCOUNT: chứa các tài khoản
-        this.WriteQuery("CREATE TABLE IF NOT EXISTS ACCOUNT (\n" +
+        db.execSQL("CREATE TABLE IF NOT EXISTS ACCOUNT (\n" +
                 "\tTAIKHOAN VARCHAR PRIMARY KEY NOT NULL,\n" +
                 "\tMATKHAU VARCHAR NOT NULL,\n" +
                 "\tQUYENHAN VARCHAR NOT NULL, \n" +
@@ -60,56 +67,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "\tFOREIGN KEY (QUYENHAN) REFERENCES [ROLE](QUYENHAN)\n" +
                 ");");
         //Thêm tài khoản admin và khách hàng mẫu để test
-        this.AddAccount("123", "123", "admin", "Nguyen Van A", "0924939352", "voquinamit1@gmail.com", "thailan");
-        this.AddAccount("1234", "1234", "customer", "Nguyen Thi B", "0334379439", "", "119");
+        db.execSQL("Insert into ACCOUNT values " +
+                "('123', '123', 'admin', 'Nguyen Van A', '0924939352', 'voquinamit1@gmail.com', 'thailan'), " +
+                "('1234', '1234', 'customer', 'Nguyen Thi B', '0334379439', '', '119');");
         //endregion
 
         //region Tạo bảng CATEGORY: Phân loại sản phẩm
-        this.WriteQuery(
+        db.execSQL(
                 "CREATE TABLE IF NOT EXISTS [CATEGORY] (" +
                         "NAME VARCHAR PRIMARY KEY NOT NULL, " +
                         "NOIDUNG VARCHAR);"
         );
         //Thêm một số CATEGORY
-        this.AddCategory("COMBO", "Bó hoa");
-        this.AddCategory("TULIP", "Hoa Tulip");
-        this.AddCategory("VASE", "Bình hoa");
+        db.execSQL("Insert into [CATEGORY] values " +
+                "('COMBO', 'Bó hoa'), " +
+                "('TULIP', 'Hoa Tulip'), " +
+                "('VASE', 'Bình hoa')");
         //endregion
 
         //region Tạo bảng SẢN PHẨM: Lưu trữ sản phẩm (hoa)
-        this.WriteQuery(
+        db.execSQL(
                 "CREATE TABLE IF NOT EXISTS SANPHAM (\n" +
-                        "\tMASP VARCHAR PRIMARY KEY NOT NULL,\n" +
-                        "\tTENSP VARCHAR NOT NULL,\n" +
-                        "\tPHANLOAI VARCHAR NOT NULL, \n" +
-                        "\tSOLUONG INTEGER NOT NULL,\n" +
-                        "\tNOINHAP VARCHAR NOT NULL,\n" +
-                        "\tNOIDUNG VARCHAR NULL,\n" +
-                        "\tDONGIA REAL CHECK(DONGIA > 0) NOT NULL,\n" +
-                        "\tHINHANH INTEGER NOT NULL,\n" +
-                        "\tNGAYNHAP date,\n" +
+                        "MASP VARCHAR PRIMARY KEY NOT NULL,\n" +
+                        "TENSP VARCHAR NOT NULL, \n" +
+                        "PHANLOAI VARCHAR NOT NULL, \n" +
+                        "SOLUONG INTEGER NOT NULL,\n" +
+                        "NOINHAP VARCHAR NOT NULL,\n" +
+                        "NOIDUNG VARCHAR, \n" +
+                        "DONGIA REAL CHECK(DONGIA > 0) NOT NULL,\n" +
+                        "HINHANH INTEGER NOT NULL,\n" +
+                        "NGAYNHAP date,\n" +
                         "FOREIGN KEY (PHANLOAI) REFERENCES [CATEGORY](NAME)" +
                         ");"
         );
-        //cách lấy dữ liệu theo mong muón datetime SELECT strftime('%d/%m/%Y', date_column) AS formatted_date FROM my_table;
-
-        //Thêm 1 vài sản phẩm mẫu vào database
-        this.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 1150000, R.drawable.you_look_gorgeous);
-        this.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 4500000, R.drawable.hello_sweetheart);
-        this.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 2500000, R.drawable.strawberry_sundea);
-        this.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "", 1500000, R.drawable.wintry_wonder);
-        this.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "", 2000000, R.drawable.hopeful_romantic);
-        this.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.all_in_bloom);
-        this.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.blue_day);
-        this.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.red_love);
-        this.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.pure_white);
-        this.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.pastel_tulip);
-        this.AddProduct("BH001", "Hope For Love", "VASE", 0, "TPHCM", "", 5000000, R.drawable.hope_for_love);
-        this.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "", 5000000, R.drawable.big_rose);
-        //endregion
+        String date = "2023-04-02";
+        db.execSQL("Insert into SANPHAM values \n" +
+                "('CB001', 'You Look Gorgeous', 'COMBO', 10, 'Đà Lạt', 'ASD', 9500000, "+R.drawable.imgpro_you_look_gorgeous+", '"+date+"'), \n " +
+                "('CB002', 'Hello Sweetheart', 'COMBO', 10, 'Đà Lạt', 'ASD', 5000000, "+R.drawable.imgpro_hello_sweetheart+", '"+date+"'), \n" +
+                "('CB003', 'Strawberry Sundea', 'COMBO', 10, 'Đà Lạt', 'ASD', 9500000, "+R.drawable.imgpro_strawberry_sundea+", '"+date+"'), \n" +
+                "('CB004', 'Wintry Wonder', 'COMBO', 10, 'Đà Lạt', 'ASD', 5000000, "+R.drawable.imgpro_wintry_wonder+", '"+date+"'),  \n" +
+                "('CB005', 'Hopeful Romantic', 'COMBO', 10, 'Đà Lạt', 'ASD', 9500000, "+R.drawable.imgpro_hopeful_romantic+", '"+date+"'),  \n" +
+                "('TL001', 'All In Bloom', 'TULIP', 10, 'TPHCM', 'ASD', 1500000, "+R.drawable.imgpro_all_in_bloom+", '"+date+"'),  \n" +
+                "('TL002', 'Blue Day', 'TULIP', 10, 'TPHCM', 'ASD', 1500000, "+R.drawable.imgpro_blue_day+", '"+date+"'),  \n" +
+                "('TL003', 'Red Love', 'TULIP', 10, 'TPHCM', 'ASD', 1500000, "+R.drawable.imgpro_red_love+", '"+date+"'),  \n" +
+                "('TL004', 'Pure White', 'TULIP', 10, 'TPHCM', 'ASD', 1500000, "+R.drawable.imgpro_pure_white+", '"+date+"'),  \n" +
+                "('TL005', 'Pastel Tulip', 'TULIP', 10, 'TPHCM', 'ASD', 1000000, "+R.drawable.imgpro_pastel_tulip+", '"+date+"'),  \n" +
+                "('BH001', 'Hope For Love', 'VASE', 0, 'TPHCM', 'ASD', 3000000, "+R.drawable.imgpro_hope_for_love+", '"+date+"'),  \n" +
+                "('BH002', 'Big Rose', 'VASE', 10, 'TPHCM', 'ASD', 3000000, "+R.drawable.imgpro_big_rose+", '"+date+"');");
 
         //region Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
-        this.WriteQuery(
+        db.execSQL(
                 "CREATE TABLE IF NOT EXISTS BILL (\n" +
                         "   ID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                         "   DATEORDER date NOT NULL,\n" +
@@ -121,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //endregion
 
         //region Tạo bảng Bill_Detail: Chi tiết hóa đơn
-        this.WriteQuery(
+        db.execSQL(
                 "CREATE TABLE IF NOT EXISTS BILLDETAIL (\n" +
                         "    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
                         "    MASP VARCHAR NOT NULL,\n" +
@@ -131,7 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "    UNITPRICE Real check(UNITPRICE > 0) not NULL,\n" +
                         "    TOTALPRICE Real check (TOTALPRICE > 0) not Null,\n" +
                         "    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP),\n" +
-                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID)\n" +
+                        "    FOREIGN KEY (IDORDER) REFERENCES BILL(ID), \n" +
                         "    FOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)" +
                         ");"
         );
@@ -139,7 +146,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //endregion
 
         //region Tạo bảng VOUCHER: Lưu trữ các voucher hiện có
-        this.WriteQuery(
+        db.execSQL(
                 "CREATE TABLE IF NOT EXISTS VOUCHER(\n" +
                         "\tMAVOUCHER VARCHAR PRIMARY KEY not null,\n" +
                         "\tNOIDUNG TEXT," +
@@ -148,40 +155,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         ");"
         );
         int year = LocalDate.now().getYear();
-        this.AddVoucher("SALET5", "Sale tháng 5", "2023-05-31" , 10.0/100);
-        this.AddVoucher("SALET2", "Sale tháng 2", "2023-02-28", 30.0/100);
+        db.execSQL("Insert into VOUCHER values \n" +
+                "('SALET5', 'Sale tháng 5', '2023-05-31' , 10.0/100), \n" +
+                "('SALENEW', 'Sale mới', '2023-05-31' , 30.0/100), \n" +
+                "('TVBTRAN', 'Sale báo', '2023-02-31' , 15.0/100), \n" +
+                "('TVBTRAN19T2', 'Vẫn là báo sale', '2023-04-31' , 20.0/100)");
+
         //endregion
 
         //region Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể
-        this.WriteQuery(
+        db.execSQL(
                 "CREATE TABLE IF NOT EXISTS VOUCHER_DETAIL(\n" +
-                        "\tMAVOUCHER VARCHAR,\n" +
-                        "\tMASP VARCHAR NOT NULL,\n" +
-                        "\tFOREIGN KEY (MAVOUCHER) REFERENCES VOUCHER(MAVOUCHER),\n" +
-                        "  FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP)\n" +
+                        "MAVOUCHER VARCHAR," +
+                        "MASP VARCHAR NOT NULL," +
+                        "FOREIGN KEY (MAVOUCHER) REFERENCES VOUCHER(MAVOUCHER)," +
+                        "  FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP)" +
                         ");"
         );
-        this.AddVoucherProduct("SALET5", "CB001");
-        this.AddVoucherProduct("SALET5", "CB002");
-        this.AddVoucherProduct("SALET5", "CB003");
-        this.AddVoucherProduct("SALET2", "CB001");
+        db.execSQL("Insert into VOUCHER_DETAIL values " +
+                "('SALET5', 'CB001'), " +
+                "('SALET5', 'CB002'), " +
+                "('SALET5', 'CB003') ");
         //endregion
-
-
-
-
-
         //region Tạo bảng CARTLIST: Lưu trữ giỏ hàng của người dùng, tự động cập nhật khi người dùng đăng nhập lại
-        this.WriteQuery(
+        db.execSQL(
                 "CREATE TABLE IF NOT EXISTS CARTLIST (\n" +
                         "\tIDCARTLIST   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                        "\tIDCUS        VARCHAR NULL,\n" +
+                        "\tIDCUS        VARCHAR,\n" +
                         "\tIDSANPHAM    VARCHAR NOT NULL,\n" +
-                        "\tIDVoucher    VARCHAR null,\n" +
+                        "\tIDVoucher    VARCHAR,\n" +
                         "\tSOLUONG      INTEGER CHECK(SOLUONG > 0) NOT NULL," +
-                        "\tDONGIA       REAL NULL,\n" +
+                        "\tDONGIA       REAL,\n" +
                         "\tFOREIGN KEY (IDCUS) REFERENCES ACCOUNT(TAIKHOAN),\n" +
-                        "\tFOREIGN KEY (IDSANPHAM) REFERENCES SANPHAM(MASP)\n" +
+                        "\tFOREIGN KEY (IDSANPHAM) REFERENCES SANPHAM(MASP), \n" +
                         "\tFOREIGN KEY (IDVoucher) REFERENCES VOUCHER(MAVOUCHER)\n" +
                         ")"
         );

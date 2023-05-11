@@ -31,7 +31,6 @@ import com.example.appdemo.model.DatabaseHelper;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 
 public class UseVoucherActivity extends AppCompatActivity {
     RecyclerView lvSP;
@@ -48,10 +47,6 @@ public class UseVoucherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_use_voucher);
-        AnhXa();
-
-    }
-    private void AnhXa(){
         tvHanVch = findViewById(R.id.tvHanVch);
         tvMucGiam = findViewById(R.id.tvMucGiam);
         tvMaVch = (TextView) findViewById(R.id.tvMaVch);
@@ -61,20 +56,21 @@ public class UseVoucherActivity extends AppCompatActivity {
         qlVoucher = new QLVoucher(this);
         databaseHelper = new DatabaseHelper(this, "DBFlowerShop.sqlite", null, 1);
         sqLiteDatabase = databaseHelper.getWritableDatabase();
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
             Voucher voucher = (Voucher) bundle.get("VOUCHER");
-            Toast.makeText(getApplicationContext(), voucher.getMAVOUCHER().toString(), Toast.LENGTH_SHORT).show();
             maVoucher = voucher.getMAVOUCHER();
             tvMaVch.setText("Mã voucher: " + voucher.getMAVOUCHER().toString());
-            LocalDate inputDate = LocalDate.parse(voucher.getHANSD());
+            DateTimeFormatter inFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             DateTimeFormatter outFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate inputDate = LocalDate.parse(voucher.getHANSD(), inFormat);
             String outputDate = inputDate.format(outFormat);
             tvHanVch.setText("Hạn sử dụng: " + outputDate);
             tvMucGiam.setText("Mức giảm: " + voucher.getGIAM()*100 + "%");
         }
         Cursor listSanPham = databaseHelper.GetData(
-                "Select* from SANPHAM"
+                "Select* from SANPHAM ORDER BY MASP ASC"
         );
         while (listSanPham.moveToNext()){
             sanPhams.add(new SanPham(listSanPham.getString(0),
@@ -88,9 +84,9 @@ public class UseVoucherActivity extends AppCompatActivity {
             ));
         }
         adapter = new UseVoucherAdapter(this, sanPhams, maVoucher);
-        Toast.makeText(this, sanPhams.size()+"", Toast.LENGTH_SHORT).show();
-        lvSP.setLayoutManager(new LinearLayoutManager(this));
+        lvSP.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         lvSP.setAdapter(adapter);
+        Toast.makeText(UseVoucherActivity.this, listSanPham.getCount()+"", Toast.LENGTH_SHORT).show();
         btnUseVoucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,8 +101,7 @@ public class UseVoucherActivity extends AppCompatActivity {
                     });
                     builder.create().show();
                 } else {
-                    builder.setTitle("Đồng ý thêm " + Voucher_SanPham.size() + " sản phẩm?");
-                    ListView listView = new ListView(UseVoucherActivity.this);
+                    builder.setTitle("Đồng ý thêm voucher vào " + Voucher_SanPham.size() + " sản phẩm?");
                     String content = "";
                     for(int i = 0; i < Voucher_SanPham.size(); i++){
                         content += Voucher_SanPham.get(i).getTENSP() + "\n";
@@ -133,39 +128,7 @@ public class UseVoucherActivity extends AppCompatActivity {
                         }
                     });
                     builder.create().show();
-
                 }
-
-//                int countChecked = 0;
-//                ArrayList<SanPham> sanPhams1 = new ArrayList<>();
-//                Toast.makeText(UseVoucherActivity.this, lvSP.getCount()+"", Toast.LENGTH_SHORT).show();
-//                for (int i = 0; i < lvSP.getCount(); i++){
-//                    v = lvSP.getChildAt(i);
-//                    TextView tvStatus = (TextView) v.findViewById(R.id.tvStatus);
-//                }
-//                int countAdded = 0;
-//                for (int i = 0; i < sanPhams1.size(); i++){
-//                    String maSP = sanPhams1.get(i).getMASP();
-//                    Cursor cursor = databaseHelper.GetData("Select* from VOUCHER_DETAIL");
-//                    boolean check = true;
-//                    while (cursor.moveToNext()){
-//                        if (cursor.getString(0).equals(maVoucher) && cursor.getString(1).equals(maSP)){
-//                            check = false;
-//                        }
-//                    }
-//                    if (check){
-//                        ContentValues values = new ContentValues();
-//                        values.put("MAVOUCHER", maVoucher);
-//                        values.put("MASP", maSP);
-//                        sqLiteDatabase.insert("VOUCHER_DETAIL", null, values);
-//                        countAdded++;
-//                    }
-//                }
-//                Toast.makeText(getApplicationContext(),
-//                        "Chọn " + countChecked + " sản phẩm và đã thêm " + countAdded
-//                                + " sản phẩm.", Toast.LENGTH_SHORT).show();
-//                adapter.notifyDataSetChanged();
-//                return;
             }
         });
         adapter.setOnItemClickListener(new UseVoucherAdapter.OnItemClickListener() {
@@ -179,6 +142,7 @@ public class UseVoucherActivity extends AppCompatActivity {
                     builder.setNegativeButton("Sử dụng", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
                             Voucher_SanPham.add(item);
                         }
                     });
@@ -192,5 +156,16 @@ public class UseVoucherActivity extends AppCompatActivity {
                 builder.create().show();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (Voucher_SanPham != null){
+            Voucher_SanPham.removeAll(Voucher_SanPham);
+        }
+        if (sanPhams != null){
+            sanPhams.removeAll(sanPhams);
+        }
+        super.onBackPressed();
     }
 }

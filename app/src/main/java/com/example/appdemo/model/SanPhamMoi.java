@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-public class SanPhamMoi implements Serializable {
+public class SanPhamMoi implements Serializable{
     String MASP, TENSP, PHANLOAI, NOINHAP, NOIDUNG;
     Integer SOLUONG, HINHANH;
     Long DONGIA;
@@ -29,11 +29,7 @@ public class SanPhamMoi implements Serializable {
         this.SOLUONG = SOLUONG;
         this.HINHANH = HINHANH;
         this.DONGIA = DONGIA;
-        //Xử lí ngày tháng
-        LocalDate date = LocalDate.parse(DATE); //Chuyển từ date kiểu chuỗi sang date kiểu LocalDate
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //Định dạng dd-mm-yyyy
-        String formattedDate = date.format(formatter); //Gán kiểu ngày tháng vào dữ liệu date
-        this.DATE = formattedDate;
+        this.DATE = DATE;
     }
 
 
@@ -100,4 +96,5 @@ public class SanPhamMoi implements Serializable {
     public void setDONGIA(Long DONGIA) {
         this.DONGIA = DONGIA;
     }
+
 }
