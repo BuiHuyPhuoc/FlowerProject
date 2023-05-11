@@ -141,7 +141,10 @@ public class QLVoucherActivity extends AppCompatActivity {
                             return;
                         }
                         //Hiển thị lại danh sách listview
-                        HienThiDuLieu();
+                        qlVoucher = new QLVoucher(QLVoucherActivity.this);
+                        list = qlVoucher.getAllVoucherToString();
+                        ArrayAdapter adapter =new ArrayAdapter(QLVoucherActivity.this, android.R.layout.simple_list_item_1,list);
+                        ListView.setAdapter(adapter);
                         return;
                     }
                 }
@@ -251,6 +254,7 @@ public class QLVoucherActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+
     }
     private void AnhXa(){
         edtMaVCh = (EditText) findViewById(R.id.edtMVCH);

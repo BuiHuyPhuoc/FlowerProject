@@ -27,16 +27,13 @@ import com.example.appdemo.Utils;
 import com.example.appdemo.adapter.MenuAdapter;
 import com.example.appdemo.adapter.SanPhamAdapter;
 import com.example.appdemo.model.DatabaseHelper;
-import com.example.appdemo.model.ItemMenu;
 import com.example.appdemo.model.SanPhamMoi;
 import com.google.android.material.navigation.NavigationView;
 import com.nex3z.notificationbadge.NotificationBadge;
 
-import java.nio.BufferUnderflowException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     //Test Github
@@ -134,18 +131,18 @@ public class MainActivity extends AppCompatActivity {
         //cách lấy dữ liệu theo mong muón datetime SELECT strftime('%d/%m/%Y', date_column) AS formatted_date FROM my_table;
 
         //Thêm 1 vài sản phẩm mẫu vào database
-        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "", 1150000, R.drawable.you_look_gorgeous);
-        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "", 4500000, R.drawable.hello_sweetheart);
-        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "", 2500000, R.drawable.strawberry_sundea);
-        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "", 1500000, R.drawable.wintry_wonder);
-        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "", 2000000, R.drawable.hopeful_romantic);
-        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "", 9500000, R.drawable.all_in_bloom);
-        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.blue_day);
-        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.red_love);
-        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.pure_white);
-        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "", 1000000, R.drawable.pastel_tulip);
-        db.AddProduct("BH001", "Hope For Love", "VASE", 0, "TPHCM", "", 5000000, R.drawable.hope_for_love);
-        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "", 5000000, R.drawable.big_rose);
+        db.AddProduct("CB001", "You Look Gorgeous", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.imgpro_you_look_gorgeous);
+        db.AddProduct("CB002", "Hello Sweetheart", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.imgpro_hello_sweetheart);
+        db.AddProduct("CB003", "Strawberry Sundea", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.imgpro_strawberry_sundea);
+        db.AddProduct("CB004", "Wintry Wonder", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.imgpro_wintry_wonder);
+        db.AddProduct("CB005", "Hopeful Romantic", "COMBO", 10, "Đà Lạt", "ASD", 9500000, R.drawable.imgpro_hopeful_romantic);
+        db.AddProduct("TL001", "All In Bloom", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_all_in_bloom);
+        db.AddProduct("TL002", "Blue Day", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_blue_day);
+        db.AddProduct("TL003", "Red Love", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_red_love);
+        db.AddProduct("TL004", "Pure White", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_pure_white);
+        db.AddProduct("TL005", "Pastel Tulip", "TULIP", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_pastel_tulip);
+        db.AddProduct("BH001", "Hope For Love", "VASE", 0, "TPHCM", "ASD", 9500000, R.drawable.imgpro_hope_for_love);
+        db.AddProduct("BH002", "Big Rose", "VASE", 10, "TPHCM", "ASD", 9500000, R.drawable.imgpro_big_rose);
         //endregion
 
         //region Tạo bảng BILL: Lưu trữ các hóa đơn của người mua
@@ -188,8 +185,7 @@ public class MainActivity extends AppCompatActivity {
                         ");"
         );
         int year = LocalDate.now().getYear();
-        db.AddVoucher("SALET5", "Sale tháng 5", "2023-05-31" , 10.0/100);
-        db.AddVoucher("SALET2", "Sale tháng 2", "2023-02-28", 30.0/100);
+        db.AddVoucher("SALET5", "Sale tháng 5", year + "/05/31" , 10.0/100);
         //endregion
 
         //region Tạo bảng VOUCHER DETAIL: Chi tiết voucher sử dụng cho một hoặc nhiều sản phẩm cụ thể
@@ -264,7 +260,6 @@ public class MainActivity extends AppCompatActivity {
                                             listSanPham.getInt(7),
                                             listSanPham.getString(8)
             ));
-            quantitySP--;
         }
         spAdapter = new SanPhamAdapter( this, mangSpMoi);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false);
@@ -305,7 +300,8 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
                     case 0:
-                        drawerLayout.closeDrawer(GravityCompat.START);
+                        Intent trangchu = new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(trangchu);
                         break;
                     case 1:
                         Intent sanpham = new Intent(getApplicationContext(),SanPhamActivity.class);
